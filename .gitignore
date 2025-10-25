@@ -1,0 +1,23 @@
+# Maven
+/target/
+*.log
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+/out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / Security
+*.env
+application.properties
+application.yml
+
+# JetBrains
+.idea/
+*.iws
+*.ipr
