@@ -1,0 +1,15 @@
+spring.application.name=caloryx-backend
+
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+# Example local setup:
+# DB_URL=jdbc:postgresql://localhost:5432/caloryx
+# DB_USERNAME=postgres
+# DB_PASSWORD=postgres
+
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration
+
+logging.level.org.hibernate=warn
