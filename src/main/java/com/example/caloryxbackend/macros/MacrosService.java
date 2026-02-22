@@ -1,7 +1,7 @@
 //package com.example.caloryxbackend.macros;
 //
 //import com.example.caloryxbackend.macros.payload.MacrosResponse;
-//import com.example.caloryxbackend.user.User;
+//import com.example.caloryxbackend.entities.User;
 //import org.springframework.stereotype.Service;
 //
 //@Service

@@ -1,11 +1,11 @@
 package com.example.caloryxbackend.user;
 
-import com.example.caloryxbackend.user.payload.OnboardingRequest;
-import jakarta.transaction.Transactional;
+import com.example.caloryxbackend.common.exception.NotFoundException;
+import com.example.caloryxbackend.entities.User;
+import com.example.caloryxbackend.user.model.payload.RegisterRequest;
+import com.example.caloryxbackend.user.model.payload.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -13,27 +13,67 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findUserById(UUID id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    public UserResponse getCurrentUserProfile(String auth0Id) throws NotFoundException {
+        User user = userRepository.findByAuth0id(auth0Id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return mapToProfileResponse(user);
     }
 
-    @Transactional
-    public void completeOnboarding(String auth0Id, OnboardingRequest request) {
+    public void registerUser(String auth0Id, RegisterRequest request) {
+
+        if (userRepository.findByAuth0id(auth0Id).isPresent()) {
+            throw new IllegalStateException("User already exists");
+        }
+
+        User user = new User();
+
+        user.setAuth0id(auth0Id);
+        user.setFullName(request.getFullName());
+        user.setBirthDate(request.getBirthDate());
+        user.setGender(request.getGender());
+        user.setRole(request.getRole());
+        user.setHeightCm(request.getHeightCm());
+        user.setStartWeightKg(request.getStartWeightKg());
+        user.setActualWeightKg(request.getStartWeightKg());
+        user.setTargetWeightKg(request.getTargetWeightKg());
+        user.setWeeklyGoalKg(request.getWeeklyGoalKg());
+        user.setActivityLevel(request.getActivityLevel());
+        user.setGoal(request.getGoal());
+
+        userRepository.save(user);
+    }
+
+    public UserResponse updateUser(String auth0Id, RegisterRequest request) {
 
         User user = userRepository.findByAuth0id(auth0Id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setFullName(request.getFullName());
-        user.setStartWeightKg(request.getStartWeightKg());
         user.setActualWeightKg(request.getStartWeightKg());
         user.setTargetWeightKg(request.getTargetWeightKg());
         user.setWeeklyGoalKg(request.getWeeklyGoalKg());
-        user.setHeightCm(request.getHeightCm());
         user.setGoal(request.getGoal());
         user.setActivityLevel(request.getActivityLevel());
 
-        user.setProfileCompleted(true);
+        userRepository.save(user);
+
+        return mapToProfileResponse(user);
     }
 
+    private UserResponse mapToProfileResponse(User user) {
+        return UserResponse.builder()
+                .fullName(user.getFullName())
+                .birthDate(user.getBirthDate())
+                .gender(user.getGender())
+                .role(user.getRole())
+                .heightCm(user.getHeightCm())
+                .startWeightKg(user.getStartWeightKg())
+                .actualWeightKg(user.getActualWeightKg())
+                .targetWeightKg(user.getTargetWeightKg())
+                .weeklyGoalKg(user.getWeeklyGoalKg())
+                .activityLevel(user.getActivityLevel())
+                .goal(user.getGoal())
+                .build();
+    }
 }

@@ -1,12 +1,13 @@
-package com.example.caloryxbackend.user.enums;
+package com.example.caloryxbackend.user.model.enums;
 
 import lombok.Getter;
 
 @Getter
 public enum ActivityLevel {
-    LOW(0, "LOW"),
-    MEDIUM(1, "MEDIUM"),
-    HIGH(2, "HIGH");
+    SEDENTARY(0, "SEDENTARY"),
+    LIGHT(1, "LIGHT"),
+    MODERATE(2, "MODERATE"),
+    ACTIVE(3, "ACTIVE");
 
     private final int value;
     private final String name;
