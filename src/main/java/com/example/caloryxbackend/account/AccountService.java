@@ -17,8 +17,6 @@ public class AccountService {
 
         boolean exists = userRepository.existsByAuth0id(auth0Id);
 
-        System.out.println("User with auth0Id " + auth0Id + " exists: " + exists);
-
         // Most: ha nincs DB user → needsRegister = true
         return new AccountResponse(exists);
     }
