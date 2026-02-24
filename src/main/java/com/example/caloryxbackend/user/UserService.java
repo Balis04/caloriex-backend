@@ -50,11 +50,17 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setFullName(request.getFullName());
-        user.setActualWeightKg(request.getStartWeightKg());
+        user.setBirthDate(request.getBirthDate());
+        user.setGender(request.getGender());
+        user.setRole(request.getRole());
+        user.setHeightCm(request.getHeightCm());
+        user.setStartWeightKg(request.getStartWeightKg());
+        user.setActualWeightKg(request.getActualWeightKg());
         user.setTargetWeightKg(request.getTargetWeightKg());
         user.setWeeklyGoalKg(request.getWeeklyGoalKg());
         user.setGoal(request.getGoal());
         user.setActivityLevel(request.getActivityLevel());
+        user.setWeeklyGoalKg(request.getWeeklyGoalKg());
 
         userRepository.save(user);
 

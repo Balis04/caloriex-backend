@@ -17,6 +17,7 @@ public class RegisterRequest {
     private UserRole role;
     private Integer heightCm;
     private Double startWeightKg;
+    private Double actualWeightKg;
     private ActivityLevel activityLevel;
     private GoalType goal;
     private Double targetWeightKg;

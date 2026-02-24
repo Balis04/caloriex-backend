@@ -12,8 +12,8 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @GetMapping("/account/needs-register")
+    @GetMapping("/account/has-profile")
     public ResponseEntity<AccountResponse> checkRegister() {
-        return ResponseEntity.ok(accountService.getNeedRegister());
+        return ResponseEntity.ok(accountService.getHasProfile());
     }
 }
