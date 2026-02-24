@@ -12,7 +12,7 @@ public class AccountService {
     private final CurrentUserService currentUserService;
     private final UserRepository userRepository;
 
-    public AccountResponse getNeedRegister() {
+    public AccountResponse getHasProfile() {
         String auth0Id = currentUserService.getAuth0Id();
 
         boolean exists = userRepository.existsByAuth0id(auth0Id);
