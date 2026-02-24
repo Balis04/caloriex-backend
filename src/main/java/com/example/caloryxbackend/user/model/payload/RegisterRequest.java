@@ -6,13 +6,13 @@ import com.example.caloryxbackend.user.model.enums.GoalType;
 import com.example.caloryxbackend.user.model.enums.UserRole;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class RegisterRequest {
 
     private String fullName;
-    private Date birthDate;
+    private LocalDate birthDate;
     private Gender gender;
     private UserRole role;
     private Integer heightCm;

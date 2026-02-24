@@ -7,6 +7,7 @@ import com.example.caloryxbackend.user.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDate;
 
 import java.time.Instant;
 import java.util.Date;
@@ -30,7 +31,7 @@ public class User {
     private String fullName;
 
     @Column(name ="birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
