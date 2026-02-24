@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.user.enums;
+package com.example.caloryxbackend.user.model.enums;
 
 import lombok.Getter;
 

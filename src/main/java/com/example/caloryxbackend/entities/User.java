@@ -1,13 +1,16 @@
-package com.example.caloryxbackend.user;
+package com.example.caloryxbackend.entities;
 
-import com.example.caloryxbackend.user.enums.ActivityLevel;
-import com.example.caloryxbackend.user.enums.GoalType;
-import com.example.caloryxbackend.user.enums.UserRole;
+import com.example.caloryxbackend.user.model.enums.ActivityLevel;
+import com.example.caloryxbackend.user.model.enums.Gender;
+import com.example.caloryxbackend.user.model.enums.GoalType;
+import com.example.caloryxbackend.user.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDate;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -24,26 +27,33 @@ public class User {
     @Column(name = "auth0_id", nullable = false, unique = true)
     private String auth0id;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
     @Column(name = "full_name")
     private String fullName;
+
+    @Column(name ="birth_date")
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "goal")
-    private GoalType goal;
+    @Column(name = "height_cm")
+    private Integer heightCm;
+
+    @Column(name = "start_weight_kg")
+    private Double startWeightKg;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_level")
     private ActivityLevel activityLevel;
 
-    @Column(name = "start_weight_kg")
-    private Double startWeightKg;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "goal")
+    private GoalType goal;
 
     @Column(name = "target_weight_kg")
     private Double targetWeightKg;
@@ -53,12 +63,6 @@ public class User {
 
     @Column(name = "actual_weight_kg")
     private Double actualWeightKg;
-
-    @Column(name = "height_cm")
-    private Integer heightCm;
-
-    @Column(name = "profile_completed", nullable = false)
-    private boolean profileCompleted;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
