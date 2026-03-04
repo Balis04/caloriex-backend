@@ -1,13 +1,13 @@
-package com.example.caloryxbackend.food_log.payload;
+package com.example.caloryxbackend.foodlog.payload;
 
-import com.example.caloryxbackend.food_log.MealTime;
+import com.example.caloryxbackend.foodlog.MealTime;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class FoodLodRequest {
+public class FoodLogRequest {
     @NotBlank(message = "Az étel neve nem lehet üres")
     @Size(max = 100, message = "Az étel neve túl hosszú (max 100 karakter)")
     private String foodName;

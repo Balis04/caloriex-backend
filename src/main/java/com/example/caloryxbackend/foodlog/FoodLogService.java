@@ -1,8 +1,8 @@
-package com.example.caloryxbackend.food_log;
+package com.example.caloryxbackend.foodlog;
 
 import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.entities.FoodLog;
-import com.example.caloryxbackend.food_log.payload.FoodLodRequest;
+import com.example.caloryxbackend.foodlog.payload.FoodLogRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class FoodLogService {
     private final CurrentUserService currentUserService;
     private final FoodLogRepository repository;
 
-    public FoodLog createFoodLog(FoodLodRequest request) {
+    public FoodLog createFoodLog(FoodLogRequest request) {
         FoodLog entity = new FoodLog();
 
         entity.setFoodName(request.getFoodName());

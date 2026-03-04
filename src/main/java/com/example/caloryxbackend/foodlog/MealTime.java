@@ -1,5 +1,8 @@
-package com.example.caloryxbackend.food_log;
+package com.example.caloryxbackend.foodlog;
 
+import lombok.Getter;
+
+@Getter
 public enum MealTime {
     BREAKFAST(0, "Breakfast"),
     LUNCH(1, "Lunch"),

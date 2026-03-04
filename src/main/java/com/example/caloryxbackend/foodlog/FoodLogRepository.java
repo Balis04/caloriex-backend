@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.food_log;
+package com.example.caloryxbackend.foodlog;
 
 import com.example.caloryxbackend.entities.FoodLog;
 import org.springframework.data.jpa.repository.JpaRepository;

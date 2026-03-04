@@ -11,10 +11,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("api/foods")
+@RequestMapping("/api/foods")
 public class FoodProxyController {
 
-    // A Spring beolvassa a környezeti változót (USDA_API_KEY)
     @Value("${USDA_API_KEY}")
     private String apiKey;
 
@@ -26,16 +25,16 @@ public class FoodProxyController {
             @RequestParam(required = false) String brand) {
 
         try {
-            // Az USDA URL összeállítása
-            String url = UriComponentsBuilder
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder
                     .fromHttpUrl("https://api.nal.usda.gov/fdc/v1/foods/search")
                     .queryParam("api_key", apiKey)
                     .queryParam("query", query)
-                    .queryParam("brandOwner", brand)
-                    .queryParam("dataType", "Branded")
-                    .toUriString();
+                    .queryParam("dataType", "Branded");
+            if (brand != null && !brand.trim().isEmpty()) {
+                uriBuilder.queryParam("brandOwner", brand);
+            }
+            String url = uriBuilder.toUriString();
 
-            // Kérés küldése az USDA-nak
             Object response = restTemplate.getForObject(url, Object.class);
 
             return ResponseEntity.ok(response);
