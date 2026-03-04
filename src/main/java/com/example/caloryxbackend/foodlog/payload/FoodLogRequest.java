@@ -23,7 +23,7 @@ public class FoodLogRequest {
     private String unit;
 
     @NotNull(message = "A kalória megadása kötelező")
-    @Min(value = 0, message = "A kalória nem lehet negatív")
+    @DecimalMin(value = "0.0", message = "A kalória nem lehet negatív")
     private Double calories;
 
     @DecimalMin("0.0")
