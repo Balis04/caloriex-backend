@@ -15,4 +15,4 @@ CREATE TABLE food_logs (
                            updated_by VARCHAR(255)
 );
 
-CREATE INDEX idx_auth0_date ON food_logs (auth0_id, created_at);
+CREATE INDEX idx_auth0_date ON food_logs (auth0_id, consumed_at);

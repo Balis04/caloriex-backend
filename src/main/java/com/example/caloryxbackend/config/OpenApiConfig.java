@@ -23,7 +23,7 @@ public class OpenApiConfig {
     }
 
     @Bean
-    public OpenApiCustomizer customerGlobalHeaderOpenApiCustomizer() {
+    public OpenApiCustomizer customGlobalHeaderOpenApiCustomizer() {
         return openApi -> {
             openApi.getPaths().forEach((path, pathItem) -> {
                 if (!isPublicPath(path)) {

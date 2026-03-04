@@ -26,7 +26,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/api/foods/search/**").permitAll()
+                        .requestMatchers("/api/foods/search", "/api/foods/search/**").permitAll()
 
                         .requestMatchers("/api/account/has-profile").authenticated()
 

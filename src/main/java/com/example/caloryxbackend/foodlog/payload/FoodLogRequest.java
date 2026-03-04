@@ -26,13 +26,13 @@ public class FoodLogRequest {
     @Min(value = 0, message = "A kalória nem lehet negatív")
     private Double calories;
 
-    @Min(0)
+    @DecimalMin("0.0")
     private Double protein;
 
-    @Min(0)
+    @DecimalMin("0.0")
     private Double carbohydrates;
 
-    @Min(0)
+    @DecimalMin("0.0")
     private Double fat;
 
     // Opcionális: Ha a frontend küldi, akkor azt használjuk, ha nem, a backend generálja
