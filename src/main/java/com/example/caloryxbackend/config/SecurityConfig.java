@@ -33,8 +33,8 @@ public class SecurityConfig {
                         // bármi ami tényleg public
                         .requestMatchers("/api/public/**",
                         "/auth/needs-register/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/food-log/**").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/food-log/**").permitAll()
+                        .requestMatchers("/api/foods/search/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt());
