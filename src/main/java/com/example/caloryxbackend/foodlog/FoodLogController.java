@@ -20,7 +20,6 @@ import java.util.UUID;
 @RequestMapping("/api/food-log")
 @RequiredArgsConstructor
 public class FoodLogController {
-
     private final FoodLogService foodLogService;
 
     @PostMapping("/create")
