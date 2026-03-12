@@ -24,7 +24,7 @@ public class CaloriesSummaryController {
 
     @GetMapping("/today")
     public ResponseEntity<CaloriesSummaryResponse> getSummaryByDate(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
         return ResponseEntity.ok(caloriesSummaryService.getSummaryByDate(date));
     }
@@ -36,7 +36,7 @@ public class CaloriesSummaryController {
 
     @GetMapping("/meal-times")
     public ResponseEntity<MealTimeGroupResponse> getMealTimesByDate(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam("mealTime") MealTime mealTime
     ) {
         return ResponseEntity.ok(caloriesSummaryService.getMealTimeSummaryByDateAndMeal(date, mealTime));

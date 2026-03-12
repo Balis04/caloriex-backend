@@ -4,6 +4,7 @@ import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.caloriesummary.payload.CaloriesSummaryResponse;
 import com.example.caloryxbackend.caloriesummary.payload.MealTimeGroupResponse;
 import com.example.caloryxbackend.caloriesummary.payload.TodayFoodItemResponse;
+import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;
@@ -171,7 +172,9 @@ public class CaloriesSummaryService {
 
     private double calculateBmr(User user) {
         if (user.getBirthDate() == null || user.getHeightCm() == null) {
-            throw new IllegalStateException("Missing required profile data: birthDate or heightCm");
+            throw new BadRequestException(
+                    "User profile incomplete. Birth date and height must be set before calculating BMR."
+            );
         }
 
         double weight = resolveWeight(user);
@@ -193,7 +196,7 @@ public class CaloriesSummaryService {
         if (user.getStartWeightKg() != null) {
             return user.getStartWeightKg();
         }
-        throw new IllegalStateException("Missing required profile data: actualWeightKg or startWeightKg");
+        throw new BadRequestException("Missing required profile data: actualWeightKg or startWeightKg");
     }
 
     private double activityMultiplier(ActivityLevel activityLevel) {

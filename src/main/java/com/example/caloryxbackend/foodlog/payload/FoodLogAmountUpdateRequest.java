@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class FoodLogAmountUpdateRequest {
 
-    @NotNull(message = "A mennyiség megadása kötelezõ")
-    @Positive(message = "A mennyiségnek pozitívnak kell lennie")
+    @NotNull(message = "A mennyisÃ©g megadÃ¡sa kÃ¶telezÅ‘")
+    @Positive(message = "A mennyisÃ©gnek pozitÃ­vnak kell lennie")
     private Double amount;
 }
