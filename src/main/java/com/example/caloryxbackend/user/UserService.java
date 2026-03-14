@@ -20,7 +20,7 @@ public class UserService {
         return mapToProfileResponse(user);
     }
 
-    public void registerUser(String auth0Id, RegisterRequest request) {
+    public void registerUser(String auth0Id, String email, RegisterRequest request) {
 
         if (userRepository.findByAuth0id(auth0Id).isPresent()) {
             throw new IllegalStateException("User already exists");
@@ -29,6 +29,7 @@ public class UserService {
         User user = new User();
 
         user.setAuth0id(auth0Id);
+        user.setEmail(email);
         user.setFullName(request.getFullName());
         user.setBirthDate(request.getBirthDate());
         user.setGender(request.getGender());
@@ -44,11 +45,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserResponse updateUser(String auth0Id, RegisterRequest request) {
+    public UserResponse updateUser(String auth0Id, String email, RegisterRequest request) {
 
         User user = userRepository.findByAuth0id(auth0Id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if (email != null && !email.isBlank()) {
+            user.setEmail(email);
+        }
         user.setFullName(request.getFullName());
         user.setBirthDate(request.getBirthDate());
         user.setGender(request.getGender());
