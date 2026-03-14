@@ -29,7 +29,9 @@ public class UserService {
         User user = new User();
 
         user.setAuth0id(auth0Id);
-        user.setEmail(email);
+        if (email != null && !email.isBlank()) {
+            user.setEmail(email);
+        }
         user.setFullName(request.getFullName());
         user.setBirthDate(request.getBirthDate());
         user.setGender(request.getGender());
@@ -45,10 +47,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserResponse updateUser(String auth0Id, String email, RegisterRequest request) {
+    public UserResponse updateUser(String auth0Id, String email, RegisterRequest request) throws NotFoundException{
 
         User user = userRepository.findByAuth0id(auth0Id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (email != null && !email.isBlank()) {
             user.setEmail(email);

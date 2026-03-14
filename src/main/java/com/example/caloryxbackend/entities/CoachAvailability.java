@@ -31,8 +31,8 @@ public class CoachAvailability {
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coach_profile_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "coach_profile_id", nullable = false)
     private CoachProfile coachProfile;
 
     @Enumerated(EnumType.STRING)

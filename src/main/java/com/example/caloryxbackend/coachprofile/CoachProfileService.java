@@ -1,15 +1,9 @@
 package com.example.caloryxbackend.coachprofile;
 
 import com.example.caloryxbackend.account.CurrentUserService;
+import com.example.caloryxbackend.coachprofile.payload.*;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
-import com.example.caloryxbackend.coachprofile.payload.CoachAvailabilityRequest;
-import com.example.caloryxbackend.coachprofile.payload.CoachAvailabilityResponse;
-import com.example.caloryxbackend.coachprofile.payload.CoachCertificateRequest;
-import com.example.caloryxbackend.coachprofile.payload.CoachCertificateResponse;
-import com.example.caloryxbackend.coachprofile.payload.CoachListResponse;
-import com.example.caloryxbackend.coachprofile.payload.CoachProfileRequest;
-import com.example.caloryxbackend.coachprofile.payload.CoachProfileResponse;
 import com.example.caloryxbackend.entities.CoachAvailability;
 import com.example.caloryxbackend.entities.CoachCertificate;
 import com.example.caloryxbackend.entities.CoachProfile;
@@ -22,20 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class CoachProfileService {
 
     private final CoachProfileRepository coachProfileRepository;
-    private final CoachAvailabilityRepository coachAvailabilityRepository;
-    private final CoachCertificateRepository coachCertificateRepository;
     private final UserRepository userRepository;
     private final CurrentUserService currentUserService;
 
@@ -87,7 +74,7 @@ public class CoachProfileService {
     public CoachProfileResponse getMine() {
         User user = getCurrentUser();
         CoachProfile coachProfile = coachProfileRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new BadRequestException("Coach profile does not exist for the current user"));
+                .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
 
         return mapProfileResponse(coachProfile);
     }
@@ -131,7 +118,7 @@ public class CoachProfileService {
         profile.getAvailabilities().clear();
         profile.getCertificates().clear();
 
-        entityManager.flush();   // <- ez kell
+        entityManager.flush();
 
         profile.getAvailabilities().addAll(
                 buildAvailabilities(profile, request.getAvailabilities())
