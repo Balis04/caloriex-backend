@@ -15,6 +15,8 @@ import com.example.caloryxbackend.entities.CoachCertificate;
 import com.example.caloryxbackend.entities.CoachProfile;
 import com.example.caloryxbackend.entities.User;
 import com.example.caloryxbackend.user.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,37 +39,48 @@ public class CoachProfileService {
     private final UserRepository userRepository;
     private final CurrentUserService currentUserService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Transactional
     public CoachProfileResponse create(CoachProfileRequest request) {
+
         User user = getCurrentUser();
+
         if (coachProfileRepository.existsByUserId(user.getId())) {
             throw new BadRequestException("Coach profile already exists for the current user");
         }
+
         validateRequest(request);
 
         CoachProfile coachProfile = new CoachProfile();
         coachProfile.setUser(user);
-        applyProfileFields(coachProfile, request);
-        CoachProfile savedProfile = coachProfileRepository.save(coachProfile);
 
-        replaceChildren(savedProfile, request);
-        return mapProfileResponse(coachProfileRepository.findById(savedProfile.getId())
-                .orElseThrow(() -> new NotFoundException("Coach profile not found after creation")));
+        applyProfileFields(coachProfile, request);
+
+        replaceChildren(coachProfile, request);
+
+        CoachProfile saved = coachProfileRepository.save(coachProfile);
+
+        return mapProfileResponse(saved);
     }
 
     @Transactional
     public CoachProfileResponse update(UUID id, CoachProfileRequest request) {
+
         User user = getCurrentUser();
-        CoachProfile coachProfile = coachProfileRepository.findByIdAndUserId(id, user.getId())
+
+        CoachProfile coachProfile = coachProfileRepository
+                .findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new NotFoundException("Coach profile not found"));
 
         validateRequest(request);
+
         applyProfileFields(coachProfile, request);
-        coachProfileRepository.save(coachProfile);
 
         replaceChildren(coachProfile, request);
-        return mapProfileResponse(coachProfileRepository.findById(coachProfile.getId())
-                .orElseThrow(() -> new NotFoundException("Coach profile not found after update")));
+
+        return mapProfileResponse(coachProfile);
     }
 
     @Transactional(readOnly = true)
@@ -113,22 +126,31 @@ public class CoachProfileService {
         entity.setContactNote(request.getContactNote());
     }
 
-    private void replaceChildren(CoachProfile coachProfile, CoachProfileRequest request) {
-        coachAvailabilityRepository.deleteAllByCoachProfileId(coachProfile.getId());
-        coachAvailabilityRepository.flush();
-        coachCertificateRepository.deleteAllByCoachProfileId(coachProfile.getId());
-        coachCertificateRepository.flush();
+    private void replaceChildren(CoachProfile profile, CoachProfileRequest request) {
 
-        coachAvailabilityRepository.saveAll(buildAvailabilities(coachProfile, request.getAvailabilities()));
-        coachCertificateRepository.saveAll(buildCertificates(coachProfile, request.getCertificates()));
+        profile.getAvailabilities().clear();
+        profile.getCertificates().clear();
+
+        entityManager.flush();   // <- ez kell
+
+        profile.getAvailabilities().addAll(
+                buildAvailabilities(profile, request.getAvailabilities())
+        );
+
+        profile.getCertificates().addAll(
+                buildCertificates(profile, request.getCertificates())
+        );
     }
 
     private List<CoachAvailability> buildAvailabilities(
             CoachProfile coachProfile,
             List<CoachAvailabilityRequest> requests
     ) {
+
         List<CoachAvailability> availabilities = new ArrayList<>();
+
         for (CoachAvailabilityRequest request : requests) {
+
             if (!Boolean.TRUE.equals(request.getAvailable())) {
                 continue;
             }
@@ -139,8 +161,10 @@ public class CoachProfileService {
             entity.setAvailable(true);
             entity.setStartTime(request.getStartTime());
             entity.setEndTime(request.getEndTime());
+
             availabilities.add(entity);
         }
+
         return availabilities;
     }
 

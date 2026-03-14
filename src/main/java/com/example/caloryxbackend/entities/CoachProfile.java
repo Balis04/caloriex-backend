@@ -2,19 +2,7 @@ package com.example.caloryxbackend.entities;
 
 import com.example.caloryxbackend.coachprofile.model.Currency;
 import com.example.caloryxbackend.coachprofile.model.TrainingFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -65,11 +53,19 @@ public class CoachProfile {
     @Column(name = "contact_note", columnDefinition = "text")
     private String contactNote;
 
-    @OneToMany(mappedBy = "coachProfile", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "coachProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @org.hibernate.annotations.BatchSize(size = 20)
     private List<CoachAvailability> availabilities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "coachProfile", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "coachProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     @org.hibernate.annotations.BatchSize(size = 20)
     private List<CoachCertificate> certificates = new ArrayList<>();
 

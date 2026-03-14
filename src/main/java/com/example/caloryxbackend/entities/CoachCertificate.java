@@ -27,8 +27,8 @@ public class CoachCertificate {
     @Column(name = "id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "coach_profile_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coach_profile_id")
     private CoachProfile coachProfile;
 
     @Column(name = "file_name", nullable = false, length = 255)

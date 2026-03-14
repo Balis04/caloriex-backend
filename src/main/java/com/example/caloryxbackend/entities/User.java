@@ -85,5 +85,9 @@ public class User {
         if (createdAt == null) {
             createdAt = Instant.now();
         }
+
+        if (role == null) {
+            role = UserRole.USER;
+        }
     }
 }

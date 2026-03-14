@@ -1,7 +1,6 @@
 package com.example.caloryxbackend.account;
 
 import com.example.caloryxbackend.account.payload.AccountResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
