@@ -5,8 +5,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class CurrentUserService {
+
+    private static final List<String> EMAIL_CLAIM_CANDIDATES = List.of(
+            "email",
+            "preferred_username",
+            "upn",
+            "unique_name"
+    );
 
     public CurrentUser get() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -15,8 +24,8 @@ public class CurrentUserService {
             throw new IllegalStateException("No JWT authentication found");
         }
 
-        String auth0Id = jwt.getSubject(); // sub
-        String email = jwt.getClaimAsString("email");
+        String auth0Id = jwt.getSubject();
+        String email = jwt.getClaimAsString("https://caloriex.com/email");
 
         return new CurrentUser(auth0Id, email);
     }
