@@ -1,7 +1,9 @@
 package com.example.caloryxbackend.coachprofile.payload;
 
+import com.example.caloryxbackend.coachprofile.coachavailability.payload.CoachAvailabilityRequest;
 import com.example.caloryxbackend.coachprofile.model.Currency;
 import com.example.caloryxbackend.coachprofile.model.TrainingFormat;
+import com.example.caloryxbackend.validation.ValidPriceRange;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@ValidPriceRange
 public class CoachProfileRequest {
 
     private LocalDate trainingStartedAt;
@@ -35,7 +38,4 @@ public class CoachProfileRequest {
     @Valid
     @NotEmpty(message = "At least one availability entry is required")
     private List<CoachAvailabilityRequest> availabilities;
-
-    @Valid
-    private List<CoachCertificateRequest> certificates;
 }

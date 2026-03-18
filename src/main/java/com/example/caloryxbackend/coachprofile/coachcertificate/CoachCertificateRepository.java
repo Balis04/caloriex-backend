@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.coachprofile;
+package com.example.caloryxbackend.coachprofile.coachcertificate;
 
 import com.example.caloryxbackend.entities.CoachCertificate;
 import org.springframework.data.jpa.repository.JpaRepository;

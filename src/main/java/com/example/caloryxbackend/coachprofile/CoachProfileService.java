@@ -1,314 +1,140 @@
 package com.example.caloryxbackend.coachprofile;
 
 import com.example.caloryxbackend.account.CurrentUserService;
-import com.example.caloryxbackend.coachprofile.payload.*;
+import com.example.caloryxbackend.coachprofile.coachavailability.CoachAvailabilityFactory;
+import com.example.caloryxbackend.coachprofile.coachavailability.CoachAvailabilityRepository;
+import com.example.caloryxbackend.coachprofile.coachcertificate.CoachCertificateFactory;
+import com.example.caloryxbackend.coachprofile.coachcertificate.CoachCertificateMapper;
+import com.example.caloryxbackend.coachprofile.coachcertificate.CoachCertificateRepository;
+import com.example.caloryxbackend.coachprofile.coachcertificate.payload.CoachCertificateResponse;
+import com.example.caloryxbackend.coachprofile.coachcertificate.payload.CoachCertificateUploadRequest;
+import com.example.caloryxbackend.coachprofile.payload.CoachListResponse;
+import com.example.caloryxbackend.coachprofile.payload.CoachProfileRequest;
+import com.example.caloryxbackend.coachprofile.payload.CoachProfileResponse;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
-import com.example.caloryxbackend.entities.CoachAvailability;
 import com.example.caloryxbackend.entities.CoachCertificate;
 import com.example.caloryxbackend.entities.CoachProfile;
 import com.example.caloryxbackend.entities.User;
-import com.example.caloryxbackend.user.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.example.caloryxbackend.storage.CertificateStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CoachProfileService {
 
     private final CoachProfileRepository coachProfileRepository;
-    private final UserRepository userRepository;
+    private final CoachCertificateRepository coachCertificateRepository;
     private final CurrentUserService currentUserService;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final CertificateStorageService certificateStorageService;
+    private final CoachProfileMapper coachProfileMapper;
+    private final CoachCertificateMapper coachCertificateMapper;
+    private final CoachCertificateFactory coachCertificateFactory;
+    private final CoachAvailabilityFactory coachAvailabilityFactory;
+    private final CoachAvailabilityRepository coachAvailabilityRepository;
 
     @Transactional
     public CoachProfileResponse create(CoachProfileRequest request) {
 
-        User user = getCurrentUser();
+        User user = currentUserService.getUser();
 
         if (coachProfileRepository.existsByUserId(user.getId())) {
             throw new BadRequestException("Coach profile already exists for the current user");
         }
 
-        validateRequest(request);
-
         CoachProfile coachProfile = new CoachProfile();
         coachProfile.setUser(user);
 
-        applyProfileFields(coachProfile, request);
+        coachProfileMapper.updateFromRequest(request, coachProfile);
 
-        replaceChildren(coachProfile, request);
+        replaceAvailability(coachProfile, request);
 
         CoachProfile saved = coachProfileRepository.save(coachProfile);
-
-        return mapProfileResponse(saved);
+        return coachProfileMapper.toResponse(saved);
     }
 
     @Transactional
     public CoachProfileResponse update(UUID id, CoachProfileRequest request) {
 
-        User user = getCurrentUser();
+        CoachProfile coachProfile = getMyCoachProfile(id);
 
-        CoachProfile coachProfile = coachProfileRepository
-                .findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new NotFoundException("Coach profile not found"));
+        coachProfileMapper.updateFromRequest(request, coachProfile);
 
-        validateRequest(request);
+        replaceAvailability(coachProfile, request);
 
-        applyProfileFields(coachProfile, request);
-
-        replaceChildren(coachProfile, request);
-
-        return mapProfileResponse(coachProfile);
+        CoachProfile saved = coachProfileRepository.save(coachProfile);
+        return coachProfileMapper.toResponse(saved);
     }
 
     @Transactional(readOnly = true)
     public CoachProfileResponse getMine() {
-        User user = getCurrentUser();
-        CoachProfile coachProfile = coachProfileRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
+        CoachProfile coachProfile = getMyCoachProfile();
 
-        return mapProfileResponse(coachProfile);
+        return coachProfileMapper.toResponse(coachProfile);
     }
 
     @Transactional(readOnly = true)
     public List<CoachListResponse> getAll() {
-        User user = getCurrentUser();
+        User user = currentUserService.getUser();
         return coachProfileRepository.findAllByUserIdNot(user.getId()).stream()
-                .map(this::mapListResponse)
+                .map(coachProfileMapper::toListResponse)
                 .toList();
     }
 
     @Transactional
+    public CoachCertificateResponse uploadCertificate(
+            UUID id,
+            CoachCertificateUploadRequest request
+    ) {
+        CoachProfile coachProfile = getMyCoachProfile(id);
+
+        var upload = certificateStorageService.uploadCertificate(request.getFile());
+
+        CoachCertificate certificate = coachCertificateFactory.create(
+                request,
+                coachProfile,
+                upload
+        );
+
+        CoachCertificate saved = coachCertificateRepository.save(certificate);
+        coachProfile.getCertificates().add(saved);
+
+        return coachCertificateMapper.toResponse(saved);
+    }
+
+    @Transactional
     public void delete(UUID id) {
-        User user = getCurrentUser();
-        CoachProfile coachProfile = coachProfileRepository.findByIdAndUserId(id, user.getId())
-                .orElseThrow(() -> new NotFoundException("Coach profile not found"));
+        CoachProfile coachProfile = getMyCoachProfile(id);
 
         coachProfileRepository.delete(coachProfile);
     }
 
-    private User getCurrentUser() {
-        String auth0Id = currentUserService.getAuth0Id();
-        return userRepository.findByAuth0id(auth0Id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    private void applyProfileFields(CoachProfile entity, CoachProfileRequest request) {
-        entity.setTrainingStartedAt(request.getTrainingStartedAt());
-        entity.setShortDescription(request.getShortDescription());
-        entity.setTrainingFormat(request.getTrainingFormat());
-        entity.setPriceFrom(request.getPriceFrom());
-        entity.setPriceTo(request.getPriceTo());
-        entity.setCurrency(request.getCurrency());
-        entity.setMaxCapacity(request.getMaxCapacity());
-        entity.setContactNote(request.getContactNote());
-    }
-
-    private void replaceChildren(CoachProfile profile, CoachProfileRequest request) {
+    private void replaceAvailability(CoachProfile profile, CoachProfileRequest request) {
+        coachAvailabilityRepository.deleteAllByCoachProfileId(profile.getId());
 
         profile.getAvailabilities().clear();
-        profile.getCertificates().clear();
-
-        entityManager.flush();
 
         profile.getAvailabilities().addAll(
-                buildAvailabilities(profile, request.getAvailabilities())
-        );
-
-        profile.getCertificates().addAll(
-                buildCertificates(profile, request.getCertificates())
+                coachAvailabilityFactory.createList(profile, request.getAvailabilities())
         );
     }
 
-    private List<CoachAvailability> buildAvailabilities(
-            CoachProfile coachProfile,
-            List<CoachAvailabilityRequest> requests
-    ) {
+    private CoachProfile getMyCoachProfile(UUID id) {
+        User user = currentUserService.getUser();
 
-        List<CoachAvailability> availabilities = new ArrayList<>();
-
-        for (CoachAvailabilityRequest request : requests) {
-
-            if (!Boolean.TRUE.equals(request.getAvailable())) {
-                continue;
-            }
-
-            CoachAvailability entity = new CoachAvailability();
-            entity.setCoachProfile(coachProfile);
-            entity.setDayOfWeek(request.getDayOfWeek());
-            entity.setAvailable(true);
-            entity.setStartTime(request.getStartTime());
-            entity.setEndTime(request.getEndTime());
-
-            availabilities.add(entity);
-        }
-
-        return availabilities;
+        return coachProfileRepository.findByIdAndUserId(id, user.getId())
+                .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
     }
 
-    private List<CoachCertificate> buildCertificates(
-            CoachProfile coachProfile,
-            List<CoachCertificateRequest> requests
-    ) {
-        if (requests == null || requests.isEmpty()) {
-            return List.of();
-        }
+    private CoachProfile getMyCoachProfile() {
+        User user = currentUserService.getUser();
 
-        List<CoachCertificate> certificates = new ArrayList<>();
-        for (CoachCertificateRequest request : requests) {
-            if (isBlank(request.getFileName()) && isBlank(request.getFileUrl())) {
-                continue;
-            }
-
-            CoachCertificate entity = new CoachCertificate();
-            entity.setCoachProfile(coachProfile);
-            entity.setFileName(request.getFileName());
-            entity.setCertificateName(request.getCertificateName());
-            entity.setIssuer(request.getIssuer());
-            entity.setIssuedAt(request.getIssuedAt());
-            entity.setFileUrl(request.getFileUrl());
-            entity.setContentType(request.getContentType());
-            entity.setFileSizeBytes(request.getFileSizeBytes());
-            certificates.add(entity);
-        }
-        return certificates;
-    }
-
-    private void validateRequest(CoachProfileRequest request) {
-        if (request.getPriceFrom() != null && request.getPriceTo() != null && request.getPriceFrom() > request.getPriceTo()) {
-            throw new BadRequestException("Price from cannot be greater than price to");
-        }
-
-        if ((request.getPriceFrom() != null || request.getPriceTo() != null) && request.getCurrency() == null) {
-            throw new BadRequestException("Currency is required when a price range is provided");
-        }
-
-        validateAvailabilities(request.getAvailabilities());
-        validateCertificates(request.getCertificates());
-    }
-
-    private void validateAvailabilities(List<CoachAvailabilityRequest> requests) {
-        Set<DayOfWeek> seenDays = EnumSet.noneOf(DayOfWeek.class);
-        for (CoachAvailabilityRequest request : requests) {
-            if (!seenDays.add(request.getDayOfWeek())) {
-                throw new BadRequestException("Each day of week can only appear once");
-            }
-
-            boolean available = Boolean.TRUE.equals(request.getAvailable());
-            if (available && (request.getStartTime() == null || request.getEndTime() == null)) {
-                throw new BadRequestException("Start and end time are required for available days");
-            }
-
-            if (available && !request.getStartTime().isBefore(request.getEndTime())) {
-                throw new BadRequestException("Start time must be before end time");
-            }
-        }
-    }
-
-    private void validateCertificates(List<CoachCertificateRequest> requests) {
-        if (requests == null) {
-            return;
-        }
-
-        for (CoachCertificateRequest request : requests) {
-            boolean hasAnyCertificateValue =
-                    !isBlank(request.getFileName()) ||
-                    !isBlank(request.getFileUrl()) ||
-                    !isBlank(request.getCertificateName()) ||
-                    !isBlank(request.getIssuer()) ||
-                    request.getIssuedAt() != null ||
-                    !isBlank(request.getContentType()) ||
-                    request.getFileSizeBytes() != null;
-
-            if (!hasAnyCertificateValue) {
-                continue;
-            }
-
-            if (isBlank(request.getFileName()) || isBlank(request.getFileUrl())) {
-                throw new BadRequestException("Certificate fileName and fileUrl are required when certificate data is provided");
-            }
-        }
-    }
-
-    private CoachProfileResponse mapProfileResponse(CoachProfile entity) {
-        return new CoachProfileResponse(
-                entity.getId(),
-                entity.getUser().getId(),
-                entity.getTrainingStartedAt(),
-                entity.getShortDescription(),
-                entity.getTrainingFormat(),
-                entity.getPriceFrom(),
-                entity.getPriceTo(),
-                entity.getCurrency(),
-                entity.getMaxCapacity(),
-                entity.getContactNote(),
-                mapAvailabilities(entity),
-                mapCertificates(entity),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
-    private CoachListResponse mapListResponse(CoachProfile entity) {
-        return new CoachListResponse(
-                entity.getId(),
-                entity.getUser().getId(),
-                entity.getUser().getFullName(),
-                entity.getUser().getEmail(),
-                entity.getTrainingStartedAt(),
-                entity.getShortDescription(),
-                entity.getTrainingFormat(),
-                entity.getPriceFrom(),
-                entity.getPriceTo(),
-                entity.getCurrency(),
-                entity.getMaxCapacity(),
-                entity.getContactNote(),
-                mapAvailabilities(entity),
-                mapCertificates(entity),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
-    private List<CoachAvailabilityResponse> mapAvailabilities(CoachProfile entity) {
-        return entity.getAvailabilities().stream()
-                .sorted(Comparator.comparing(CoachAvailability::getDayOfWeek))
-                .map(availability -> new CoachAvailabilityResponse(
-                        availability.getId(),
-                        availability.getDayOfWeek(),
-                        availability.isAvailable(),
-                        availability.getStartTime(),
-                        availability.getEndTime()
-                ))
-                .toList();
-    }
-
-    private List<CoachCertificateResponse> mapCertificates(CoachProfile entity) {
-        return entity.getCertificates().stream()
-                .map(certificate -> new CoachCertificateResponse(
-                        certificate.getId(),
-                        certificate.getFileName(),
-                        certificate.getCertificateName(),
-                        certificate.getIssuer(),
-                        certificate.getIssuedAt(),
-                        certificate.getFileUrl(),
-                        certificate.getContentType(),
-                        certificate.getFileSizeBytes(),
-                        certificate.getUploadedAt()
-                ))
-                .toList();
-    }
-
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
+        return coachProfileRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
     }
 }

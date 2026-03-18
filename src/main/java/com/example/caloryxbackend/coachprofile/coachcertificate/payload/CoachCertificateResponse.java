@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.coachprofile.payload;
+package com.example.caloryxbackend.coachprofile.coachcertificate.payload;
 
 import java.time.Instant;
 import java.util.UUID;
