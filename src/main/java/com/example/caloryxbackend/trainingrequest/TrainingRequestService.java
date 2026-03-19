@@ -51,7 +51,7 @@ public class TrainingRequestService {
             throw new BadRequestException("You cannot send a training request to your own coach profile");
         }
 
-        TrainingRequest trainingRequest = trainingRequestMapper.toEntity(request, requester, coachProfile);
+        TrainingRequest trainingRequest = trainingRequestMapper.toEntity(request, TrainingRequestStatus.PENDING, requester, coachProfile);
 
         TrainingRequest saved = trainingRequestRepository.save(trainingRequest);
 

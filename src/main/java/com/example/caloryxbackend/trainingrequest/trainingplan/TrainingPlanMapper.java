@@ -1,8 +1,8 @@
 package com.example.caloryxbackend.trainingrequest.trainingplan;
 
-import com.example.caloryxbackend.coachprofile.payload.CoachCertificateUploadResponse;
 import com.example.caloryxbackend.entities.TrainingPlan;
 import com.example.caloryxbackend.entities.TrainingRequest;
+import com.example.caloryxbackend.storage.payload.DocumentUploadResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingPlanResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,15 +16,15 @@ public interface TrainingPlanMapper {
     @Mapping(target = "requesterUser", source = "request.requesterUser")
     @Mapping(target = "planName", source = "planName")
     @Mapping(target = "description", source = "description")
-    @Mapping(target = "fileName", source = "upload.fileName")
+    @Mapping(target = "fileName", source = "upload.originalFileName")
     @Mapping(target = "fileUrl", source = "upload.fileUrl")
     @Mapping(target = "contentType", source = "upload.contentType")
-    @Mapping(target = "fileSizeBytes", source = "upload.fileSizeBytes")
+    @Mapping(target = "fileSizeBytes", source = "upload.size")
     TrainingPlan toEntity(
             TrainingRequest request,
             String planName,
             String description,
-            CoachCertificateUploadResponse upload
+            DocumentUploadResponse upload
     );
 
     TrainingPlanResponse toResponse(TrainingPlan entity);

@@ -20,12 +20,13 @@ public interface TrainingRequestMapper {
     @Mapping(target = "weeklyTrainingCount", source = "request.weeklyTrainingCount")
     @Mapping(target = "sessionDurationMinutes", source = "request.sessionDurationMinutes")
     @Mapping(target = "preferredLocation", source = "request.preferredLocation")
-    @Mapping(target = "status", expression = "java(resolveStatus(request))")
+    @Mapping(target = "status", source = "status")
     @Mapping(target = "coachNote", source = "request.coachNote")
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     TrainingRequest toEntity(
             TrainingRequestCreateRequest request,
+            TrainingRequestStatus status,
             User requester,
             CoachProfile coachProfile
     );
@@ -55,10 +56,4 @@ public interface TrainingRequestMapper {
     @Mapping(source = "fileUrl", target = "fileUrl")
     @Mapping(source = "uploadedAt", target = "uploadedAt")
     ClosedTrainingRequestResponse toClosedResponse(TrainingPlan entity);
-
-    default TrainingRequestStatus resolveStatus(TrainingRequestCreateRequest request) {
-        return request.status() == null
-                ? TrainingRequestStatus.PENDING
-                : request.status();
-    }
 }

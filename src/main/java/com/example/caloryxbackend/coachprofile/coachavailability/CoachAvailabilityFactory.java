@@ -19,7 +19,7 @@ public class CoachAvailabilityFactory {
             List<CoachAvailabilityRequest> requests
     ) {
         return requests.stream()
-                .filter(CoachAvailabilityRequest::getAvailable)
+                .filter(r -> Boolean.TRUE.equals(r.getAvailable()))
                 .map(r -> {
                     CoachAvailability entity = mapper.toEntity(r);
                     entity.setCoachProfile(profile);

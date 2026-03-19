@@ -3,7 +3,7 @@ package com.example.caloryxbackend.storage;
 import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.config.R2StorageProperties;
-import com.example.caloryxbackend.coachprofile.payload.CoachCertificateUploadResponse;
+import com.example.caloryxbackend.storage.payload.DocumentUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,15 +34,15 @@ public class CertificateStorageService {
     private final R2StorageProperties properties;
     private final CurrentUserService currentUserService;
 
-    public CoachCertificateUploadResponse uploadCertificate(MultipartFile file) {
+    public DocumentUploadResponse uploadCertificate(MultipartFile file) {
         return uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate");
     }
 
-    public CoachCertificateUploadResponse uploadTrainingPlan(MultipartFile file) {
+    public DocumentUploadResponse uploadTrainingPlan(MultipartFile file) {
         return uploadDocument(file, "Training plan", "training plan", "training-plans", "training-plan");
     }
 
-    private CoachCertificateUploadResponse uploadDocument(
+    private DocumentUploadResponse uploadDocument(
             MultipartFile file,
             String documentLabel,
             String fileTypeLabel,
@@ -73,7 +73,7 @@ public class CertificateStorageService {
             throw new BadRequestException("Failed to upload " + fileTypeLabel + " to storage");
         }
 
-        return new CoachCertificateUploadResponse(
+        return new DocumentUploadResponse(
                 originalFileName,
                 buildFileUrl(objectKey),
                 contentType,

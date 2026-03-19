@@ -22,8 +22,6 @@ public record TrainingRequestCreateRequest(
         @Size(max = 255)
         String preferredLocation,
 
-        TrainingRequestStatus status,
-
         @Size(max = 5000)
         String coachNote
 ) {
