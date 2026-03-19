@@ -17,13 +17,6 @@ public class CurrentUserService {
 
     private final UserRepository userRepository;
 
-    private static final List<String> EMAIL_CLAIM_CANDIDATES = List.of(
-            "email",
-            "preferred_username",
-            "upn",
-            "unique_name"
-    );
-
     public User getUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -55,12 +48,6 @@ public class CurrentUserService {
     }
 
     public String getEmail() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || !(auth.getPrincipal() instanceof Jwt jwt)) {
-            throw new IllegalStateException("No JWT authentication found");
-        }
-
-        return jwt.getClaimAsString("https://caloriex.com/email");
+        return get().email();
     }
 }

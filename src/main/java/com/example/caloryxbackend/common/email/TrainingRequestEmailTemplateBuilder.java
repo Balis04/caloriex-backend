@@ -60,7 +60,7 @@ public class TrainingRequestEmailTemplateBuilder {
                 Heti edzésszám: %s
                 Egy alkalom hossza: %s perc
                 Preferált helyszín: %s
-                Edzői megjegyzés: %s
+                Indoklás: %s
                 Kérés azonosító: %s
                 Létrehozva: %s
 

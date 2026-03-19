@@ -13,6 +13,7 @@ public class CoachAvailabilityRequest {
     @NotNull
     private DayOfWeek dayOfWeek;
 
+    @NotNull
     private Boolean available;
 
     private LocalTime startTime;

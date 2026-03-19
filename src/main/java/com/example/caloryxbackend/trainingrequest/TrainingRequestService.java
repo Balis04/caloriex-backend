@@ -64,7 +64,7 @@ public class TrainingRequestService {
     public TrainingRequestResponse updateStatus(UUID trainingRequestId, TrainingRequestStatusUpdateRequest request) {
         TrainingRequest trainingRequest = findTrainingRequest(trainingRequestId);
 
-        validator.validateStatusUpdate(request.status());
+        validator.validateStatusUpdate(trainingRequest.getStatus(), request.status());
 
         trainingRequest.setStatus(request.status());
         trainingRequest.setDescription(request.description());

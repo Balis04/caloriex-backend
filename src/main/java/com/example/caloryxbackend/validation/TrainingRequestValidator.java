@@ -22,9 +22,13 @@ public class TrainingRequestValidator {
         }
     }
 
-    public void validateStatusUpdate(TrainingRequestStatus status){
-        if (status != TrainingRequestStatus.APPROVED && status != TrainingRequestStatus.REJECTED) {
+    public void validateStatusUpdate(TrainingRequestStatus actualStatus ,TrainingRequestStatus nextStatus){
+        if (nextStatus != TrainingRequestStatus.APPROVED && nextStatus != TrainingRequestStatus.REJECTED) {
             throw new BadRequestException("Status can only be APPROVED or REJECTED");
+        }
+
+        if (actualStatus.equals(TrainingRequestStatus.CLOSED)){
+            throw new BadRequestException("Actual status can not be CLOSED");
         }
     }
 }

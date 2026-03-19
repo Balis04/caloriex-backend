@@ -115,7 +115,9 @@ public class CoachProfileService {
     }
 
     private void replaceAvailability(CoachProfile profile, CoachProfileRequest request) {
-        coachAvailabilityRepository.deleteAllByCoachProfileId(profile.getId());
+        if (profile.getId() != null) {
+            coachAvailabilityRepository.deleteAllByCoachProfileId(profile.getId());
+        }
 
         profile.getAvailabilities().clear();
 
