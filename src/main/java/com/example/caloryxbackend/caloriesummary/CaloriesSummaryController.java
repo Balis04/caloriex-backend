@@ -3,7 +3,7 @@ package com.example.caloryxbackend.caloriesummary;
 import com.example.caloryxbackend.caloriesummary.payload.CaloriesSummaryResponse;
 import com.example.caloryxbackend.caloriesummary.payload.MealTimeGroupResponse;
 import com.example.caloryxbackend.caloriesummary.payload.TodayFoodItemResponse;
-import com.example.caloryxbackend.foodlog.MealTime;
+import com.example.caloryxbackend.common.enums.MealTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

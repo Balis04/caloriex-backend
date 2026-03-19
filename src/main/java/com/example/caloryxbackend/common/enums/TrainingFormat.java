@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.coachprofile.model;
+package com.example.caloryxbackend.common.enums;
 
 public enum TrainingFormat {
     ONLINE,

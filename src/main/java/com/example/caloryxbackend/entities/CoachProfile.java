@@ -1,7 +1,7 @@
 package com.example.caloryxbackend.entities;
 
-import com.example.caloryxbackend.coachprofile.model.Currency;
-import com.example.caloryxbackend.coachprofile.model.TrainingFormat;
+import com.example.caloryxbackend.common.enums.Currency;
+import com.example.caloryxbackend.common.enums.TrainingFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

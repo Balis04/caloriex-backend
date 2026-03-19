@@ -1,8 +1,8 @@
 package com.example.caloryxbackend.coachprofile.payload;
 
 import com.example.caloryxbackend.coachprofile.coachavailability.payload.CoachAvailabilityRequest;
-import com.example.caloryxbackend.coachprofile.model.Currency;
-import com.example.caloryxbackend.coachprofile.model.TrainingFormat;
+import com.example.caloryxbackend.common.enums.Currency;
+import com.example.caloryxbackend.common.enums.TrainingFormat;
 import com.example.caloryxbackend.validation.ValidPriceRange;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

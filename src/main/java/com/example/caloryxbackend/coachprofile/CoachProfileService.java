@@ -131,6 +131,11 @@ public class CoachProfileService {
                 .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
     }
 
+    public CoachProfile findCoachProfile(UUID coachProfileId){
+        return coachProfileRepository.findById(coachProfileId)
+                .orElseThrow(() -> new NotFoundException("Coach profile not found"));
+    }
+
     private CoachProfile getMyCoachProfile() {
         User user = currentUserService.getUser();
 

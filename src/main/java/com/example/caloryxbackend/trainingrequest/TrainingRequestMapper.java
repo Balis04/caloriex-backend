@@ -1,0 +1,64 @@
+package com.example.caloryxbackend.trainingrequest;
+
+import com.example.caloryxbackend.entities.CoachProfile;
+import com.example.caloryxbackend.entities.TrainingPlan;
+import com.example.caloryxbackend.entities.TrainingRequest;
+import com.example.caloryxbackend.entities.User;
+import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
+import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
+import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestCreateRequest;
+import com.example.caloryxbackend.trainingrequest.payload.response.TrainingRequestResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface TrainingRequestMapper {
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "requesterUser", source = "requester")
+    @Mapping(target = "coachProfile", source = "coachProfile")
+    @Mapping(target = "weeklyTrainingCount", source = "request.weeklyTrainingCount")
+    @Mapping(target = "sessionDurationMinutes", source = "request.sessionDurationMinutes")
+    @Mapping(target = "preferredLocation", source = "request.preferredLocation")
+    @Mapping(target = "status", expression = "java(resolveStatus(request))")
+    @Mapping(target = "coachNote", source = "request.coachNote")
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    TrainingRequest toEntity(
+            TrainingRequestCreateRequest request,
+            User requester,
+            CoachProfile coachProfile
+    );
+
+    @Mapping(source = "coachProfile.id", target = "coachProfileId")
+    @Mapping(source = "requesterUser.id", target = "requesterUserId")
+    @Mapping(source = "coachProfile.user.fullName", target = "coachName")
+    @Mapping(source = "requesterUser.fullName", target = "requesterName")
+    @Mapping(source = "requesterUser.email", target = "requesterEmail")
+    TrainingRequestResponse toResponse(TrainingRequest entity);
+
+    @Mapping(source = "trainingRequest.id", target = "requestId")
+    @Mapping(source = "trainingRequest.coachProfile.user.fullName", target = "coachName")
+    @Mapping(source = "trainingRequest.requesterUser.fullName", target = "requesterName")
+    @Mapping(source = "trainingRequest.requesterUser.email", target = "requesterEmail")
+    @Mapping(source = "trainingRequest.weeklyTrainingCount", target = "weeklyTrainingCount")
+    @Mapping(source = "trainingRequest.sessionDurationMinutes", target = "sessionDurationMinutes")
+    @Mapping(source = "trainingRequest.preferredLocation", target = "preferredLocation")
+    @Mapping(source = "trainingRequest.status", target = "status")
+    @Mapping(source = "trainingRequest.description", target = "description")
+    @Mapping(source = "trainingRequest.coachNote", target = "coachNote")
+    @Mapping(source = "trainingRequest.createdAt", target = "createdAt")
+
+    @Mapping(source = "planName", target = "planName")
+    @Mapping(source = "description", target = "planDescription")
+    @Mapping(source = "fileName", target = "fileName")
+    @Mapping(source = "fileUrl", target = "fileUrl")
+    @Mapping(source = "uploadedAt", target = "uploadedAt")
+    ClosedTrainingRequestResponse toClosedResponse(TrainingPlan entity);
+
+    default TrainingRequestStatus resolveStatus(TrainingRequestCreateRequest request) {
+        return request.status() == null
+                ? TrainingRequestStatus.PENDING
+                : request.status();
+    }
+}

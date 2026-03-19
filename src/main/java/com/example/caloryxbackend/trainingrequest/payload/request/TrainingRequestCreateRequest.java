@@ -1,6 +1,6 @@
-package com.example.caloryxbackend.trainingrequest.payload;
+package com.example.caloryxbackend.trainingrequest.payload.request;
 
-import com.example.caloryxbackend.trainingrequest.model.TrainingRequestStatus;
+import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package com.example.caloryxbackend.foodlog.payload;
 
-import com.example.caloryxbackend.foodlog.MealTime;
+import com.example.caloryxbackend.common.enums.MealTime;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

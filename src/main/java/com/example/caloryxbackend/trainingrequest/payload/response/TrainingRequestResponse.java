@@ -1,6 +1,6 @@
-package com.example.caloryxbackend.trainingrequest.payload;
+package com.example.caloryxbackend.trainingrequest.payload.response;
 
-import com.example.caloryxbackend.trainingrequest.model.TrainingRequestStatus;
+import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -16,6 +16,7 @@ public record TrainingRequestResponse(
         Integer sessionDurationMinutes,
         String preferredLocation,
         TrainingRequestStatus status,
+        String description,
         String coachNote,
         Instant createdAt
 ) {

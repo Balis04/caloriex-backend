@@ -1,6 +1,6 @@
 package com.example.caloryxbackend.caloriesummary.payload;
 
-import com.example.caloryxbackend.foodlog.MealTime;
+import com.example.caloryxbackend.common.enums.MealTime;
 
 import java.util.List;
 

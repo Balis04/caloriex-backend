@@ -1,10 +1,7 @@
 package com.example.caloryxbackend.entities;
 
-import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,10 +17,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "training_requests")
+@Table(name = "training_plans")
 @Getter
 @Setter
-public class TrainingRequest {
+public class TrainingPlan {
 
     @Id
     @GeneratedValue
@@ -31,31 +28,37 @@ public class TrainingRequest {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "training_request_id", nullable = false)
+    private TrainingRequest trainingRequest;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "coach_user_id", nullable = false)
+    private User coachUser;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "requester_user_id", nullable = false)
     private User requesterUser;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "coach_profile_id", nullable = false)
-    private CoachProfile coachProfile;
-
-    @Column(name = "weekly_training_count", nullable = false)
-    private Integer weeklyTrainingCount;
-
-    @Column(name = "session_duration_minutes", nullable = false)
-    private Integer sessionDurationMinutes;
-
-    @Column(name = "preferred_location", nullable = false, length = 255)
-    private String preferredLocation;
-
-    @Column(name = "coach_note", columnDefinition = "text")
-    private String coachNote;
+    @Column(name = "plan_name", length = 255)
+    private String planName;
 
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 20)
-    private TrainingRequestStatus status;
+    @Column(name = "file_name", nullable = false, length = 255)
+    private String fileName;
+
+    @Column(name = "file_url", nullable = false, length = 500)
+    private String fileUrl;
+
+    @Column(name = "content_type", length = 100)
+    private String contentType;
+
+    @Column(name = "file_size_bytes")
+    private Long fileSizeBytes;
+
+    @Column(name = "uploaded_at", nullable = false)
+    private Instant uploadedAt;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
@@ -69,8 +72,8 @@ public class TrainingRequest {
         if (createdAt == null) {
             createdAt = now;
         }
-        if (status == null) {
-            status = TrainingRequestStatus.PENDING;
+        if (uploadedAt == null) {
+            uploadedAt = now;
         }
         updatedAt = now;
     }
