@@ -7,10 +7,9 @@ import com.example.caloryxbackend.user.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
 
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +25,9 @@ public class User {
 
     @Column(name = "auth0_id", nullable = false, unique = true)
     private String auth0id;
+
+    @Column(name = "email", unique = true)
+    private String email;
 
     @Column(name = "full_name")
     private String fullName;
@@ -67,6 +69,9 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    @OneToOne(mappedBy = "user")
+    private CoachProfile coachProfile;
+
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {
@@ -74,7 +79,7 @@ public class User {
         }
 
         if (role == null) {
-            role = UserRole.USER; // default fallback
+            role = UserRole.USER;
         }
     }
 }

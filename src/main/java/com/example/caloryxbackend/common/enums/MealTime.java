@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.foodlog;
+package com.example.caloryxbackend.common.enums;
 
 import lombok.Getter;
 

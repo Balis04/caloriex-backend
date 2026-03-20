@@ -13,9 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final AccountService accountService;
+    private final CurrentUserService currentUserService;
 
     @GetMapping("/account/has-profile")
     public ResponseEntity<AccountResponse> checkRegister() {
         return ResponseEntity.ok(accountService.getHasProfile());
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<CurrentUser> getProfile(){
+        return ResponseEntity.ok(currentUserService.get());
     }
 }

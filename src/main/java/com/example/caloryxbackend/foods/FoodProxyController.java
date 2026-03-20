@@ -15,7 +15,7 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class FoodProxyController {
 
-    @Value("${USDA_API_KEY}")
+    @Value("${usda.api-key}")
     private String apiKey;
 
     private final RestClient restClient;

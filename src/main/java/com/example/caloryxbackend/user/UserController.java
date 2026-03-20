@@ -23,15 +23,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register( @RequestBody RegisterRequest request ) {
+    public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
         String auth0Id = currentUserService.getAuth0Id();
-        userService.registerUser(auth0Id, request);
+        String email = currentUserService.getEmail();
+        userService.registerUser(auth0Id, email, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserResponse> updateProfile( @RequestBody RegisterRequest request ) {
+    public ResponseEntity<UserResponse> updateProfile(@RequestBody RegisterRequest request) {
         String auth0Id = currentUserService.getAuth0Id();
-        return ResponseEntity.ok(userService.updateUser(auth0Id, request));
+        String email = currentUserService.getEmail();
+        return ResponseEntity.ok(userService.updateUser(auth0Id, email, request));
     }
 }
