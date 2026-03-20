@@ -1,8 +1,8 @@
 package com.example.caloryxbackend.validation;
 
+import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.entities.TrainingRequest;
-import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component

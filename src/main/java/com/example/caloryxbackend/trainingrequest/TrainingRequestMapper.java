@@ -1,12 +1,12 @@
 package com.example.caloryxbackend.trainingrequest;
 
+import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import com.example.caloryxbackend.entities.CoachProfile;
 import com.example.caloryxbackend.entities.TrainingPlan;
 import com.example.caloryxbackend.entities.TrainingRequest;
 import com.example.caloryxbackend.entities.User;
-import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
-import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
 import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestCreateRequest;
+import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingRequestResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

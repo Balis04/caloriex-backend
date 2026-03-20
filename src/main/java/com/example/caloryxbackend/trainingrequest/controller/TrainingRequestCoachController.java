@@ -1,11 +1,11 @@
 package com.example.caloryxbackend.trainingrequest.controller;
 
-import com.example.caloryxbackend.trainingrequest.TrainingRequestService;
 import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
+import com.example.caloryxbackend.trainingrequest.TrainingRequestService;
+import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingPlanResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingRequestResponse;
-import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

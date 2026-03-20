@@ -1,7 +1,7 @@
 package com.example.caloryxbackend.trainingrequest;
 
-import com.example.caloryxbackend.entities.TrainingRequest;
 import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
+import com.example.caloryxbackend.entities.TrainingRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
