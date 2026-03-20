@@ -1,6 +1,6 @@
 package com.example.caloryxbackend.entities;
 
-import com.example.caloryxbackend.foodlog.MealTime;
+import com.example.caloryxbackend.common.enums.MealTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.coachprofile.payload;
+package com.example.caloryxbackend.coachprofile.coachavailability.payload;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

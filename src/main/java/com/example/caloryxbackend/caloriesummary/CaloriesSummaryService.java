@@ -8,7 +8,7 @@ import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;
-import com.example.caloryxbackend.foodlog.MealTime;
+import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.user.UserRepository;
 import com.example.caloryxbackend.user.model.enums.ActivityLevel;
 import com.example.caloryxbackend.user.model.enums.Gender;

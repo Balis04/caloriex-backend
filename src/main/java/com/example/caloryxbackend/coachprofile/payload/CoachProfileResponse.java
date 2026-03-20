@@ -1,7 +1,9 @@
 package com.example.caloryxbackend.coachprofile.payload;
 
-import com.example.caloryxbackend.coachprofile.model.Currency;
-import com.example.caloryxbackend.coachprofile.model.TrainingFormat;
+import com.example.caloryxbackend.coachprofile.coachavailability.payload.CoachAvailabilityResponse;
+import com.example.caloryxbackend.coachprofile.coachcertificate.payload.CoachCertificateResponse;
+import com.example.caloryxbackend.common.enums.Currency;
+import com.example.caloryxbackend.common.enums.TrainingFormat;
 
 import java.time.Instant;
 import java.time.LocalDate;
