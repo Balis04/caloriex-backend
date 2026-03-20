@@ -49,7 +49,7 @@ docker compose up --build
 
 Ha minden rendben, akkor:
 
-- PostgreSQL: `localhost:5432`
+- PostgreSQL: `localhost:5433`
 - Backend API: `http://localhost:8080`
 
 ## Frontend masik repoban

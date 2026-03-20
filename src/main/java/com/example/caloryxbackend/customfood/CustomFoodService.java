@@ -79,7 +79,6 @@ public class CustomFoodService {
 
     private CustomFoodResponse map(CustomFood entity) {
         return new CustomFoodResponse(
-                entity.getId(),
                 entity.getName(),
                 entity.getCalories(),
                 entity.getFat(),
