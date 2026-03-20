@@ -1,6 +1,7 @@
 package com.example.caloryxbackend.trainingrequest.trainingplan;
 
 import com.example.caloryxbackend.entities.TrainingPlan;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,5 +14,11 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan, UUID
 
     Optional<TrainingPlan> findByTrainingRequestId(UUID trainingRequestId);
 
+    @EntityGraph(attributePaths = {
+            "trainingRequest",
+            "trainingRequest.coachProfile",
+            "trainingRequest.coachProfile.user",
+            "trainingRequest.requesterUser"
+    })
     List<TrainingPlan> findAllByCoachUserIdOrderByUploadedAtDesc(UUID coachUserId);
 }

@@ -21,7 +21,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -52,6 +55,7 @@ public class CoachProfileService {
 
         coachProfileMapper.updateFromRequest(request, coachProfile);
 
+        validateAvailabilities(request);
         replaceAvailability(coachProfile, request);
 
         CoachProfile saved = coachProfileRepository.save(coachProfile);
@@ -64,6 +68,8 @@ public class CoachProfileService {
         CoachProfile coachProfile = getMyCoachProfile(id);
 
         coachProfileMapper.updateFromRequest(request, coachProfile);
+
+        validateAvailabilities(request);
 
         replaceAvailability(coachProfile, request);
 
@@ -112,6 +118,18 @@ public class CoachProfileService {
         CoachProfile coachProfile = getMyCoachProfile(id);
 
         coachProfileRepository.delete(coachProfile);
+    }
+
+    private void validateAvailabilities(CoachProfileRequest request) {
+        if (request.getAvailabilities() == null) return;
+
+        Set<DayOfWeek> days = new HashSet<>();
+
+        for (var a : request.getAvailabilities()) {
+            if (!days.add(a.getDayOfWeek())) {
+                throw new BadRequestException("Duplicate availability for day: " + a.getDayOfWeek());
+            }
+        }
     }
 
     private void replaceAvailability(CoachProfile profile, CoachProfileRequest request) {

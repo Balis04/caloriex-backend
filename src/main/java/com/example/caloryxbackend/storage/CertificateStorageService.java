@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,10 +53,29 @@ public class CertificateStorageService {
         validateStorageEnabled(documentLabel);
         validateFile(file, documentLabel, fileTypeLabel);
 
-        String originalFileName = Paths.get(file.getOriginalFilename()).getFileName().toString();
+        String originalFileName = file.getOriginalFilename();
+
+        if (originalFileName == null || originalFileName.isBlank()) {
+            originalFileName = fallbackFileName;
+        } else {
+            originalFileName = originalFileName.replace("\\", "/");
+
+            int lastSlash = originalFileName.lastIndexOf("/");
+            if (lastSlash >= 0) {
+                originalFileName = originalFileName.substring(lastSlash + 1);
+            }
+
+            originalFileName = originalFileName.replace("\0", "");
+        }
+
         String extension = getExtension(originalFileName, documentLabel);
         String contentType = normalizeContentType(file.getContentType(), extension, fileTypeLabel);
-        String objectKey = buildObjectKey(folderName, sanitizeFileName(originalFileName, fallbackFileName), extension);
+
+        String objectKey = buildObjectKey(
+                folderName,
+                sanitizeFileName(originalFileName, fallbackFileName),
+                extension
+        );
 
         try {
             s3Client.putObject(

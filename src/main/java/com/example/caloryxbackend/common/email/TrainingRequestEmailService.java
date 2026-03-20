@@ -25,21 +25,27 @@ public class TrainingRequestEmailService {
     public void sendCreationEmail(TrainingRequest request, User requester, CoachProfile coachProfile) {
         String coachEmail = coachProfile.getUser().getEmail();
 
-        SimpleMailMessage message = createBaseMessage();
-        message.setTo(coachEmail);
-        message.setSubject("[Caloryx] Új edzésterv kérés érkezett");
-
-        String replyTo = requester.getEmail();
-        if (replyTo != null && !replyTo.isBlank()) {
-            message.setReplyTo(replyTo.trim());
+        if (coachEmail == null || coachEmail.isBlank()) {
+            log.warn("Skipping creation email: coach email is missing, request id={}", request.getId());
+            return;
         }
 
-        message.setText(templateBuilder.buildCreationMailBody(request, requester, coachProfile));
-
         try {
+            SimpleMailMessage message = createBaseMessage();
+            message.setTo(coachEmail);
+            message.setSubject("[Caloryx] Új edzésterv kérés érkezett");
+
+            String replyTo = requester.getEmail();
+            if (replyTo != null && !replyTo.isBlank()) {
+                message.setReplyTo(replyTo.trim());
+            }
+
+            message.setText(templateBuilder.buildCreationMailBody(request, requester, coachProfile));
+
             mailSender.send(message);
-        } catch (MailException ex) {
-            log.error("Failed to send training request creation email to coach '{}', request id={}",
+
+        } catch (Exception ex) {
+            log.warn("Failed to send training request creation email to coach '{}', request id={}",
                     coachEmail, request.getId(), ex);
         }
     }
@@ -47,15 +53,21 @@ public class TrainingRequestEmailService {
     public void sendStatusUpdateEmail(TrainingRequest request) {
         String requesterEmail = request.getRequesterUser().getEmail();
 
-        SimpleMailMessage message = createBaseMessage();
-        message.setTo(requesterEmail);
-        message.setSubject("[Caloryx] Frissült az edzéskérelmed státusza");
-        message.setText(templateBuilder.buildStatusUpdateMailBody(request));
+        if (requesterEmail == null || requesterEmail.isBlank()) {
+            log.warn("Skipping status update email: requester email is missing, request id={}", request.getId());
+            return;
+        }
 
         try {
+            SimpleMailMessage message = createBaseMessage();
+            message.setTo(requesterEmail);
+            message.setSubject("[Caloryx] Frissült az edzéskérelmed státusza");
+            message.setText(templateBuilder.buildStatusUpdateMailBody(request));
+
             mailSender.send(message);
-        } catch (MailException ex) {
-            log.error("Failed to send training request status update email to requester '{}', request id={}",
+
+        } catch (Exception ex) {
+            log.warn("Failed to send training request status update email to requester '{}', request id={}",
                     requesterEmail, request.getId(), ex);
         }
     }
