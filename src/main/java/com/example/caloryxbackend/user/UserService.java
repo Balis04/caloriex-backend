@@ -88,4 +88,9 @@ public class UserService {
                 .goal(user.getGoal())
                 .build();
     }
+
+    public User findUser(String auth0Id){
+        return userRepository.findByAuth0id(auth0Id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
 }

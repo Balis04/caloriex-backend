@@ -3,7 +3,7 @@ package com.example.caloryxbackend.trainingrequest.trainingplan;
 import com.example.caloryxbackend.entities.TrainingPlan;
 import com.example.caloryxbackend.entities.TrainingRequest;
 import com.example.caloryxbackend.storage.payload.DocumentUploadResponse;
-import com.example.caloryxbackend.trainingrequest.payload.response.TrainingPlanResponse;
+import com.example.caloryxbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

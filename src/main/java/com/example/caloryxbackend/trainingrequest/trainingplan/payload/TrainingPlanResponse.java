@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.trainingrequest.payload.response;
+package com.example.caloryxbackend.trainingrequest.trainingplan.payload;
 
 import java.time.Instant;
 

@@ -4,7 +4,7 @@ import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import com.example.caloryxbackend.trainingrequest.TrainingRequestService;
 import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
-import com.example.caloryxbackend.trainingrequest.payload.response.TrainingPlanResponse;
+import com.example.caloryxbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingRequestResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
