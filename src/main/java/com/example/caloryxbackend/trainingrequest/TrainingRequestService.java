@@ -13,7 +13,7 @@ import com.example.caloryxbackend.entities.User;
 import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestCreateRequest;
 import com.example.caloryxbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import com.example.caloryxbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
-import com.example.caloryxbackend.trainingrequest.payload.response.TrainingPlanResponse;
+import com.example.caloryxbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;
 import com.example.caloryxbackend.trainingrequest.payload.response.TrainingRequestResponse;
 import com.example.caloryxbackend.trainingrequest.trainingplan.TrainingPlanMapper;
 import com.example.caloryxbackend.trainingrequest.trainingplan.TrainingPlanRepository;

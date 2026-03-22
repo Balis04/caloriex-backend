@@ -15,6 +15,10 @@ public class CustomFoodRequest {
     @DecimalMin(value = "0.0", message = "Calories cannot be negative")
     private Double calories;
 
+    @NotNull(message = "Protein is required")
+    @DecimalMin(value = "0.0", message = "Protein cannot be negative")
+    private Double protein;
+
     @NotNull(message = "Fat is required")
     @DecimalMin(value = "0.0", message = "Fat cannot be negative")
     private Double fat;

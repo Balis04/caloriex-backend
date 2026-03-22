@@ -5,6 +5,7 @@ import com.example.caloryxbackend.common.exception.NotFoundException;
 import com.example.caloryxbackend.customfood.payload.CustomFoodRequest;
 import com.example.caloryxbackend.customfood.payload.CustomFoodResponse;
 import com.example.caloryxbackend.entities.CustomFood;
+import com.example.caloryxbackend.entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,73 +18,56 @@ public class CustomFoodService {
 
     private final CustomFoodRepository customFoodRepository;
     private final CurrentUserService currentUserService;
+    private final CustomFoodMapper customFoodMapper;
 
     public CustomFoodResponse create(CustomFoodRequest request) {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        CustomFood entity = new CustomFood();
-        entity.setAuth0Id(auth0Id);
-        applyRequest(entity, request);
+        CustomFood customFood = customFoodMapper.toEntity(request, user);
 
-        return map(customFoodRepository.save(entity));
+        return customFoodMapper.toResponse(
+                customFoodRepository.save(customFood)
+        );
     }
 
     public CustomFoodResponse update(UUID id, CustomFoodRequest request) {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        CustomFood entity = customFoodRepository.findByIdAndAuth0Id(id, auth0Id)
-                .orElseThrow(() -> new NotFoundException("Custom food not found"));
+        CustomFood customFood = findCustomFood(user, id);
 
-        applyRequest(entity, request);
+        customFoodMapper.updateEntity(customFood, request, user);
 
-        return map(customFoodRepository.save(entity));
+        return customFoodMapper.toResponse(
+                customFoodRepository.save(customFood)
+        );
     }
 
     public void delete(UUID id) {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        CustomFood entity = customFoodRepository.findByIdAndAuth0Id(id, auth0Id)
-                .orElseThrow(() -> new NotFoundException("Custom food not found"));
+        CustomFood entity = findCustomFood(user, id);
 
         customFoodRepository.delete(entity);
     }
 
     public List<CustomFoodResponse> getAll() {
-        return customFoodRepository.findAll().stream()
-                .map(this::map)
-                .toList();
+        return customFoodMapper.toResponseList(customFoodRepository.findAll());
     }
 
     public List<CustomFoodResponse> getMine() {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        return customFoodRepository.findAllByAuth0Id(auth0Id).stream()
-                .map(this::map)
-                .toList();
+        return customFoodMapper.toResponseList(customFoodRepository.findAllByUser(user));
     }
 
     public List<CustomFoodResponse> getNotMine() {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        return customFoodRepository.findAllNotOwnedBy(auth0Id).stream()
-                .map(this::map)
-                .toList();
+        return customFoodMapper.toResponseList(customFoodRepository.findAllNotOwnedBy(user));
     }
 
-    private void applyRequest(CustomFood entity, CustomFoodRequest request) {
-        entity.setName(request.getName());
-        entity.setCalories(request.getCalories());
-        entity.setFat(request.getFat());
-        entity.setCarbohydrates(request.getCarbohydrates());
-    }
-
-    private CustomFoodResponse map(CustomFood entity) {
-        return new CustomFoodResponse(
-                entity.getId(),
-                entity.getName(),
-                entity.getCalories(),
-                entity.getFat(),
-                entity.getCarbohydrates()
-        );
+    private CustomFood findCustomFood(User user, UUID id){
+        return customFoodRepository.findByIdAndUser(id, user)
+                .orElseThrow(() -> new NotFoundException("Custom food not found"));
     }
 }
