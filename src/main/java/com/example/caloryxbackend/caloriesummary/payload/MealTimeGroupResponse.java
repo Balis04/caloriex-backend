@@ -14,6 +14,6 @@ public record MealTimeGroupResponse(
         double consumedProteinGrams,
         double consumedCarbohydratesGrams,
         double consumedFatGrams,
-        List<TodayFoodItemResponse> foods
+        List<FoodItemResponse> foods
 ) {
 }

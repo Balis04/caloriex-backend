@@ -1,8 +1,8 @@
 package com.example.caloryxbackend.common.email;
 
 import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
-import com.example.caloryxbackend.user.model.enums.ActivityLevel;
-import com.example.caloryxbackend.user.model.enums.GoalType;
+import com.example.caloryxbackend.common.enums.ActivityLevel;
+import com.example.caloryxbackend.common.enums.GoalType;
 
 public final class EmailFormatUtils {
 

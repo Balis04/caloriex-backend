@@ -1,9 +1,9 @@
 package com.example.caloryxbackend.user.model.payload;
 
-import com.example.caloryxbackend.user.model.enums.ActivityLevel;
-import com.example.caloryxbackend.user.model.enums.Gender;
-import com.example.caloryxbackend.user.model.enums.GoalType;
-import com.example.caloryxbackend.user.model.enums.UserRole;
+import com.example.caloryxbackend.common.enums.ActivityLevel;
+import com.example.caloryxbackend.common.enums.Gender;
+import com.example.caloryxbackend.common.enums.GoalType;
+import com.example.caloryxbackend.common.enums.UserRole;
 import lombok.Builder;
 import lombok.Data;
 

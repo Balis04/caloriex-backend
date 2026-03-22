@@ -1,9 +1,9 @@
 package com.example.caloryxbackend.entities;
 
-import com.example.caloryxbackend.user.model.enums.ActivityLevel;
-import com.example.caloryxbackend.user.model.enums.Gender;
-import com.example.caloryxbackend.user.model.enums.GoalType;
-import com.example.caloryxbackend.user.model.enums.UserRole;
+import com.example.caloryxbackend.common.enums.ActivityLevel;
+import com.example.caloryxbackend.common.enums.Gender;
+import com.example.caloryxbackend.common.enums.GoalType;
+import com.example.caloryxbackend.common.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,41 +29,41 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name ="birth_date")
+    @Column(name ="birth_date", nullable = false)
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @Column(name = "height_cm")
+    @Column(name = "height_cm", nullable = false)
     private Integer heightCm;
 
-    @Column(name = "start_weight_kg")
+    @Column(name = "start_weight_kg", nullable = false)
     private Double startWeightKg;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "activity_level")
+    @Column(name = "activity_level", nullable = false)
     private ActivityLevel activityLevel;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "goal")
+    @Column(name = "goal", nullable = false)
     private GoalType goal;
 
-    @Column(name = "target_weight_kg")
+    @Column(name = "target_weight_kg", nullable = false)
     private Double targetWeightKg;
 
-    @Column(name = "weekly_goal_kg")
+    @Column(name = "weekly_goal_kg", nullable = false)
     private Double weeklyGoalKg;
 
-    @Column(name = "actual_weight_kg")
+    @Column(name = "actual_weight_kg", nullable = false)
     private Double actualWeightKg;
 
     @Column(name = "created_at", nullable = false)

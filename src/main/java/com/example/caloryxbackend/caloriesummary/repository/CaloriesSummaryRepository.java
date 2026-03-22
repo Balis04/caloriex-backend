@@ -1,5 +1,6 @@
-package com.example.caloryxbackend.caloriesummary;
+package com.example.caloryxbackend.caloriesummary.repository;
 
+import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,7 +23,7 @@ public interface CaloriesSummaryRepository extends JpaRepository<FoodLog, UUID> 
               AND fl.consumedAt >= :start
               AND fl.consumedAt < :end
             """)
-    TodayIntakeProjection findTodayIntake(
+    DayIntakeProjection findTodayIntake(
             @Param("auth0Id") String auth0Id,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
@@ -34,10 +35,10 @@ public interface CaloriesSummaryRepository extends JpaRepository<FoodLog, UUID> 
             LocalDateTime end
     );
 
-    interface TodayIntakeProjection {
-        Double getCalories();
-        Double getProtein();
-        Double getCarbohydrates();
-        Double getFat();
-    }
+    List<FoodLog> findByAuth0IdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+            String auth0Id,
+            MealTime mealTime,
+            LocalDateTime start,
+            LocalDateTime end
+    );
 }

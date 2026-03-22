@@ -5,7 +5,7 @@ import com.example.caloryxbackend.common.enums.MealTime;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record TodayFoodItemResponse(
+public record FoodItemResponse(
         UUID id,
         String foodName,
         MealTime mealTime,
