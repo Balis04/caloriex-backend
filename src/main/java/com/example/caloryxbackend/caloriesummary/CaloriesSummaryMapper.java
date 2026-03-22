@@ -1,10 +1,10 @@
-package com.example.caloryxbackend.caloriessummary;
+package com.example.caloryxbackend.caloriesummary;
 
-import com.example.caloryxbackend.caloriessummary.repository.DayIntakeProjection;
-import com.example.caloryxbackend.caloriessummary.calculation.DailyMacroTargets;
-import com.example.caloryxbackend.caloriessummary.calculation.MealCaloriesBreakdown;
-import com.example.caloryxbackend.caloriessummary.calculation.MealMacroTotals;
-import com.example.caloryxbackend.caloriessummary.payload.*;
+import com.example.caloryxbackend.caloriesummary.repository.DayIntakeProjection;
+import com.example.caloryxbackend.caloriesummary.calculation.DailyMacroTargets;
+import com.example.caloryxbackend.caloriesummary.calculation.MealCaloriesBreakdown;
+import com.example.caloryxbackend.caloriesummary.calculation.MealMacroTotals;
+import com.example.caloryxbackend.caloriesummary.payload.*;
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import org.mapstruct.Mapper;
@@ -49,9 +49,9 @@ public interface CaloriesSummaryMapper {
     MealTimeGroupResponse toMealTimeGroupResponse(
             MealTime mealTime,
             double targetCalories,
-            double targetProtein,
-            double targetCarbohydrates,
-            double targetFat,
+            double targetProteinGrams,
+            double targetCarbohydratesGrams,
+            double targetFatGrams,
             MealMacroTotals summary,
             List<FoodItemResponse> foods
     );

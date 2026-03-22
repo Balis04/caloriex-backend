@@ -29,7 +29,7 @@ public class User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(name ="birth_date", nullable = false)
@@ -46,7 +46,7 @@ public class User {
     @Column(name = "height_cm", nullable = false)
     private Integer heightCm;
 
-    @Column(name = "start_weight_kg")
+    @Column(name = "start_weight_kg", nullable = false)
     private Double startWeightKg;
 
     @Enumerated(EnumType.STRING)
@@ -57,10 +57,10 @@ public class User {
     @Column(name = "goal", nullable = false)
     private GoalType goal;
 
-    @Column(name = "target_weight_kg")
+    @Column(name = "target_weight_kg", nullable = false)
     private Double targetWeightKg;
 
-    @Column(name = "weekly_goal_kg")
+    @Column(name = "weekly_goal_kg", nullable = false)
     private Double weeklyGoalKg;
 
     @Column(name = "actual_weight_kg", nullable = false)

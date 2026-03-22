@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.caloriessummary.calculation;
+package com.example.caloryxbackend.caloriesummary.calculation;
 
 public record MealCaloriesBreakdown(
         double targetBreakfast,

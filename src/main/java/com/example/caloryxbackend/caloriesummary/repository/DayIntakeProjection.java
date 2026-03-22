@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.caloriessummary.repository;
+package com.example.caloryxbackend.caloriesummary.repository;
 
 public interface DayIntakeProjection {
     Double getCalories();

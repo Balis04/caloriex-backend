@@ -1,14 +1,14 @@
-package com.example.caloryxbackend.caloriessummary;
+package com.example.caloryxbackend.caloriesummary;
 
 import com.example.caloryxbackend.account.CurrentUserService;
-import com.example.caloryxbackend.caloriessummary.calculation.DailyMacroTargets;
-import com.example.caloryxbackend.caloriessummary.repository.CaloriesSummaryRepository;
-import com.example.caloryxbackend.caloriessummary.repository.DayIntakeProjection;
-import com.example.caloryxbackend.caloriessummary.calculation.MealCaloriesBreakdown;
-import com.example.caloryxbackend.caloriessummary.calculation.MealMacroTotals;
-import com.example.caloryxbackend.caloriessummary.payload.CaloriesSummaryResponse;
-import com.example.caloryxbackend.caloriessummary.payload.FoodItemResponse;
-import com.example.caloryxbackend.caloriessummary.payload.MealTimeGroupResponse;
+import com.example.caloryxbackend.caloriesummary.calculation.DailyMacroTargets;
+import com.example.caloryxbackend.caloriesummary.repository.CaloriesSummaryRepository;
+import com.example.caloryxbackend.caloriesummary.repository.DayIntakeProjection;
+import com.example.caloryxbackend.caloriesummary.calculation.MealCaloriesBreakdown;
+import com.example.caloryxbackend.caloriesummary.calculation.MealMacroTotals;
+import com.example.caloryxbackend.caloriesummary.payload.CaloriesSummaryResponse;
+import com.example.caloryxbackend.caloriesummary.payload.FoodItemResponse;
+import com.example.caloryxbackend.caloriesummary.payload.MealTimeGroupResponse;
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;

@@ -1,9 +1,8 @@
-package com.example.caloryxbackend.caloriessummary;
+package com.example.caloryxbackend.caloriesummary;
 
-import com.example.caloryxbackend.caloriessummary.calculation.DailyMacroTargets;
-import com.example.caloryxbackend.caloriessummary.calculation.MealCaloriesBreakdown;
-import com.example.caloryxbackend.caloriessummary.calculation.MealMacroTotals;
-import com.example.caloryxbackend.common.enums.GoalType;
+import com.example.caloryxbackend.caloriesummary.calculation.DailyMacroTargets;
+import com.example.caloryxbackend.caloriesummary.calculation.MealCaloriesBreakdown;
+import com.example.caloryxbackend.caloriesummary.calculation.MealMacroTotals;
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;

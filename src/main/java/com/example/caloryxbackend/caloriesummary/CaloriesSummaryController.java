@@ -1,8 +1,8 @@
-package com.example.caloryxbackend.caloriessummary;
+package com.example.caloryxbackend.caloriesummary;
 
-import com.example.caloryxbackend.caloriessummary.payload.CaloriesSummaryResponse;
-import com.example.caloryxbackend.caloriessummary.payload.FoodItemResponse;
-import com.example.caloryxbackend.caloriessummary.payload.MealTimeGroupResponse;
+import com.example.caloryxbackend.caloriesummary.payload.CaloriesSummaryResponse;
+import com.example.caloryxbackend.caloriesummary.payload.FoodItemResponse;
+import com.example.caloryxbackend.caloriesummary.payload.MealTimeGroupResponse;
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.common.exception.payload.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;

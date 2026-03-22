@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.caloriessummary.repository;
+package com.example.caloryxbackend.caloriesummary.repository;
 
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;

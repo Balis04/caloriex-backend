@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.caloriessummary.payload;
+package com.example.caloryxbackend.caloriesummary.payload;
 
 import java.time.LocalDate;
 
