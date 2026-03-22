@@ -1,6 +1,5 @@
 package com.example.caloryxbackend.common.enums;
 
-import com.example.caloryxbackend.caloriessummary.calculation.DailyMacroTargets;
 import lombok.Getter;
 
 @Getter
@@ -48,13 +47,5 @@ public enum GoalType {
 
     public double calculateAdjustment(Double weeklyGoalKg) {
         return applyDailyDelta(calculateDailyDelta(weeklyGoalKg));
-    }
-
-    public DailyMacroTargets calculateMacros(double calories) {
-        double proteinGrams = (calories * proteinRatio) / 4.0;
-        double carbohydratesGrams = (calories * carbsRatio) / 4.0;
-        double fatGrams = (calories * fatRatio) / 9.0;
-
-        return new DailyMacroTargets(proteinGrams, carbohydratesGrams, fatGrams);
     }
 }

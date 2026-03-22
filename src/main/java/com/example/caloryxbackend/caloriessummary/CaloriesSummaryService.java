@@ -56,7 +56,17 @@ public class CaloriesSummaryService {
     public MealTimeGroupResponse getMealTimeSummaryByDateAndMeal(LocalDate date, MealTime mealTime) {
         User user = currentUserService.getUser();
 
-        List<FoodLog> logs = getLogsForDate(user, date);
+        LocalDate targetDate = date != null ? date : LocalDate.now();
+        LocalDateTime start = targetDate.atStartOfDay();
+        LocalDateTime end = start.plusDays(1);
+
+        List<FoodLog> logs = caloriesSummaryRepository
+                .findByAuth0IdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+                        user.getAuth0id(),
+                        mealTime,
+                        start,
+                        end
+                );
 
         double dailyTargetCalories = caloriesCalculator.calculateTargetCalories(user);
         DailyMacroTargets dailyTargetMacros = caloriesCalculator.calculateMacros(user, dailyTargetCalories);

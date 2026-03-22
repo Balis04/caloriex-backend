@@ -3,6 +3,7 @@ package com.example.caloryxbackend.caloriessummary;
 import com.example.caloryxbackend.caloriessummary.calculation.DailyMacroTargets;
 import com.example.caloryxbackend.caloriessummary.calculation.MealCaloriesBreakdown;
 import com.example.caloryxbackend.caloriessummary.calculation.MealMacroTotals;
+import com.example.caloryxbackend.common.enums.GoalType;
 import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;
@@ -25,7 +26,11 @@ public class CaloriesCalculator {
     }
 
     public DailyMacroTargets calculateMacros(User user, double calories) {
-        return user.getGoal().calculateMacros(calories);
+        double proteinGrams = (calories * user.getGoal().getProteinRatio()) / 4.0;
+        double carbohydratesGrams = (calories * user.getGoal().getCarbsRatio()) / 4.0;
+        double fatGrams = (calories * user.getGoal().getFatRatio()) / 9.0;
+
+        return new DailyMacroTargets(proteinGrams, carbohydratesGrams, fatGrams);
     }
 
     private double calculateBmr(User user) {
@@ -37,29 +42,17 @@ public class CaloriesCalculator {
     }
 
     public MealMacroTotals calculateMealMacros(List<FoodLog> logs) {
-        double calories = logs.stream()
-                .map(FoodLog::getCalories)
-                .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+        double calories = 0;
+        double protein = 0;
+        double carbs = 0;
+        double fat = 0;
 
-        double protein = logs.stream()
-                .map(FoodLog::getProtein)
-                .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-        double carbs = logs.stream()
-                .map(FoodLog::getCarbohydrates)
-                .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-        double fat = logs.stream()
-                .map(FoodLog::getFat)
-                .filter(Objects::nonNull)
-                .mapToDouble(Double::doubleValue)
-                .sum();
+        for (FoodLog log : logs) {
+            if (log.getCalories() != null) calories += log.getCalories();
+            if (log.getProtein() != null) protein += log.getProtein();
+            if (log.getCarbohydrates() != null) carbs += log.getCarbohydrates();
+            if (log.getFat() != null) fat += log.getFat();
+        }
 
         return new MealMacroTotals(calories, protein, carbs, fat);
     }

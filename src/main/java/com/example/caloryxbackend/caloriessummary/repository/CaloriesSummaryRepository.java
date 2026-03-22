@@ -1,5 +1,6 @@
 package com.example.caloryxbackend.caloriessummary.repository;
 
+import com.example.caloryxbackend.common.enums.MealTime;
 import com.example.caloryxbackend.entities.FoodLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +31,13 @@ public interface CaloriesSummaryRepository extends JpaRepository<FoodLog, UUID> 
 
     List<FoodLog> findByAuth0IdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
             String auth0Id,
+            LocalDateTime start,
+            LocalDateTime end
+    );
+
+    List<FoodLog> findByAuth0IdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+            String auth0Id,
+            MealTime mealTime,
             LocalDateTime start,
             LocalDateTime end
     );
