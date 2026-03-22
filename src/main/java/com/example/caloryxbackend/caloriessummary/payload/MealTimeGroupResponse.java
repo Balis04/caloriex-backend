@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.caloriesummary.payload;
+package com.example.caloryxbackend.caloriessummary.payload;
 
 import com.example.caloryxbackend.common.enums.MealTime;
 
@@ -14,6 +14,6 @@ public record MealTimeGroupResponse(
         double consumedProteinGrams,
         double consumedCarbohydratesGrams,
         double consumedFatGrams,
-        List<TodayFoodItemResponse> foods
+        List<FoodItemResponse> foods
 ) {
 }
