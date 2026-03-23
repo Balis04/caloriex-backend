@@ -1,6 +1,5 @@
 package com.example.caloryxbackend.usdafoods;
 
-import com.example.caloryxbackend.caloriesummary.payload.FoodItemResponse;
 import com.example.caloryxbackend.usdafoods.payload.UsdaFoodItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

@@ -45,7 +45,7 @@ public class UsdaFoodService {
                     .body(UsdaFoodSearchResponse.class);
 
             if (response == null || response.foods() == null) {
-                throw new RuntimeException("USDA response invalid");
+                throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA response invalid");
             }
 
             return response.foods().stream()
@@ -60,7 +60,7 @@ public class UsdaFoodService {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA API error");
 
         } catch (ResourceAccessException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA API timeout");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA API unreachable or timed out");
         }
     }
 
@@ -76,7 +76,7 @@ public class UsdaFoodService {
                 usdaFood.getBrandOwner(),
                 getNutrientValue(nutrients, 1008), // calories
                 getNutrientValue(nutrients, 1003), // protein
-                getNutrientValue(nutrients, 1005), // carbs
+                getNutrientValue(nutrients, 1005), // carbohydrates
                 getNutrientValue(nutrients, 1004), // fat
                 usdaFood.getServingSize(),
                 usdaFood.getServingSizeUnit()

@@ -6,7 +6,7 @@ public record UsdaFoodItemResponse(
         String brand,
         Double calories,
         Double protein,
-        Double carbs,
+        Double carbohydrates,
         Double fat,
         Double servingSize,
         String servingUnit
