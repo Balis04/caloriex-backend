@@ -1,7 +1,9 @@
 package com.example.caloryxbackend.usdafoods;
 
+import com.example.caloryxbackend.caloriesummary.payload.FoodItemResponse;
 import com.example.caloryxbackend.usdafoods.payload.UsdaFoodItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,13 +36,10 @@ public class UsdaFoodController {
     @ApiResponse(
             responseCode = "200",
             description = "Successful search",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = UsdaFoodItemResponse.class)
-            )
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = UsdaFoodItemResponse.class)))
     )
-    @ApiResponse(responseCode = "400", description = "Invalid input")
-    @ApiResponse(responseCode = "502", description = "External API error")
+    @ApiResponse(responseCode = "400", description = "Invalid input" , content = @Content)
+    @ApiResponse(responseCode = "502", description = "External API error", content = @Content)
     public ResponseEntity<List<UsdaFoodItemResponse>> searchFood(
             @RequestParam @NotBlank String query,
             @RequestParam(required = false) String brand) {

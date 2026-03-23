@@ -11,15 +11,15 @@ import java.time.Duration;
 @Configuration
 public class RestClientConfig {
 
-    @Value("${rest.client.connect-timeout}")
+    @Value("${rest.client.connect-timeout:3}")
     private int connectTimeout;
 
-    @Value("${rest.client.read-timeout}")
+    @Value("${rest.client.read-timeout:5}")
     private int readTimeout;
 
     @Bean
     public RestClient restClient(RestClient.Builder builder,
-                                 @Value("${usda.base-url}") String baseUrl) {
+                                 @Value("${usda.base-url:https://api.nal.usda.gov}") String baseUrl) {
 
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout((int) Duration.ofSeconds(connectTimeout).toMillis());

@@ -6,8 +6,12 @@ import com.example.caloryxbackend.usdafoods.payload.UsdaFoodNutrient;
 import com.example.caloryxbackend.usdafoods.payload.UsdaFoodSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -21,36 +25,50 @@ public class UsdaFoodService {
     private String apiKey;
 
     public List<UsdaFoodItemResponse> search(String query, String brand) {
+        try {
+            UsdaFoodSearchResponse response = restClient.get()
+                    .uri(uriBuilder -> {
+                        uriBuilder
+                                .path("/fdc/v1/foods/search")
+                                .queryParam("api_key", apiKey)
+                                .queryParam("query", query)
+                                .queryParam("dataType", "Branded")
+                                .queryParam("pageSize", 20);
 
-        UsdaFoodSearchResponse response = restClient.get()
-                .uri(uriBuilder -> {
-                    uriBuilder
-                            .path("/fdc/v1/foods/search")
-                            .queryParam("api_key", apiKey)
-                            .queryParam("query", query)
-                            .queryParam("dataType", "Branded")
-                            .queryParam("pageSize", 20);
+                        if (brand != null && !brand.isBlank()) {
+                            uriBuilder.queryParam("brandOwner", brand.trim());
+                        }
 
-                    if (brand != null && !brand.isBlank()) {
-                        uriBuilder.queryParam("brandOwner", brand.trim());
-                    }
+                        return uriBuilder.build();
+                    })
+                    .retrieve()
+                    .body(UsdaFoodSearchResponse.class);
 
-                    return uriBuilder.build();
-                })
-                .retrieve()
-                .body(UsdaFoodSearchResponse.class);
+            if (response == null || response.foods() == null) {
+                throw new RuntimeException("USDA response invalid");
+            }
 
-        if (response == null || response.foods() == null) {
-            throw new RuntimeException("USDA response invalid");
+            return response.foods().stream()
+                    .map(this::mapFood)
+                    .toList();
+        } catch (RestClientResponseException e) {
+
+            if (e.getStatusCode().is4xxClientError()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid request to USDA");
+            }
+
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA API error");
+
+        } catch (ResourceAccessException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "USDA API timeout");
         }
-
-        return response.foods().stream()
-                .map(this::mapFood)
-                .toList();
     }
 
-    public UsdaFoodItemResponse mapFood(UsdaFood usdaFood) {
-        List<UsdaFoodNutrient> nutrients = usdaFood.getFoodNutrients();
+    private  UsdaFoodItemResponse mapFood(UsdaFood usdaFood) {
+        List<UsdaFoodNutrient> nutrients =
+                usdaFood.getFoodNutrients() != null
+                        ? usdaFood.getFoodNutrients()
+                        : List.of();
 
         return new UsdaFoodItemResponse(
                 usdaFood.getFdcId(),
@@ -67,7 +85,7 @@ public class UsdaFoodService {
 
     private Double getNutrientValue(List<UsdaFoodNutrient> nutrients, int nutrientId) {
         return nutrients.stream()
-                .filter(n -> n.getNutrientId() == nutrientId)
+                .filter(n -> n.getNutrientId() == nutrientId && n.getValue() != null)
                 .map(UsdaFoodNutrient::getValue)
                 .findFirst()
                 .orElse(0.0);
