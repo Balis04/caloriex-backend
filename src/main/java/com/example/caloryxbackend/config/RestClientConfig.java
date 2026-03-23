@@ -1,5 +1,6 @@
 package com.example.caloryxbackend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -10,13 +11,22 @@ import java.time.Duration;
 @Configuration
 public class RestClientConfig {
 
-    @Bean
-    public RestClient restClient() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout((int) Duration.ofSeconds(3).toMillis());
-        factory.setReadTimeout((int) Duration.ofSeconds(5).toMillis());
+    @Value("${rest.client.connect-timeout}")
+    private int connectTimeout;
 
-        return RestClient.builder()
+    @Value("${rest.client.read-timeout}")
+    private int readTimeout;
+
+    @Bean
+    public RestClient restClient(RestClient.Builder builder,
+                                 @Value("${usda.base-url}") String baseUrl) {
+
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout((int) Duration.ofSeconds(connectTimeout).toMillis());
+        factory.setReadTimeout((int) Duration.ofSeconds(readTimeout).toMillis());
+
+        return builder
+                .baseUrl(baseUrl)
                 .requestFactory(factory)
                 .build();
     }
