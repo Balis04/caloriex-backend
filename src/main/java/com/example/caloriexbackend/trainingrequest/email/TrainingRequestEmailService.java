@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.common.email;
+package com.example.caloriexbackend.trainingrequest.email;
 
 import com.example.caloriexbackend.entities.CoachProfile;
 import com.example.caloriexbackend.entities.TrainingRequest;
@@ -32,7 +32,7 @@ public class TrainingRequestEmailService {
         try {
             SimpleMailMessage message = createBaseMessage();
             message.setTo(coachEmail);
-            message.setSubject("[Caloriex] Új edzésterv kérés érkezett");
+            message.setSubject("[Caloriex] New Training request arrived");
 
             String replyTo = requester.getEmail();
             if (replyTo != null && !replyTo.isBlank()) {

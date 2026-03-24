@@ -178,10 +178,13 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>11.7.2</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/caloriex</url>
-					<user>postgres</user>
-					<password>postgres</password>
-					<cleanDisabled>false</cleanDisabled>
+					<!--suppress UnresolvedMavenProperty -->
+					<url>${env.DB_URL}</url>
+					<!--suppress UnresolvedMavenProperty -->
+					<user>${env.DB_USERNAME}</user>
+					<!--suppress UnresolvedMavenProperty -->
+					<password>${env.DB_PASSWORD}</password>
+					<cleanDisabled>true</cleanDisabled>
 				</configuration>
 			</plugin>
 

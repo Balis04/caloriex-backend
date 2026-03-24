@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.foodlog;
+package com.example.caloriexbackend.foodlog.repository;
 
 import com.example.caloriexbackend.entities.FoodLog;
 import org.springframework.data.jpa.repository.JpaRepository;

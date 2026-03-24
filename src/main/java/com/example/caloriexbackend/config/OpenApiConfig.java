@@ -37,7 +37,6 @@ public class OpenApiConfig {
 
     private boolean isPublicPath(String path) {
         return path.equals("/") ||
-                path.startsWith("/api/foods/search") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/v3/api-docs");
     }

@@ -8,6 +8,7 @@ import com.example.caloriexbackend.entities.User;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogRequest;
 import com.example.caloriexbackend.foodlog.payload.response.FoodLogResponse;
+import com.example.caloriexbackend.foodlog.repository.FoodLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

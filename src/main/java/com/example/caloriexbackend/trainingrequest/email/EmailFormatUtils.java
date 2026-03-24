@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.common.email;
+package com.example.caloriexbackend.trainingrequest.email;
 
 import com.example.caloriexbackend.common.enums.TrainingRequestStatus;
 import com.example.caloriexbackend.common.enums.ActivityLevel;
@@ -11,52 +11,52 @@ public final class EmailFormatUtils {
 
     public static String safe(String value) {
         if (value == null) {
-            return "nincs megadva";
+            return "not provided";
         }
 
         String trimmed = value.trim();
-        return trimmed.isEmpty() ? "nincs megadva" : trimmed;
+        return trimmed.isEmpty() ? "not provided" : trimmed;
     }
 
     public static String weight(Double weight) {
-        return weight == null ? "nincs megadva" : weight + " kg";
+        return weight == null ? "not provided" : weight + " kg";
     }
 
     public static String goal(GoalType goal) {
         if (goal == null) {
-            return "nincs megadva";
+            return "not provided";
         }
 
         return switch (goal) {
-            case CUT -> "Fogyás";
-            case MAINTAIN -> "Súlytartás";
-            case BULK -> "Tömegnövelés";
+            case CUT -> "Weight loss";
+            case MAINTAIN -> "Weight maintenance";
+            case BULK -> "Muscle gain";
         };
     }
 
     public static String activityLevel(ActivityLevel activityLevel) {
         if (activityLevel == null) {
-            return "nincs megadva";
+            return "not provided";
         }
 
         return switch (activityLevel) {
-            case SEDENTARY -> "Ülő életmód";
-            case LIGHT -> "Könnyű aktivitás";
-            case MODERATE -> "Közepes aktivitás";
-            case ACTIVE -> "Magas aktivitás";
+            case SEDENTARY -> "Sedentary";
+            case LIGHT -> "Light activity";
+            case MODERATE -> "Moderate activity";
+            case ACTIVE -> "High activity";
         };
     }
 
     public static String status(TrainingRequestStatus status) {
         if (status == null) {
-            return "nincs megadva";
+            return "not provided";
         }
 
         return switch (status) {
-            case PENDING -> "Folyamatban";
-            case APPROVED -> "Elfogadva";
-            case REJECTED -> "Elutasítva";
-            case CLOSED -> "Lezárva";
+            case PENDING -> "Pending";
+            case APPROVED -> "Approved";
+            case REJECTED -> "Rejected";
+            case CLOSED -> "Closed";
         };
     }
 }

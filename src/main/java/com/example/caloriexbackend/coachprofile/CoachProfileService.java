@@ -10,13 +10,14 @@ import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCe
 import com.example.caloriexbackend.coachprofile.payload.CoachListResponse;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileRequest;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileResponse;
+import com.example.caloriexbackend.coachprofile.repository.CoachProfileRepository;
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.CoachCertificate;
 import com.example.caloriexbackend.entities.CoachProfile;
 import com.example.caloriexbackend.entities.User;
-import com.example.caloriexbackend.storage.CertificateStorageService;
+import com.example.caloriexbackend.storage.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class CoachProfileService {
     private final CoachProfileRepository coachProfileRepository;
     private final CoachCertificateRepository coachCertificateRepository;
     private final AuthenticatedUserService authenticatedUserService;
-    private final CertificateStorageService certificateStorageService;
+    private final StorageService storageService;
     private final CoachProfileMapper coachProfileMapper;
     private final CoachCertificateMapper coachCertificateMapper;
     private final CoachCertificateFactory coachCertificateFactory;
@@ -99,7 +100,7 @@ public class CoachProfileService {
     ) {
         CoachProfile coachProfile = getMyCoachProfile(id);
 
-        var upload = certificateStorageService.uploadCertificate(request.getFile());
+        var upload = storageService.uploadCertificate(request.getFile());
 
         CoachCertificate certificate = coachCertificateFactory.create(
                 request,

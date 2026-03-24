@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.common.email;
+package com.example.caloriexbackend.trainingrequest.email;
 
 import com.example.caloriexbackend.entities.CoachProfile;
 import com.example.caloriexbackend.entities.TrainingRequest;
@@ -10,30 +10,30 @@ public class TrainingRequestEmailTemplateBuilder {
 
     public String buildCreationMailBody(TrainingRequest trainingRequest, User requester, CoachProfile coachProfile) {
         return """
-                Új edzésterv kérés érkezett a Caloriex rendszerben.
+        A new training request has been submitted in the Caloriex system.
 
-                Edző: %s
+        Coach: %s
 
-                Ügyfél adatai:
-                - Név: %s
-                - Email: %s
-                - Jelenlegi testsúly: %s
-                - Cél testsúly: %s
-                - Cél: %s
-                - Aktivitási szint: %s
+        Client details:
+        - Name: %s
+        - Email: %s
+        - Current weight: %s
+        - Target weight: %s
+        - Goal: %s
+        - Activity level: %s
 
-                Edzési igények:
-                - Heti edzések száma: %s
-                - Egy alkalom hossza: %s perc
-                - Preferált helyszín: %s
-                - Megjegyzés: %s
+        Training preferences:
+        - Weekly training sessions: %s
+        - Session duration: %s minutes
+        - Preferred location: %s
+        - Note: %s
 
-                Kérés státusza: %s
-                Kérés azonosító: %s
-                Létrehozva: %s
+        Request status: %s
+        Request ID: %s
+        Created at: %s
 
-                A részletekért lépj be az alkalmazásba.
-                """.formatted(
+        Please log in to the application for more details.
+        """.formatted(
                 EmailFormatUtils.safe(coachProfile.getUser().getFullName()),
                 EmailFormatUtils.safe(requester.getFullName()),
                 EmailFormatUtils.safe(requester.getEmail()),
@@ -53,19 +53,19 @@ public class TrainingRequestEmailTemplateBuilder {
 
     public String buildStatusUpdateMailBody(TrainingRequest trainingRequest) {
         return """
-                A Caloriex rendszerben frissült az edzéskérelmed státusza.
+        The status of your training request has been updated in the Caloriex system.
 
-                Új státusz: %s
-                Edző: %s
-                Heti edzésszám: %s
-                Egy alkalom hossza: %s perc
-                Preferált helyszín: %s
-                Indoklás: %s
-                Kérés azonosító: %s
-                Létrehozva: %s
+        New status: %s
+        Coach: %s
+        Weekly training sessions: %s
+        Session duration: %s minutes
+        Preferred location: %s
+        Reason: %s
+        Request ID: %s
+        Created at: %s
 
-                A részletekért lépj be az alkalmazásba.
-                """.formatted(
+        Please log in to the application for more details.
+        """.formatted(
                 EmailFormatUtils.status(trainingRequest.getStatus()),
                 EmailFormatUtils.safe(trainingRequest.getCoachProfile().getUser().getFullName()),
                 trainingRequest.getWeeklyTrainingCount(),

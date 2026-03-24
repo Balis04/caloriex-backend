@@ -4,6 +4,7 @@ import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.customfood.payload.CustomFoodRequest;
 import com.example.caloriexbackend.customfood.payload.CustomFoodResponse;
+import com.example.caloriexbackend.customfood.repository.CustomFoodRepository;
 import com.example.caloriexbackend.entities.CustomFood;
 import com.example.caloriexbackend.entities.User;
 import lombok.RequiredArgsConstructor;

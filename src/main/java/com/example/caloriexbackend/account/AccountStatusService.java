@@ -1,8 +1,8 @@
 package com.example.caloriexbackend.account;
 
-import com.example.caloriexbackend.account.payload.response.AccountStatusResponse;
+import com.example.caloriexbackend.account.payload.AccountStatusResponse;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
-import com.example.caloriexbackend.user.UserRepository;
+import com.example.caloriexbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -10,7 +10,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class RegisterRequest {
+public class UserRequest {
 
     @NotBlank(message = "Full name is required")
     @Size(max = 100, message = "Full name must not exceed 100 characters")
@@ -45,7 +45,6 @@ public class RegisterRequest {
     private ActivityLevel activityLevel;
 
     @NotNull(message = "Goal is required")
-    @NotNull(message = "Weekly goal is required")
     private GoalType goal;
 
     @Positive(message = "Target weight must be greater than 0")
@@ -55,6 +54,6 @@ public class RegisterRequest {
 
     @Positive(message = "Weekly goal must be greater than 0")
     @DecimalMax(value = "5.0", message = "Weekly goal must not exceed 5 kg")
-    @NotNull(message = "Target weight is required")
+    @NotNull(message = "Weekly goal is required")
     private Double weeklyGoalKg;
 }

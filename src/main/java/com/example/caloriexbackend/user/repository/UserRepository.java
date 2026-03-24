@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.user;
+package com.example.caloriexbackend.user.repository;
 
 import com.example.caloriexbackend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
