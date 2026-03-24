@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface FoodLogRepository extends JpaRepository<FoodLog, UUID> {
 
-    Optional<FoodLog> findByIdAndAuth0Id(UUID id, String auth0Id);
+    Optional<FoodLog> findByIdAndUserId(UUID id, UUID userId);
 }

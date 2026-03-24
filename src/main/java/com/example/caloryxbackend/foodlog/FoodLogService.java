@@ -4,12 +4,14 @@ import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
 import com.example.caloryxbackend.entities.FoodLog;
-import com.example.caloryxbackend.foodlog.payload.FoodLogAmountUpdateRequest;
-import com.example.caloryxbackend.foodlog.payload.FoodLogRequest;
+import com.example.caloryxbackend.entities.User;
+import com.example.caloryxbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
+import com.example.caloryxbackend.foodlog.payload.request.FoodLogRequest;
+import com.example.caloryxbackend.foodlog.payload.response.FoodLogResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -18,31 +20,22 @@ public class FoodLogService {
 
     private final CurrentUserService currentUserService;
     private final FoodLogRepository repository;
+    private final FoodLogMapper foodLogMapper;
 
-    public FoodLog createFoodLog(FoodLogRequest request) {
-        FoodLog entity = new FoodLog();
-
-        entity.setFoodName(request.getFoodName());
-        entity.setMealTime(request.getMealTime());
-        entity.setAmount(request.getAmount());
-        entity.setUnit(request.getUnit());
-        entity.setCalories(request.getCalories());
-        entity.setProtein(request.getProtein());
-        entity.setCarbohydrates(request.getCarbohydrates());
-        entity.setFat(request.getFat());
-
-        entity.setConsumedAt(request.getConsumedAt() != null ? request.getConsumedAt() : LocalDateTime.now());
-
-        entity.setAuth0Id(currentUserService.getAuth0Id());
-
-        return repository.save(entity);
+    @Transactional
+    public FoodLogResponse createFoodLog(FoodLogRequest request) {
+        User user = currentUserService.getUser();
+        FoodLog entity = foodLogMapper.toEntity(request, user);
+        FoodLog saved = repository.save(entity);
+        return foodLogMapper.toResponse(saved);
     }
 
-    public FoodLog updateFoodLogAmount(UUID foodLogId, FoodLogAmountUpdateRequest request) {
-        String auth0Id = currentUserService.getAuth0Id();
+    @Transactional
+    public FoodLogResponse updateFoodLogAmount(UUID foodLogId, FoodLogAmountUpdateRequest request) {
 
-        FoodLog foodLog = repository.findByIdAndAuth0Id(foodLogId, auth0Id)
-                .orElseThrow(() -> new NotFoundException("Food log not found"));
+        User user = currentUserService.getUser();
+
+        FoodLog foodLog = findFoodLog(foodLogId, user);
 
         Double previousAmount = foodLog.getAmount();
         if (previousAmount == null || previousAmount <= 0) {
@@ -56,18 +49,25 @@ public class FoodLogService {
         foodLog.setProtein(scale(foodLog.getProtein(), ratio));
         foodLog.setCarbohydrates(scale(foodLog.getCarbohydrates(), ratio));
         foodLog.setFat(scale(foodLog.getFat(), ratio));
-        foodLog.setUpdatedBy(auth0Id);
+        foodLog.setUpdatedBy(user.getId());
 
-        return repository.save(foodLog);
+        FoodLog saved = repository.save(foodLog);
+        return foodLogMapper.toResponse(saved);
     }
 
+    @Transactional
     public void deleteFoodLog(UUID foodLogId) {
-        String auth0Id = currentUserService.getAuth0Id();
+        User user = currentUserService.getUser();
 
-        FoodLog foodLog = repository.findByIdAndAuth0Id(foodLogId, auth0Id)
-                .orElseThrow(() -> new NotFoundException("Food log not found"));
+        FoodLog foodLog = findFoodLog(foodLogId, user);
 
         repository.delete(foodLog);
+    }
+
+    private FoodLog findFoodLog(UUID foodLogId, User user){
+
+        return repository.findByIdAndUserId(foodLogId, user.getId())
+                .orElseThrow(() -> new NotFoundException("Food log not found"));
     }
 
     private Double scale(Double value, double ratio) {

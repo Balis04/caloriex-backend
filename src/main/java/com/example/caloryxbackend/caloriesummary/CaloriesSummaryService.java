@@ -36,7 +36,7 @@ public class CaloriesSummaryService {
         LocalDateTime end = start.plusDays(1);
 
         DayIntakeProjection intake =
-                caloriesSummaryRepository.findTodayIntake(user.getAuth0id(), start, end);
+                caloriesSummaryRepository.findTodayIntake(user.getId(), start, end);
 
         List<FoodLog> logs = getLogsForDate(user, targetDate);
 
@@ -61,8 +61,8 @@ public class CaloriesSummaryService {
         LocalDateTime end = start.plusDays(1);
 
         List<FoodLog> logs = caloriesSummaryRepository
-                .findByAuth0IdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
-                        user.getAuth0id(),
+                .findByUserIdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+                        user.getId(),
                         mealTime,
                         start,
                         end
@@ -104,8 +104,8 @@ public class CaloriesSummaryService {
         LocalDateTime end = start.plusDays(1);
 
         return caloriesSummaryRepository
-                .findByAuth0IdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
-                        user.getAuth0id(), start, end
+                .findByUserIdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+                        user.getId(), start, end
                 );
     }
 }

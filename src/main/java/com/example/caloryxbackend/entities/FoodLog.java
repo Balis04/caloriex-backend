@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "food_logs", indexes = {
-        @Index(name = "idx_auth_id_consumed", columnList = "auth0_id, consumed_at")
+        @Index(name = "idx_food_logs_user_id_consumed_at", columnList = "user_id, consumed_at")
 })
 @Getter
 @Setter
@@ -19,8 +19,9 @@ public class FoodLog {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "auth0_id", nullable = false)
-    private String auth0Id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "meal_time")
@@ -57,7 +58,7 @@ public class FoodLog {
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by")
-    private String updatedBy;
+    private UUID updatedBy;
 
     @PrePersist
     protected void onCreate() {
