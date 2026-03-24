@@ -1,15 +1,17 @@
-package com.example.caloryxbackend.user.model.payload;
+package com.example.caloryxbackend.user.payload.response;
 
 import com.example.caloryxbackend.common.enums.ActivityLevel;
 import com.example.caloryxbackend.common.enums.Gender;
 import com.example.caloryxbackend.common.enums.GoalType;
 import com.example.caloryxbackend.common.enums.UserRole;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class RegisterRequest {
+@Builder
+public class UserResponse {
 
     private String fullName;
     private LocalDate birthDate;
@@ -18,9 +20,8 @@ public class RegisterRequest {
     private Integer heightCm;
     private Double startWeightKg;
     private Double actualWeightKg;
-    private ActivityLevel activityLevel;
-    private GoalType goal;
     private Double targetWeightKg;
     private Double weeklyGoalKg;
+    private ActivityLevel activityLevel;
+    private GoalType goal;
 }
-
