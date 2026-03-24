@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum UserRole {
-    TRAINER(0, "TRAINER"),
+    COACH(0, "COACH"),
     USER(1, "USER");
 
     private final int value;

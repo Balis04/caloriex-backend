@@ -13,7 +13,7 @@ import java.util.UUID;
 public record CoachListResponse(
         UUID id,
         UUID userId,
-        String trainerName,
+        String coachName,
         String email,
         LocalDate trainingStartedAt,
         String shortDescription,

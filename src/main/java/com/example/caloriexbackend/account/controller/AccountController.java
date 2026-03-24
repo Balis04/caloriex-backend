@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/account")
 @RequiredArgsConstructor
 public class AccountController {
 
     private final AccountStatusService accountStatusService;
     private final AuthenticatedUserService authenticatedUserService;
 
-    @GetMapping("/account/has-profile")
+    @GetMapping("/has-profile")
     public ResponseEntity<AccountStatusResponse> getProfileStatus() {
         return ResponseEntity.ok(accountStatusService.getProfileStatus());
     }
