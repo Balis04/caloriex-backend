@@ -17,10 +17,10 @@ public class CoachAvailabilityRequest {
     @NotNull
     private Boolean available;
 
-    @Schema(type = "string", pattern = "HH:mm:ss", example = "10:10:10")
+    @Schema(type = "string", example = "10:10:10")
     private LocalTime startTime;
 
-    @Schema(type = "string", pattern = "HH:mm:ss", example = "20:20:20")
+    @Schema(type = "string", example = "20:20:20")
     private LocalTime endTime;
 
     @AssertTrue(message = "Invalid time range")

@@ -89,7 +89,7 @@ public class CoachProfileController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request body" +
+                    description = "Invalid request body </br>" +
                             "Coach profile already exists for the current user",
                     content = @Content
             ),

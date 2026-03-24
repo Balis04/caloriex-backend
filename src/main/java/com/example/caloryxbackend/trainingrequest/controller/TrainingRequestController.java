@@ -61,7 +61,7 @@ public class TrainingRequestController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request body" +
+                    description = "Invalid request body </br>" +
                             "You cannot send a training request to your own coach profile",
                     content = @Content
             ),
