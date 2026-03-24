@@ -1,9 +1,11 @@
-package com.example.caloriexbackend.trainingrequest.trainingplan;
+package com.example.caloriexbackend.trainingrequest.trainingplan.service;
 
 import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;
 import com.example.caloriexbackend.storage.StorageService;
 import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.trainingrequest.trainingplan.mapper.TrainingPlanMapper;
+import com.example.caloriexbackend.trainingrequest.trainingplan.repository.TrainingPlanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,10 +1,11 @@
-package com.example.caloriexbackend.foodlog;
+package com.example.caloriexbackend.foodlog.service;
 
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.FoodLog;
 import com.example.caloriexbackend.entities.User;
+import com.example.caloriexbackend.foodlog.mapper.FoodLogMapper;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogRequest;
 import com.example.caloriexbackend.foodlog.payload.response.FoodLogResponse;

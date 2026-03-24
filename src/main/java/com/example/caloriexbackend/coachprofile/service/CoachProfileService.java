@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.coachprofile;
+package com.example.caloriexbackend.coachprofile.service;
 
 import com.example.caloriexbackend.coachprofile.coachavailability.CoachAvailabilityFactory;
 import com.example.caloriexbackend.coachprofile.coachavailability.CoachAvailabilityRepository;
@@ -7,6 +7,7 @@ import com.example.caloriexbackend.coachprofile.coachcertificate.CoachCertificat
 import com.example.caloriexbackend.coachprofile.coachcertificate.CoachCertificateRepository;
 import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCertificateResponse;
 import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCertificateUploadRequest;
+import com.example.caloriexbackend.coachprofile.mapper.CoachProfileMapper;
 import com.example.caloriexbackend.coachprofile.payload.CoachListResponse;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileRequest;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileResponse;

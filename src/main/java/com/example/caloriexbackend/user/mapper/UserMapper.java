@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.user;
+package com.example.caloriexbackend.user.mapper;
 
 import com.example.caloriexbackend.entities.User;
 import com.example.caloriexbackend.user.payload.request.UserRequest;

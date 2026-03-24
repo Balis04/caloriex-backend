@@ -1,13 +1,15 @@
-package com.example.caloriexbackend.caloriesummary;
+package com.example.caloriexbackend.caloriesummary.service;
 
+import com.example.caloriexbackend.caloriesummary.calculation.CaloriesCalculator;
 import com.example.caloriexbackend.caloriesummary.calculation.DailyMacroTargets;
-import com.example.caloriexbackend.caloriesummary.repository.CaloriesSummaryRepository;
-import com.example.caloriexbackend.caloriesummary.repository.DayIntakeProjection;
 import com.example.caloriexbackend.caloriesummary.calculation.MealCaloriesBreakdown;
 import com.example.caloriexbackend.caloriesummary.calculation.MealMacroTotals;
+import com.example.caloriexbackend.caloriesummary.mapper.CaloriesSummaryMapper;
 import com.example.caloriexbackend.caloriesummary.payload.CaloriesSummaryResponse;
 import com.example.caloriexbackend.caloriesummary.payload.FoodItemResponse;
 import com.example.caloriexbackend.caloriesummary.payload.MealTimeGroupResponse;
+import com.example.caloriexbackend.caloriesummary.repository.CaloriesSummaryRepository;
+import com.example.caloriexbackend.caloriesummary.repository.DayIntakeProjection;
 import com.example.caloriexbackend.common.enums.MealTime;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.FoodLog;

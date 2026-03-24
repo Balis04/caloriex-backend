@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.usdafoods;
+package com.example.caloriexbackend.usdafoods.service;
 
 import com.example.caloriexbackend.usdafoods.payload.UsdaFood;
 import com.example.caloriexbackend.usdafoods.payload.UsdaFoodItemResponse;

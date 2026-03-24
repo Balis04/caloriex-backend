@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.user.controller;
 
-import com.example.caloriexbackend.user.UserService;
+import com.example.caloriexbackend.user.service.UserService;
 import com.example.caloriexbackend.user.payload.request.UserRequest;
 import com.example.caloriexbackend.user.payload.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;

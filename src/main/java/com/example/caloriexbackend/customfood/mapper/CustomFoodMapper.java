@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.customfood;
+package com.example.caloriexbackend.customfood.mapper;
 
 import com.example.caloriexbackend.customfood.payload.CustomFoodRequest;
 import com.example.caloriexbackend.customfood.payload.CustomFoodResponse;

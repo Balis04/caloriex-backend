@@ -1,7 +1,7 @@
 package com.example.caloriexbackend.trainingrequest.controller;
 
 import com.example.caloriexbackend.common.enums.TrainingRequestStatus;
-import com.example.caloriexbackend.trainingrequest.TrainingRequestService;
+import com.example.caloriexbackend.trainingrequest.service.TrainingRequestService;
 import com.example.caloriexbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import com.example.caloriexbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
 import com.example.caloriexbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;

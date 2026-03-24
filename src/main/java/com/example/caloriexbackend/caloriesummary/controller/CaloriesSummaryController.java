@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.caloriesummary.controller;
 
-import com.example.caloriexbackend.caloriesummary.CaloriesSummaryService;
+import com.example.caloriexbackend.caloriesummary.service.CaloriesSummaryService;
 import com.example.caloriexbackend.caloriesummary.payload.CaloriesSummaryResponse;
 import com.example.caloriexbackend.caloriesummary.payload.FoodItemResponse;
 import com.example.caloriexbackend.caloriesummary.payload.MealTimeGroupResponse;

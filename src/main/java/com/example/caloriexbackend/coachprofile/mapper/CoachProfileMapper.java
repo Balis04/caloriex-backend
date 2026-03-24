@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.coachprofile;
+package com.example.caloriexbackend.coachprofile.mapper;
 
 import com.example.caloriexbackend.coachprofile.coachavailability.CoachAvailabilityMapper;
 import com.example.caloriexbackend.coachprofile.coachcertificate.CoachCertificateMapper;
@@ -23,7 +23,7 @@ public interface CoachProfileMapper {
     CoachProfileResponse toResponse(CoachProfile entity);
 
     @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "trainerName", source = "user.fullName")
+    @Mapping(target = "coachName", source = "user.fullName")
     @Mapping(target = "email", source = "user.email")
     CoachListResponse toListResponse(CoachProfile entity);
 

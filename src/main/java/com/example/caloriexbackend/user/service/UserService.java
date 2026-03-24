@@ -1,10 +1,11 @@
-package com.example.caloriexbackend.user;
+package com.example.caloriexbackend.user.service;
 
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUser;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.User;
+import com.example.caloriexbackend.user.mapper.UserMapper;
 import com.example.caloriexbackend.user.payload.request.UserRequest;
 import com.example.caloriexbackend.user.payload.response.UserResponse;
 import com.example.caloriexbackend.user.repository.UserRepository;

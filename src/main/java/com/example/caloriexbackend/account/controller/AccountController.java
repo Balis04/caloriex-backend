@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.account.controller;
 
-import com.example.caloriexbackend.account.AccountStatusService;
+import com.example.caloriexbackend.account.service.AccountStatusService;
 import com.example.caloriexbackend.account.payload.AccountStatusResponse;
 import com.example.caloriexbackend.common.security.AuthenticatedUser;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/account")
 @RequiredArgsConstructor
 public class AccountController {
 
     private final AccountStatusService accountStatusService;
     private final AuthenticatedUserService authenticatedUserService;
 
-    @GetMapping("/account/has-profile")
+    @GetMapping("/has-profile")
     public ResponseEntity<AccountStatusResponse> getProfileStatus() {
         return ResponseEntity.ok(accountStatusService.getProfileStatus());
     }
