@@ -1,7 +1,7 @@
 package com.example.caloryxbackend.storage;
 
-import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.common.exception.BadRequestException;
+import com.example.caloryxbackend.common.security.AuthenticatedUserService;
 import com.example.caloryxbackend.config.R2StorageProperties;
 import com.example.caloryxbackend.storage.payload.DocumentUploadResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class CertificateStorageService {
 
     private final S3Client s3Client;
     private final R2StorageProperties properties;
-    private final CurrentUserService currentUserService;
+    private final AuthenticatedUserService authenticatedUserService;
 
     public DocumentUploadResponse uploadCertificate(MultipartFile file) {
         return uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate");
@@ -130,7 +130,7 @@ public class CertificateStorageService {
     }
 
     private String buildObjectKey(String folderName, String sanitizedFileName, String extension) {
-        String auth0Id = currentUserService.getAuth0Id();
+        String auth0Id = authenticatedUserService.getAuth0Id();
         String timestamp = Instant.now().toString().replace(":", "-");
         return "%s/%s/%s-%s-%s.%s".formatted(
                 folderName,

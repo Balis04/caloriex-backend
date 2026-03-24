@@ -1,6 +1,5 @@
 package com.example.caloryxbackend.coachprofile;
 
-import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.coachprofile.coachavailability.CoachAvailabilityFactory;
 import com.example.caloryxbackend.coachprofile.coachavailability.CoachAvailabilityRepository;
 import com.example.caloryxbackend.coachprofile.coachcertificate.CoachCertificateFactory;
@@ -13,6 +12,7 @@ import com.example.caloryxbackend.coachprofile.payload.CoachProfileRequest;
 import com.example.caloryxbackend.coachprofile.payload.CoachProfileResponse;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
+import com.example.caloryxbackend.common.security.AuthenticatedUserService;
 import com.example.caloryxbackend.entities.CoachCertificate;
 import com.example.caloryxbackend.entities.CoachProfile;
 import com.example.caloryxbackend.entities.User;
@@ -33,7 +33,7 @@ public class CoachProfileService {
 
     private final CoachProfileRepository coachProfileRepository;
     private final CoachCertificateRepository coachCertificateRepository;
-    private final CurrentUserService currentUserService;
+    private final AuthenticatedUserService authenticatedUserService;
     private final CertificateStorageService certificateStorageService;
     private final CoachProfileMapper coachProfileMapper;
     private final CoachCertificateMapper coachCertificateMapper;
@@ -44,7 +44,7 @@ public class CoachProfileService {
     @Transactional
     public CoachProfileResponse create(CoachProfileRequest request) {
 
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         if (coachProfileRepository.existsByUserId(user.getId())) {
             throw new BadRequestException("Coach profile already exists for the current user");
@@ -86,7 +86,7 @@ public class CoachProfileService {
 
     @Transactional(readOnly = true)
     public List<CoachListResponse> getAll() {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
         return coachProfileRepository.findAllByUserIdNot(user.getId()).stream()
                 .map(coachProfileMapper::toListResponse)
                 .toList();
@@ -145,7 +145,7 @@ public class CoachProfileService {
     }
 
     private CoachProfile getMyCoachProfile(UUID id) {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         return coachProfileRepository.findByIdAndUserId(id, user.getId())
                 .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));
@@ -157,7 +157,7 @@ public class CoachProfileService {
     }
 
     private CoachProfile getMyCoachProfile() {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         return coachProfileRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new NotFoundException("Coach profile does not exist for the current user"));

@@ -1,11 +1,11 @@
 package com.example.caloryxbackend.trainingrequest;
 
-import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.coachprofile.CoachProfileService;
 import com.example.caloryxbackend.common.email.TrainingRequestEmailService;
 import com.example.caloryxbackend.common.enums.TrainingRequestStatus;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
+import com.example.caloryxbackend.common.security.AuthenticatedUserService;
 import com.example.caloryxbackend.entities.CoachProfile;
 import com.example.caloryxbackend.entities.TrainingPlan;
 import com.example.caloryxbackend.entities.TrainingRequest;
@@ -32,7 +32,7 @@ import java.util.UUID;
 public class TrainingRequestService {
 
     private final TrainingRequestRepository trainingRequestRepository;
-    private final CurrentUserService currentUserService;
+    private final AuthenticatedUserService authenticatedUserService;
     private final TrainingPlanRepository trainingPlanRepository;
     private final TrainingRequestEmailService emailService;
     private final TrainingRequestMapper trainingRequestMapper;
@@ -43,7 +43,7 @@ public class TrainingRequestService {
 
     @Transactional
     public TrainingRequestResponse create(UUID coachProfileId, TrainingRequestCreateRequest request) {
-        User requester = currentUserService.getUser();
+        User requester = authenticatedUserService.getUser();
 
         CoachProfile coachProfile = coachProfileService.findCoachProfile(coachProfileId);
 
@@ -101,7 +101,7 @@ public class TrainingRequestService {
 
     @Transactional(readOnly = true)
     public List<TrainingRequestResponse> getMyRequests() {
-        User requester = currentUserService.getUser();
+        User requester = authenticatedUserService.getUser();
         return trainingRequestRepository.findAllByRequesterUserIdOrderByCreatedAtDesc(requester.getId()).stream()
                 .map(trainingRequestMapper::toResponse)
                 .toList();
@@ -109,7 +109,7 @@ public class TrainingRequestService {
 
     @Transactional(readOnly = true)
     public List<TrainingRequestResponse> getRequestsForMyCoachProfile(TrainingRequestStatus status) {
-        User coachUser = currentUserService.getUser();
+        User coachUser = authenticatedUserService.getUser();
 
         if (status == null) {
             return trainingRequestRepository
@@ -130,7 +130,7 @@ public class TrainingRequestService {
 
     @Transactional(readOnly = true)
     public List<ClosedTrainingRequestResponse> getClosedRequestsForMyCoachProfile() {
-        User coachUser = currentUserService.getUser();
+        User coachUser = authenticatedUserService.getUser();
 
         return trainingPlanRepository
                 .findAllByCoachUserIdOrderByUploadedAtDesc(coachUser.getId())
@@ -140,7 +140,7 @@ public class TrainingRequestService {
     }
 
     private TrainingRequest findTrainingRequest(UUID trainingRequestId){
-        User coachUser = currentUserService.getUser();
+        User coachUser = authenticatedUserService.getUser();
         return trainingRequestRepository.findByIdAndCoachProfileUserId(trainingRequestId, coachUser.getId())
                 .orElseThrow(() -> new NotFoundException("Training request not found"));
     }
