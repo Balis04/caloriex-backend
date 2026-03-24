@@ -40,6 +40,11 @@ public class CoachProfileController {
                     responseCode = "200",
                     description = "Successfully retrieved coach profiles",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = CoachListResponse.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - missing or invalid token",
+                    content = @Content
             )
     })
     public ResponseEntity<List<CoachListResponse>> getAll() {
@@ -84,17 +89,13 @@ public class CoachProfileController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request body",
+                    description = "Invalid request body" +
+                            "Coach profile already exists for the current user",
                     content = @Content
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - missing or invalid token",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Coach profile already exists",
                     content = @Content
             )
     })
@@ -121,11 +122,6 @@ public class CoachProfileController {
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - missing or invalid token",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - cannot upload certificate for this coach profile",
                     content = @Content
             ),
             @ApiResponse(

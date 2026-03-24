@@ -61,7 +61,8 @@ public class TrainingRequestController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request body",
+                    description = "Invalid request body" +
+                            "You cannot send a training request to your own coach profile",
                     content = @Content
             ),
             @ApiResponse(
@@ -72,11 +73,6 @@ public class TrainingRequestController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Coach profile not found",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "A conflicting training request already exists",
                     content = @Content
             )
     })

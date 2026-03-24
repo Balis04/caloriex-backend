@@ -107,11 +107,6 @@ public class TrainingRequestCoachController {
                     content = @Content
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - cannot update this training request",
-                    content = @Content
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "Training request or coach profile not found",
                     content = @Content
@@ -143,11 +138,6 @@ public class TrainingRequestCoachController {
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - missing or invalid token",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - cannot upload training plan for this request",
                     content = @Content
             ),
             @ApiResponse(
