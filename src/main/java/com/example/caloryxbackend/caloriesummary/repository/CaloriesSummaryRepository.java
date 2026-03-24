@@ -19,24 +19,24 @@ public interface CaloriesSummaryRepository extends JpaRepository<FoodLog, UUID> 
                 COALESCE(SUM(fl.carbohydrates), 0) AS carbohydrates,
                 COALESCE(SUM(fl.fat), 0) AS fat
             FROM FoodLog fl
-            WHERE fl.auth0Id = :auth0Id
+            WHERE fl.user.id = :userId
               AND fl.consumedAt >= :start
               AND fl.consumedAt < :end
             """)
     DayIntakeProjection findTodayIntake(
-            @Param("auth0Id") String auth0Id,
+            @Param("userId") UUID userId,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
 
-    List<FoodLog> findByAuth0IdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
-            String auth0Id,
+    List<FoodLog> findByUserIdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+            UUID userId,
             LocalDateTime start,
             LocalDateTime end
     );
 
-    List<FoodLog> findByAuth0IdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
-            String auth0Id,
+    List<FoodLog> findByUserIdAndMealTimeAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
+            UUID userId,
             MealTime mealTime,
             LocalDateTime start,
             LocalDateTime end

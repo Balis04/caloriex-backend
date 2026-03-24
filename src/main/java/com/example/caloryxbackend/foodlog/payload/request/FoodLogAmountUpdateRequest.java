@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.foodlog.payload;
+package com.example.caloryxbackend.foodlog.payload.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class FoodLogAmountUpdateRequest {
 
-    @NotNull(message = "A mennyiség megadása kötelező")
-    @Positive(message = "A mennyiségnek pozitívnak kell lennie")
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be positive")
     private Double amount;
 }
