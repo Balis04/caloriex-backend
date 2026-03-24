@@ -1,5 +1,6 @@
 package com.example.caloryxbackend.coachprofile.coachavailability.payload;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,8 +17,10 @@ public class CoachAvailabilityRequest {
     @NotNull
     private Boolean available;
 
+    @Schema(type = "string", example = "10:10:10")
     private LocalTime startTime;
 
+    @Schema(type = "string", example = "20:20:20")
     private LocalTime endTime;
 
     @AssertTrue(message = "Invalid time range")
