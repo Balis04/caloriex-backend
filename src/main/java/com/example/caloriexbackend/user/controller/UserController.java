@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Register user profile",
+            summary = "Create user profile",
             description = "Creates a user profile for the authenticated user."
     )
     @ApiResponses({
@@ -71,9 +71,9 @@ public class UserController {
                     content = @Content
             )
     })
-    @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid UserRequest request) {
-        userService.registerUser(request);
+    @PostMapping("/profile")
+    public ResponseEntity<Void> createProfile(@RequestBody @Valid UserRequest request) {
+        userService.createUserProfile(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -16,7 +16,7 @@ public class AccountStatusService {
     public AccountStatusResponse getProfileStatus() {
         String auth0Id = authenticatedUserService.getAuth0Id();
 
-        boolean exists = userRepository.existsByAuth0id(auth0Id);
+        boolean exists = userRepository.existsByAuth0Id(auth0Id);
 
         return new AccountStatusResponse(exists);
     }

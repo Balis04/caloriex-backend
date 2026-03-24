@@ -32,7 +32,7 @@ public class TrainingRequestEmailService {
         try {
             SimpleMailMessage message = createBaseMessage();
             message.setTo(coachEmail);
-            message.setSubject("[Caloriex] New Training request arrived");
+            message.setSubject("[Caloriex] New training request received");
 
             String replyTo = requester.getEmail();
             if (replyTo != null && !replyTo.isBlank()) {
@@ -60,7 +60,7 @@ public class TrainingRequestEmailService {
         try {
             SimpleMailMessage message = createBaseMessage();
             message.setTo(requesterEmail);
-            message.setSubject("[Caloriex] Frissült az edzéskérelmed státusza");
+            message.setSubject("[Caloriex] Your training request status was updated");
             message.setText(templateBuilder.buildStatusUpdateMailBody(request));
 
             mailSender.send(message);

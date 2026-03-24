@@ -13,14 +13,14 @@ public interface UserMapper {
     UserResponse toResponse(User entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "auth0id", ignore = true)
+    @Mapping(target = "auth0Id", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "coachProfile", ignore = true)
     void updateForRegistration(UserRequest request, @MappingTarget User entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "auth0id", ignore = true)
+    @Mapping(target = "auth0Id", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "coachProfile", ignore = true)
