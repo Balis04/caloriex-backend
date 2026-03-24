@@ -15,7 +15,6 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "auth0id", ignore = true)
     @Mapping(target = "email", ignore = true)
-    @Mapping(target = "actualWeightKg", source = "startWeightKg")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "coachProfile", ignore = true)
     void updateForRegistration(RegisterRequest request, @MappingTarget User entity);

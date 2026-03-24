@@ -60,7 +60,7 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request body" +
+                    description = "Invalid request body </br>" +
                             "User already exists",
                     content = @Content
             ),
