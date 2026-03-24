@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.coachprofile;
+package com.example.caloriexbackend.coachprofile.repository;
 
 import com.example.caloriexbackend.entities.CoachProfile;
 import org.springframework.data.jpa.repository.JpaRepository;

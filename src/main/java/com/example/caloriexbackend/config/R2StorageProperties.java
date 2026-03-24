@@ -9,6 +9,7 @@ public record R2StorageProperties(
         String accessKeyId,
         String secretAccessKey,
         String bucket,
-        String publicBaseUrl
+        String publicBaseUrl,
+        R2StorageAccessMode accessMode
 ) {
 }

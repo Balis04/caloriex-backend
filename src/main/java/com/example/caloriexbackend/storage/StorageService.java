@@ -1,6 +1,7 @@
 package com.example.caloriexbackend.storage;
 
 import com.example.caloriexbackend.common.exception.BadRequestException;
+import com.example.caloriexbackend.config.R2StorageAccessMode;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.config.R2StorageProperties;
 import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
@@ -13,21 +14,27 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.text.Normalizer;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Service
 @RequiredArgsConstructor
-public class CertificateStorageService {
+public class StorageService {
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of("pdf", "docx");
     private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of(
             "application/pdf",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     );
+    private static final String PDF_CONTENT_TYPE = "application/pdf";
+    private static final String DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
     private final S3Client s3Client;
     private final R2StorageProperties properties;
@@ -120,11 +127,26 @@ public class CertificateStorageService {
             throw new BadRequestException("Only PDF and DOCX " + fileTypeLabel + " files are allowed");
         }
 
+        String actualFileType = detectActualFileType(file, fileTypeLabel);
+        if (!extension.equals(actualFileType)) {
+            throw new BadRequestException("Uploaded " + fileTypeLabel + " content does not match the file extension");
+        }
+
         String contentType = file.getContentType();
         if (contentType != null && !contentType.isBlank()) {
             String normalized = contentType.toLowerCase(Locale.ROOT);
             if (!"application/octet-stream".equals(normalized) && !ALLOWED_CONTENT_TYPES.contains(normalized)) {
                 throw new BadRequestException("Unsupported " + fileTypeLabel + " content type");
+            }
+
+            String expectedContentType = switch (actualFileType) {
+                case "pdf" -> PDF_CONTENT_TYPE;
+                case "docx" -> DOCX_CONTENT_TYPE;
+                default -> throw new BadRequestException("Unsupported " + fileTypeLabel + " file extension");
+            };
+
+            if (!"application/octet-stream".equals(normalized) && !expectedContentType.equals(normalized)) {
+                throw new BadRequestException("Uploaded " + fileTypeLabel + " content does not match the content type");
             }
         }
     }
@@ -143,6 +165,14 @@ public class CertificateStorageService {
     }
 
     private String buildFileUrl(String objectKey) {
+        R2StorageAccessMode accessMode = properties.accessMode() != null
+                ? properties.accessMode()
+                : R2StorageAccessMode.PUBLIC;
+
+        if (accessMode == R2StorageAccessMode.PROTECTED) {
+            throw new BadRequestException("Protected file storage mode requires a dedicated protected download flow");
+        }
+
         String publicBaseUrl = properties.publicBaseUrl();
         if (publicBaseUrl != null && !publicBaseUrl.isBlank()) {
             return UriComponentsBuilder.fromUriString(trimTrailingSlash(publicBaseUrl))
@@ -155,6 +185,53 @@ public class CertificateStorageService {
                 properties.bucket(),
                 objectKey
         );
+    }
+
+    private String detectActualFileType(MultipartFile file, String fileTypeLabel) {
+        try (InputStream inputStream = new BufferedInputStream(file.getInputStream())) {
+            inputStream.mark(8);
+            byte[] header = inputStream.readNBytes(4);
+            inputStream.reset();
+
+            if (header.length >= 4
+                    && header[0] == '%'
+                    && header[1] == 'P'
+                    && header[2] == 'D'
+                    && header[3] == 'F') {
+                return "pdf";
+            }
+
+            if (isDocx(inputStream)) {
+                return "docx";
+            }
+        } catch (IOException exception) {
+            throw new BadRequestException("Failed to inspect uploaded " + fileTypeLabel);
+        }
+
+        throw new BadRequestException("Only real PDF and DOCX " + fileTypeLabel + " files are allowed");
+    }
+
+    private boolean isDocx(InputStream inputStream) throws IOException {
+        boolean hasContentTypes = false;
+        boolean hasWordDocument = false;
+
+        try (ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
+            ZipEntry entry;
+            while ((entry = zipInputStream.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                if ("[Content_Types].xml".equals(entryName)) {
+                    hasContentTypes = true;
+                } else if ("word/document.xml".equals(entryName)) {
+                    hasWordDocument = true;
+                }
+
+                if (hasContentTypes && hasWordDocument) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private String sanitizeFileName(String fileName, String fallbackFileName) {

@@ -1,5 +1,6 @@
-package com.example.caloriexbackend.foodlog;
+package com.example.caloriexbackend.foodlog.controller;
 
+import com.example.caloriexbackend.foodlog.FoodLogService;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogRequest;
 import com.example.caloriexbackend.foodlog.payload.response.FoodLogResponse;
@@ -25,7 +26,7 @@ public class FoodLogController {
 
     private final FoodLogService foodLogService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     @Operation(
             summary = "Create food log",
             description = "Creates a new food log entry for the authenticated user."

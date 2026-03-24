@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.trainingrequest;
+package com.example.caloriexbackend.trainingrequest.repository;
 
 import com.example.caloriexbackend.common.enums.TrainingRequestStatus;
 import com.example.caloriexbackend.entities.TrainingRequest;

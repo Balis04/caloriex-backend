@@ -2,7 +2,7 @@ package com.example.caloriexbackend.trainingrequest.trainingplan;
 
 import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;
-import com.example.caloriexbackend.storage.CertificateStorageService;
+import com.example.caloriexbackend.storage.StorageService;
 import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class TrainingPlanService {
 
-    private final CertificateStorageService storageService;
+    private final StorageService storageService;
     private final TrainingPlanRepository repository;
     private final TrainingPlanMapper trainingPlanMapper;
 

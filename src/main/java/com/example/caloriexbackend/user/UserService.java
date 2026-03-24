@@ -5,8 +5,9 @@ import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUser;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.User;
-import com.example.caloriexbackend.user.payload.request.RegisterRequest;
+import com.example.caloriexbackend.user.payload.request.UserRequest;
 import com.example.caloriexbackend.user.payload.response.UserResponse;
+import com.example.caloriexbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(RegisterRequest request) {
+    public void registerUser(UserRequest request) {
         AuthenticatedUser currentUser = authenticatedUserService.getAuthenticatedUser();
 
         if (userRepository.existsByAuth0id(currentUser.auth0Id())) {
@@ -47,7 +48,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateUser(RegisterRequest request) throws NotFoundException{
+    public UserResponse updateUser(UserRequest request) throws NotFoundException{
 
         User user = authenticatedUserService.getUser();
 

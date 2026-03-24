@@ -1,6 +1,7 @@
-package com.example.caloriexbackend.user;
+package com.example.caloriexbackend.user.controller;
 
-import com.example.caloriexbackend.user.payload.request.RegisterRequest;
+import com.example.caloriexbackend.user.UserService;
+import com.example.caloriexbackend.user.payload.request.UserRequest;
 import com.example.caloriexbackend.user.payload.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -71,7 +72,7 @@ public class UserController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<Void> register(@RequestBody @Valid UserRequest request) {
         userService.registerUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -103,7 +104,7 @@ public class UserController {
             )
     })
     @PutMapping("/profile")
-    public ResponseEntity<UserResponse> updateProfile(@RequestBody @Valid RegisterRequest request) {
+    public ResponseEntity<UserResponse> updateProfile(@RequestBody @Valid UserRequest request) {
         return ResponseEntity.ok(userService.updateUser(request));
     }
 }

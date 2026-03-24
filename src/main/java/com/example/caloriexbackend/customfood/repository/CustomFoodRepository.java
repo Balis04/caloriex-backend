@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.customfood;
+package com.example.caloriexbackend.customfood.repository;
 
 import com.example.caloriexbackend.entities.CustomFood;
 import com.example.caloriexbackend.entities.User;

@@ -2,7 +2,7 @@ package com.example.caloriexbackend.common.security;
 
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.entities.User;
-import com.example.caloriexbackend.user.UserRepository;
+import com.example.caloriexbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

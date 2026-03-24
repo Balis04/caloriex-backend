@@ -1,5 +1,6 @@
-package com.example.caloriexbackend.usdafoods;
+package com.example.caloriexbackend.usdafoods.controller;
 
+import com.example.caloriexbackend.usdafoods.UsdaFoodService;
 import com.example.caloriexbackend.usdafoods.payload.UsdaFoodItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

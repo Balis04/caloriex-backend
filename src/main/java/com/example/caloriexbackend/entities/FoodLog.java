@@ -37,7 +37,7 @@ public class FoodLog {
     private String unit;
 
     @Column(name = "calories")
-    private Double calories; // Érdemes a 100g-ra vetítettet is tárolni, vagy csak a fix értéket
+    private Double calories;
 
     @Column(name = "protein")
     private Double protein;

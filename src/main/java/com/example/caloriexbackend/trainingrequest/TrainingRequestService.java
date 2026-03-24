@@ -1,7 +1,7 @@
 package com.example.caloriexbackend.trainingrequest;
 
 import com.example.caloriexbackend.coachprofile.CoachProfileService;
-import com.example.caloriexbackend.common.email.TrainingRequestEmailService;
+import com.example.caloriexbackend.trainingrequest.email.TrainingRequestEmailService;
 import com.example.caloriexbackend.common.enums.TrainingRequestStatus;
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
@@ -13,6 +13,7 @@ import com.example.caloriexbackend.entities.User;
 import com.example.caloriexbackend.trainingrequest.payload.request.TrainingRequestCreateRequest;
 import com.example.caloriexbackend.trainingrequest.payload.request.TrainingRequestStatusUpdateRequest;
 import com.example.caloriexbackend.trainingrequest.payload.response.ClosedTrainingRequestResponse;
+import com.example.caloriexbackend.trainingrequest.repository.TrainingRequestRepository;
 import com.example.caloriexbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;
 import com.example.caloriexbackend.trainingrequest.payload.response.TrainingRequestResponse;
 import com.example.caloriexbackend.trainingrequest.trainingplan.TrainingPlanMapper;
