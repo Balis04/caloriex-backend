@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.foodlog.controller;
 
-import com.example.caloriexbackend.foodlog.FoodLogService;
+import com.example.caloriexbackend.foodlog.service.FoodLogService;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
 import com.example.caloriexbackend.foodlog.payload.request.FoodLogRequest;
 import com.example.caloriexbackend.foodlog.payload.response.FoodLogResponse;

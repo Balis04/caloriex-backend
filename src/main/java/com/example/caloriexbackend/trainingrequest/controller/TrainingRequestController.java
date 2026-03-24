@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.trainingrequest.controller;
 
-import com.example.caloriexbackend.trainingrequest.TrainingRequestService;
+import com.example.caloriexbackend.trainingrequest.service.TrainingRequestService;
 import com.example.caloriexbackend.trainingrequest.payload.request.TrainingRequestCreateRequest;
 import com.example.caloriexbackend.trainingrequest.payload.response.TrainingRequestResponse;
 import io.swagger.v3.oas.annotations.Operation;

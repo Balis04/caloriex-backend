@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.trainingrequest.trainingplan;
+package com.example.caloriexbackend.trainingrequest.trainingplan.repository;
 
 import com.example.caloriexbackend.entities.TrainingPlan;
 import org.springframework.data.jpa.repository.EntityGraph;

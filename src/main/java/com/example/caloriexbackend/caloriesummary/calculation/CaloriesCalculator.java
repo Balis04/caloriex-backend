@@ -1,8 +1,5 @@
-package com.example.caloriexbackend.caloriesummary;
+package com.example.caloriexbackend.caloriesummary.calculation;
 
-import com.example.caloriexbackend.caloriesummary.calculation.DailyMacroTargets;
-import com.example.caloriexbackend.caloriesummary.calculation.MealCaloriesBreakdown;
-import com.example.caloriexbackend.caloriesummary.calculation.MealMacroTotals;
 import com.example.caloriexbackend.common.enums.MealTime;
 import com.example.caloriexbackend.entities.FoodLog;
 import com.example.caloriexbackend.entities.User;

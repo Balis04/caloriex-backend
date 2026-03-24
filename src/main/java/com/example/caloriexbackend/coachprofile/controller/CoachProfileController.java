@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.coachprofile.controller;
 
-import com.example.caloriexbackend.coachprofile.CoachProfileService;
+import com.example.caloriexbackend.coachprofile.service.CoachProfileService;
 import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCertificateResponse;
 import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCertificateUploadRequest;
 import com.example.caloriexbackend.coachprofile.payload.CoachListResponse;

@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.trainingrequest.trainingplan;
+package com.example.caloriexbackend.trainingrequest.trainingplan.mapper;
 
 import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;

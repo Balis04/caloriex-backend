@@ -1,6 +1,6 @@
 package com.example.caloriexbackend.account.controller;
 
-import com.example.caloriexbackend.account.AccountStatusService;
+import com.example.caloriexbackend.account.service.AccountStatusService;
 import com.example.caloriexbackend.account.payload.AccountStatusResponse;
 import com.example.caloriexbackend.common.security.AuthenticatedUser;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;

@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.foodlog;
+package com.example.caloriexbackend.foodlog.mapper;
 
 import com.example.caloriexbackend.entities.FoodLog;
 import com.example.caloriexbackend.entities.User;

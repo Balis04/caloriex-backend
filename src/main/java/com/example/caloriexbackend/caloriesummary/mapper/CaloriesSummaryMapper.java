@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.caloriesummary;
+package com.example.caloriexbackend.caloriesummary.mapper;
 
 import com.example.caloriexbackend.caloriesummary.repository.DayIntakeProjection;
 import com.example.caloriexbackend.caloriesummary.calculation.DailyMacroTargets;

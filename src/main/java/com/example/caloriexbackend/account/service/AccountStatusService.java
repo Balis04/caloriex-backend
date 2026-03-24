@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.account;
+package com.example.caloriexbackend.account.service;
 
 import com.example.caloriexbackend.account.payload.AccountStatusResponse;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;

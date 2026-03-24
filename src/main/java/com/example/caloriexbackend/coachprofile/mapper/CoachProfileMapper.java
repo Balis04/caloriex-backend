@@ -1,4 +1,4 @@
-package com.example.caloriexbackend.coachprofile;
+package com.example.caloriexbackend.coachprofile.mapper;
 
 import com.example.caloriexbackend.coachprofile.coachavailability.CoachAvailabilityMapper;
 import com.example.caloriexbackend.coachprofile.coachcertificate.CoachCertificateMapper;
