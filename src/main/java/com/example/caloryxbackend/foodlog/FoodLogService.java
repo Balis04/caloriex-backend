@@ -35,7 +35,7 @@ public class FoodLogService {
 
         User user = currentUserService.getUser();
 
-        FoodLog foodLog = findFoodLog(foodLogId);
+        FoodLog foodLog = findFoodLog(foodLogId, user);
 
         Double previousAmount = foodLog.getAmount();
         if (previousAmount == null || previousAmount <= 0) {
@@ -57,13 +57,14 @@ public class FoodLogService {
 
     @Transactional
     public void deleteFoodLog(UUID foodLogId) {
-        FoodLog foodLog = findFoodLog(foodLogId);
+        User user = currentUserService.getUser();
+
+        FoodLog foodLog = findFoodLog(foodLogId, user);
 
         repository.delete(foodLog);
     }
 
-    private FoodLog findFoodLog(UUID foodLogId){
-        User user = currentUserService.getUser();
+    private FoodLog findFoodLog(UUID foodLogId, User user){
 
         return repository.findByIdAndUserId(foodLogId, user.getId())
                 .orElseThrow(() -> new NotFoundException("Food log not found"));

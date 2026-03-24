@@ -1,11 +1,7 @@
 package com.example.caloryxbackend.foodlog.payload.request;
 
 import com.example.caloryxbackend.common.enums.MealTime;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -28,7 +24,7 @@ public class FoodLogRequest {
     private String unit;
 
     @NotNull(message = "Calories required")
-    @DecimalMin(value = "0.0", message = "Calories must be positive")
+    @DecimalMin(value = "0.0", message = "Calories must be non-negative")
     private Double calories;
 
     @DecimalMin("0.0")

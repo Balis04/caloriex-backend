@@ -7,8 +7,6 @@ import com.example.caloryxbackend.foodlog.payload.response.FoodLogResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.UUID;
-
 @Mapper(componentModel = "spring")
 public interface FoodLogMapper {
 
