@@ -58,7 +58,7 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User findUser(String auth0Id){
         return userRepository.findByAuth0id(auth0Id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
