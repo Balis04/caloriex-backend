@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>caloryx-backend</artifactId>
+	<artifactId>caloriex-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>caloryx-backend</name>
-	<description>caloryx-backend</description>
+	<name>caloriex-backend</name>
+	<description>caloriex-backend</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -178,7 +178,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>11.7.2</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/caloryx</url>
+					<url>jdbc:postgresql://localhost:5432/caloriex</url>
 					<user>postgres</user>
 					<password>postgres</password>
 					<cleanDisabled>false</cleanDisabled>

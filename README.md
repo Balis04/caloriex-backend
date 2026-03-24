@@ -1,4 +1,4 @@
-# Caloryx Backend Docker
+# Caloriex Backend Docker
 
 Ez a backend Spring Boot + PostgreSQL alapon fut, es Dockerrel ket kontenerben tudod inditani:
 
@@ -18,13 +18,13 @@ Dockerrel ugyanazt a futasi kornyezetet kapod lokalban es deploynal is. Ez azert
 Lokal futtataskor az adatbazis URL tipikusan:
 
 ```properties
-DB_URL=jdbc:postgresql://localhost:5432/caloryx
+DB_URL=jdbc:postgresql://localhost:5432/caloriex
 ```
 
 Docker Compose alatt a backend a Postgrest a szolgaltatas neve alapjan eri el:
 
 ```properties
-DB_URL=jdbc:postgresql://postgres:5432/caloryx
+DB_URL=jdbc:postgresql://postgres:5432/caloriex
 ```
 
 Ez az egyik leggyakoribb hiba Dockeresitesnel.
@@ -63,13 +63,13 @@ Ha a frontend kulon GitHub repoban van, az teljesen jo. Tipikus felallas:
 
 Peldak:
 
-- frontend: `https://caloryx-frontend.vercel.app`
-- backend: `https://api.caloryx.hu`
+- frontend: `https://caloriex-frontend.vercel.app`
+- backend: `https://api.caloriex.hu`
 
 Ebben az esetben:
 
 ```env
-APP_CORS_ALLOWED_ORIGINS=https://caloryx-frontend.vercel.app
+APP_CORS_ALLOWED_ORIGINS=https://caloriex-frontend.vercel.app
 ```
 
 ## Deploy gondolkodas
