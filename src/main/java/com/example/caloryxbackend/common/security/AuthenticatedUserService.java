@@ -1,4 +1,4 @@
-package com.example.caloryxbackend.account;
+package com.example.caloryxbackend.common.security;
 
 import com.example.caloryxbackend.common.exception.NotFoundException;
 import com.example.caloryxbackend.entities.User;
@@ -11,41 +11,41 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CurrentUserService {
+public class AuthenticatedUserService {
 
     private final UserRepository userRepository;
 
     public User getUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || !(auth.getPrincipal() instanceof Jwt jwt)) {
-            throw new IllegalStateException("No JWT authentication found");
-        }
-
-        String auth0Id = jwt.getSubject();
+        String auth0Id = getJwt().getSubject();
 
         return userRepository.findByAuth0id(auth0Id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public CurrentUser get() {
+    public AuthenticatedUser getAuthenticatedUser() {
+        Jwt jwt = getJwt();
+
+        String auth0Id = jwt.getSubject();
+        String email = jwt.getClaimAsString("https://caloriex.com/email");
+
+        return new AuthenticatedUser(auth0Id, email);
+    }
+
+    public String getAuth0Id() {
+        return getAuthenticatedUser().auth0Id();
+    }
+
+    public String getEmail() {
+        return getAuthenticatedUser().email();
+    }
+
+    private Jwt getJwt() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !(auth.getPrincipal() instanceof Jwt jwt)) {
             throw new IllegalStateException("No JWT authentication found");
         }
 
-        String auth0Id = jwt.getSubject();
-        String email = jwt.getClaimAsString("https://caloriex.com/email");
-
-        return new CurrentUser(auth0Id, email);
-    }
-
-    public String getAuth0Id() {
-        return get().auth0Id();
-    }
-
-    public String getEmail() {
-        return get().email();
+        return jwt;
     }
 }

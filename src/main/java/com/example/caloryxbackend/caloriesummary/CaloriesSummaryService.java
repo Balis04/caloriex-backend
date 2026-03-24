@@ -1,6 +1,5 @@
 package com.example.caloryxbackend.caloriesummary;
 
-import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.caloriesummary.calculation.DailyMacroTargets;
 import com.example.caloryxbackend.caloriesummary.repository.CaloriesSummaryRepository;
 import com.example.caloryxbackend.caloriesummary.repository.DayIntakeProjection;
@@ -10,6 +9,7 @@ import com.example.caloryxbackend.caloriesummary.payload.CaloriesSummaryResponse
 import com.example.caloryxbackend.caloriesummary.payload.FoodItemResponse;
 import com.example.caloryxbackend.caloriesummary.payload.MealTimeGroupResponse;
 import com.example.caloryxbackend.common.enums.MealTime;
+import com.example.caloryxbackend.common.security.AuthenticatedUserService;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CaloriesSummaryService {
 
-    private final CurrentUserService currentUserService;
+    private final AuthenticatedUserService authenticatedUserService;
     private final CaloriesSummaryRepository caloriesSummaryRepository;
     private final CaloriesCalculator caloriesCalculator;
     private final CaloriesSummaryMapper caloriesSummaryMapper;
 
     public CaloriesSummaryResponse getSummaryByDate(LocalDate date) {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         LocalDate targetDate = date != null ? date : LocalDate.now();
         LocalDateTime start = targetDate.atStartOfDay();
@@ -54,7 +54,7 @@ public class CaloriesSummaryService {
     }
 
     public MealTimeGroupResponse getMealTimeSummaryByDateAndMeal(LocalDate date, MealTime mealTime) {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         LocalDate targetDate = date != null ? date : LocalDate.now();
         LocalDateTime start = targetDate.atStartOfDay();
@@ -91,7 +91,7 @@ public class CaloriesSummaryService {
     }
 
     public List<FoodItemResponse> getTodayFoods() {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         List<FoodLog> logs = getLogsForDate(user, LocalDate.now());
 

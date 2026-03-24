@@ -1,8 +1,8 @@
 package com.example.caloryxbackend.foodlog;
 
-import com.example.caloryxbackend.account.CurrentUserService;
 import com.example.caloryxbackend.common.exception.BadRequestException;
 import com.example.caloryxbackend.common.exception.NotFoundException;
+import com.example.caloryxbackend.common.security.AuthenticatedUserService;
 import com.example.caloryxbackend.entities.FoodLog;
 import com.example.caloryxbackend.entities.User;
 import com.example.caloryxbackend.foodlog.payload.request.FoodLogAmountUpdateRequest;
@@ -18,13 +18,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FoodLogService {
 
-    private final CurrentUserService currentUserService;
+    private final AuthenticatedUserService authenticatedUserService;
     private final FoodLogRepository repository;
     private final FoodLogMapper foodLogMapper;
 
     @Transactional
     public FoodLogResponse createFoodLog(FoodLogRequest request) {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
         FoodLog entity = foodLogMapper.toEntity(request, user);
         FoodLog saved = repository.save(entity);
         return foodLogMapper.toResponse(saved);
@@ -33,7 +33,7 @@ public class FoodLogService {
     @Transactional
     public FoodLogResponse updateFoodLogAmount(UUID foodLogId, FoodLogAmountUpdateRequest request) {
 
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         FoodLog foodLog = findFoodLog(foodLogId, user);
 
@@ -57,7 +57,7 @@ public class FoodLogService {
 
     @Transactional
     public void deleteFoodLog(UUID foodLogId) {
-        User user = currentUserService.getUser();
+        User user = authenticatedUserService.getUser();
 
         FoodLog foodLog = findFoodLog(foodLogId, user);
 
