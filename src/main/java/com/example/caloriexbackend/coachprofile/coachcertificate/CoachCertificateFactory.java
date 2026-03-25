@@ -3,7 +3,7 @@ package com.example.caloriexbackend.coachprofile.coachcertificate;
 import com.example.caloriexbackend.coachprofile.coachcertificate.payload.CoachCertificateUploadRequest;
 import com.example.caloriexbackend.entities.CoachCertificate;
 import com.example.caloriexbackend.entities.CoachProfile;
-import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.PublicDocumentUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class CoachCertificateFactory {
     public CoachCertificate create(
             CoachCertificateUploadRequest request,
             CoachProfile profile,
-            DocumentUploadResponse upload
+            PublicDocumentUploadResponse upload
     ) {
         CoachCertificate entity = mapper.toEntity(request);
 

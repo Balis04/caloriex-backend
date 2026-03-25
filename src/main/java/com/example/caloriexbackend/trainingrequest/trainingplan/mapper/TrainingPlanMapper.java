@@ -2,7 +2,7 @@ package com.example.caloriexbackend.trainingrequest.trainingplan.mapper;
 
 import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;
-import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.ProtectedDocumentUploadResponse;
 import com.example.caloriexbackend.trainingrequest.trainingplan.payload.TrainingPlanResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,7 +24,7 @@ public interface TrainingPlanMapper {
             TrainingRequest request,
             String planName,
             String description,
-            DocumentUploadResponse upload
+            ProtectedDocumentUploadResponse upload
     );
 
     TrainingPlanResponse toResponse(TrainingPlan entity);

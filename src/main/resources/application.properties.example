@@ -34,5 +34,8 @@ spring.mail.properties.mail.smtp.starttls.enable=${MAIL_SMTP_STARTTLS_ENABLE:tru
 app.mail.training-request.from=${TRAINING_REQUEST_MAIL_FROM:${MAIL_USERNAME:}}
 
 app.storage.r2.access-mode=${APP_STORAGE_R2_ACCESS_MODE:PUBLIC}
-# In PUBLIC mode configure a public base URL or a public bucket endpoint.
-# PROTECTED mode is intentionally blocked until a dedicated authorized download flow exists.
+# Certificate files use the public bucket/base URL flow.
+# Training plan files are stored by storage key and downloaded through an
+# authenticated, ownership-checked backend endpoint.
+# In PUBLIC mode configure a public base URL or a public bucket endpoint for
+# public files such as coach certificates.

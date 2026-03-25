@@ -5,7 +5,7 @@ import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;
 import com.example.caloriexbackend.storage.StorageService;
-import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.ProtectedDocumentUploadResponse;
 import com.example.caloriexbackend.storage.payload.StoredFileDownload;
 import com.example.caloriexbackend.trainingrequest.trainingplan.mapper.TrainingPlanMapper;
 import com.example.caloriexbackend.trainingrequest.trainingplan.repository.TrainingPlanRepository;
@@ -29,7 +29,7 @@ public class TrainingPlanService {
             String planName,
             String description
     ) {
-        DocumentUploadResponse upload = storageService.uploadTrainingPlan(file);
+        ProtectedDocumentUploadResponse upload = storageService.uploadTrainingPlan(file);
 
         TrainingPlan trainingPlan = trainingPlanMapper.toEntity(
                 request,

@@ -4,7 +4,8 @@ import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.config.R2StorageAccessMode;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.config.R2StorageProperties;
-import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.ProtectedDocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.PublicDocumentUploadResponse;
 import com.example.caloriexbackend.storage.payload.StoredFileDownload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,12 +43,26 @@ public class StorageService {
     private final R2StorageProperties properties;
     private final AuthenticatedUserService authenticatedUserService;
 
-    public DocumentUploadResponse uploadCertificate(MultipartFile file) {
-        return uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate", true);
+    public PublicDocumentUploadResponse uploadCertificate(MultipartFile file) {
+        UploadResult upload = uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate");
+
+        return new PublicDocumentUploadResponse(
+                upload.originalFileName(),
+                buildFileUrl(upload.objectKey()),
+                upload.contentType(),
+                upload.size()
+        );
     }
 
-    public DocumentUploadResponse uploadTrainingPlan(MultipartFile file) {
-        return uploadDocument(file, "Training plan", "training plan", "training-plans", "training-plan", false);
+    public ProtectedDocumentUploadResponse uploadTrainingPlan(MultipartFile file) {
+        UploadResult upload = uploadDocument(file, "Training plan", "training plan", "training-plans", "training-plan");
+
+        return new ProtectedDocumentUploadResponse(
+                upload.originalFileName(),
+                upload.objectKey(),
+                upload.contentType(),
+                upload.size()
+        );
     }
 
     public StoredFileDownload downloadTrainingPlan(String storedKey, String fileName, String contentType) {
@@ -73,13 +88,12 @@ public class StorageService {
         }
     }
 
-    private DocumentUploadResponse uploadDocument(
+    private UploadResult uploadDocument(
             MultipartFile file,
             String documentLabel,
             String fileTypeLabel,
             String folderName,
-            String fallbackFileName,
-            boolean exposePublicUrl
+            String fallbackFileName
     ) {
         validateStorageEnabled(documentLabel);
         validateFile(file, documentLabel, fileTypeLabel);
@@ -124,10 +138,9 @@ public class StorageService {
             throw new BadRequestException("Failed to upload " + fileTypeLabel + " to storage");
         }
 
-        return new DocumentUploadResponse(
+        return new UploadResult(
                 originalFileName,
                 objectKey,
-                exposePublicUrl ? buildFileUrl(objectKey) : null,
                 contentType,
                 file.getSize()
         );
@@ -329,5 +342,13 @@ public class StorageService {
 
     private String trimTrailingSlash(String value) {
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
+    }
+
+    private record UploadResult(
+            String originalFileName,
+            String objectKey,
+            String contentType,
+            long size
+    ) {
     }
 }
