@@ -17,7 +17,7 @@ public interface TrainingPlanMapper {
     @Mapping(target = "planName", source = "planName")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "fileName", source = "upload.originalFileName")
-    @Mapping(target = "fileUrl", source = "upload.fileUrl")
+    @Mapping(target = "storageKey", source = "upload.storageKey")
     @Mapping(target = "contentType", source = "upload.contentType")
     @Mapping(target = "fileSizeBytes", source = "upload.size")
     TrainingPlan toEntity(

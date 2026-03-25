@@ -20,7 +20,6 @@ public record ClosedTrainingRequestResponse(
         String planName,
         String planDescription,
         String fileName,
-        String fileUrl,
         Instant uploadedAt
 ) {
 }

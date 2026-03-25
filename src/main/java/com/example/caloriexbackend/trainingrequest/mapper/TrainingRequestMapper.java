@@ -53,7 +53,6 @@ public interface TrainingRequestMapper {
     @Mapping(source = "planName", target = "planName")
     @Mapping(source = "description", target = "planDescription")
     @Mapping(source = "fileName", target = "fileName")
-    @Mapping(source = "fileUrl", target = "fileUrl")
     @Mapping(source = "uploadedAt", target = "uploadedAt")
     ClosedTrainingRequestResponse toClosedResponse(TrainingPlan entity);
 }
