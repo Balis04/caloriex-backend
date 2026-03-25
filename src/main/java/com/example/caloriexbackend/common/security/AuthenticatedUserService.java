@@ -6,8 +6,11 @@ import com.example.caloriexbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -15,20 +18,53 @@ public class AuthenticatedUserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public User getUser() {
-        String auth0Id = getJwt().getSubject();
+        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
 
-        return userRepository.findByAuth0Id(auth0Id)
+        return findUser(authenticatedUser)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
+    @Transactional
+    public Optional<User> findUser() {
+        return findAuthenticatedUser().flatMap(this::findUser);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<AuthenticatedUser> findAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return Optional.empty();
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof OAuth2AuthenticatedPrincipal oauth2Principal)) {
+            return Optional.empty();
+        }
+
+        String auth0Id = oauth2Principal.getAttribute("sub");
+        if (auth0Id == null || auth0Id.isBlank()) {
+            return Optional.empty();
+        }
+
+        String email = oauth2Principal.getAttribute("email");
+        Boolean emailVerified = oauth2Principal.getAttribute("email_verified");
+        String fullName = oauth2Principal.getAttribute("name");
+
+        return Optional.of(new AuthenticatedUser(
+                auth0Id,
+                email,
+                Boolean.TRUE.equals(emailVerified),
+                fullName
+        ));
+    }
+
+    @Transactional(readOnly = true)
     public AuthenticatedUser getAuthenticatedUser() {
-        Jwt jwt = getJwt();
-
-        String auth0Id = jwt.getSubject();
-        String email = jwt.getClaimAsString("https://caloriex.com/email");
-
-        return new AuthenticatedUser(auth0Id, email);
+        return findAuthenticatedUser()
+                .orElseThrow(() -> new IllegalStateException("No authenticated user found"));
     }
 
     public String getAuth0Id() {
@@ -39,13 +75,25 @@ public class AuthenticatedUserService {
         return getAuthenticatedUser().email();
     }
 
-    private Jwt getJwt() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    private Optional<User> findUser(AuthenticatedUser authenticatedUser) {
+        return userRepository.findByAuth0Id(authenticatedUser.auth0Id())
+                .or(() -> linkVerifiedEmailMatch(authenticatedUser));
+    }
 
-        if (auth == null || !(auth.getPrincipal() instanceof Jwt jwt)) {
-            throw new IllegalStateException("No JWT authentication found");
+    private Optional<User> linkVerifiedEmailMatch(AuthenticatedUser authenticatedUser) {
+        if (!authenticatedUser.emailVerified()
+                || authenticatedUser.email() == null
+                || authenticatedUser.email().isBlank()) {
+            return Optional.empty();
         }
 
-        return jwt;
+        return userRepository.findByEmailIgnoreCase(authenticatedUser.email())
+                .map(user -> {
+                    if (!authenticatedUser.auth0Id().equals(user.getAuth0Id())) {
+                        user.setAuth0Id(authenticatedUser.auth0Id());
+                        return userRepository.save(user);
+                    }
+                    return user;
+                });
     }
 }
