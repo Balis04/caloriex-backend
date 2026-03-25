@@ -29,15 +29,15 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(UserRequest request) {
+    public void createUserProfile(UserRequest request) {
         AuthenticatedUser currentUser = authenticatedUserService.getAuthenticatedUser();
 
-        if (userRepository.existsByAuth0id(currentUser.auth0Id())) {
+        if (userRepository.existsByAuth0Id(currentUser.auth0Id())) {
             throw new BadRequestException("User already exists");
         }
 
         User user = new User();
-        user.setAuth0id(currentUser.auth0Id());
+        user.setAuth0Id(currentUser.auth0Id());
 
         if (currentUser.email() != null && !currentUser.email().isBlank()) {
             user.setEmail(currentUser.email());

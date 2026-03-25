@@ -23,8 +23,8 @@ public class AccountController {
         return ResponseEntity.ok(accountStatusService.getProfileStatus());
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<AuthenticatedUser> getProfile() {
+    @GetMapping("/identity")
+    public ResponseEntity<AuthenticatedUser> getIdentity() {
         return ResponseEntity.ok(authenticatedUserService.getAuthenticatedUser());
     }
 }

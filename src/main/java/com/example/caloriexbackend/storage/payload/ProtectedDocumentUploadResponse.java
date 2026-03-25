@@ -1,8 +1,9 @@
 package com.example.caloriexbackend.storage.payload;
 
-public record DocumentUploadResponse(
+public record ProtectedDocumentUploadResponse(
         String originalFileName,
-        String fileUrl,
+        String storageKey,
         String contentType,
         long size
-) {}
+) {
+}

@@ -39,8 +39,8 @@ public class TrainingPlan {
     @Column(name = "file_name", nullable = false, length = 255)
     private String fileName;
 
-    @Column(name = "file_url", nullable = false, length = 500)
-    private String fileUrl;
+    @Column(name = "storage_key", nullable = false, length = 500)
+    private String storageKey;
 
     @Column(name = "content_type", length = 100)
     private String contentType;

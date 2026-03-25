@@ -6,7 +6,6 @@ public record TrainingPlanResponse(
         String planName,
         String description,
         String fileName,
-        String fileUrl,
         Instant uploadedAt
 ) {
 }

@@ -18,7 +18,7 @@ public class AuthenticatedUserService {
     public User getUser() {
         String auth0Id = getJwt().getSubject();
 
-        return userRepository.findByAuth0id(auth0Id)
+        return userRepository.findByAuth0Id(auth0Id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 

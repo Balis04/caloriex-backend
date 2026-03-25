@@ -4,13 +4,16 @@ import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.config.R2StorageAccessMode;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.config.R2StorageProperties;
-import com.example.caloriexbackend.storage.payload.DocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.ProtectedDocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.PublicDocumentUploadResponse;
+import com.example.caloriexbackend.storage.payload.StoredFileDownload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -40,15 +43,52 @@ public class StorageService {
     private final R2StorageProperties properties;
     private final AuthenticatedUserService authenticatedUserService;
 
-    public DocumentUploadResponse uploadCertificate(MultipartFile file) {
-        return uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate");
+    public PublicDocumentUploadResponse uploadCertificate(MultipartFile file) {
+        UploadResult upload = uploadDocument(file, "Certificate", "certificate", "coach-certificates", "certificate");
+
+        return new PublicDocumentUploadResponse(
+                upload.originalFileName(),
+                buildFileUrl(upload.objectKey()),
+                upload.contentType(),
+                upload.size()
+        );
     }
 
-    public DocumentUploadResponse uploadTrainingPlan(MultipartFile file) {
-        return uploadDocument(file, "Training plan", "training plan", "training-plans", "training-plan");
+    public ProtectedDocumentUploadResponse uploadTrainingPlan(MultipartFile file) {
+        UploadResult upload = uploadDocument(file, "Training plan", "training plan", "training-plans", "training-plan");
+
+        return new ProtectedDocumentUploadResponse(
+                upload.originalFileName(),
+                upload.objectKey(),
+                upload.contentType(),
+                upload.size()
+        );
     }
 
-    private DocumentUploadResponse uploadDocument(
+    public StoredFileDownload downloadTrainingPlan(String storedKey, String fileName, String contentType) {
+        validateStorageEnabled("Training plan");
+
+        String objectKey = resolveObjectKey(storedKey);
+
+        try {
+            byte[] content = s3Client.getObjectAsBytes(
+                    GetObjectRequest.builder()
+                            .bucket(properties.bucket())
+                            .key(objectKey)
+                            .build()
+            ).asByteArray();
+
+            return new StoredFileDownload(
+                    fileName,
+                    contentType != null && !contentType.isBlank() ? contentType : PDF_CONTENT_TYPE,
+                    content
+            );
+        } catch (RuntimeException exception) {
+            throw new BadRequestException("Failed to download training plan from storage");
+        }
+    }
+
+    private UploadResult uploadDocument(
             MultipartFile file,
             String documentLabel,
             String fileTypeLabel,
@@ -98,9 +138,9 @@ public class StorageService {
             throw new BadRequestException("Failed to upload " + fileTypeLabel + " to storage");
         }
 
-        return new DocumentUploadResponse(
+        return new UploadResult(
                 originalFileName,
-                buildFileUrl(objectKey),
+                objectKey,
                 contentType,
                 file.getSize()
         );
@@ -185,6 +225,36 @@ public class StorageService {
                 properties.bucket(),
                 objectKey
         );
+    }
+
+    private String resolveObjectKey(String storedKey) {
+        if (storedKey == null || storedKey.isBlank()) {
+            throw new BadRequestException("Stored training plan key is missing");
+        }
+
+        if (!storedKey.startsWith("http://") && !storedKey.startsWith("https://")) {
+            return storedKey;
+        }
+
+        String normalized = storedKey;
+
+        String publicBaseUrl = properties.publicBaseUrl();
+        if (publicBaseUrl != null && !publicBaseUrl.isBlank()) {
+            String prefix = trimTrailingSlash(publicBaseUrl) + "/";
+            if (normalized.startsWith(prefix)) {
+                return normalized.substring(prefix.length());
+            }
+        }
+
+        String endpoint = properties.endpoint();
+        if (endpoint != null && !endpoint.isBlank()) {
+            String prefix = trimTrailingSlash(endpoint) + "/" + properties.bucket() + "/";
+            if (normalized.startsWith(prefix)) {
+                return normalized.substring(prefix.length());
+            }
+        }
+
+        throw new BadRequestException("Stored training plan key is not a valid storage object key");
     }
 
     private String detectActualFileType(MultipartFile file, String fileTypeLabel) {
@@ -272,5 +342,13 @@ public class StorageService {
 
     private String trimTrailingSlash(String value) {
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
+    }
+
+    private record UploadResult(
+            String originalFileName,
+            String objectKey,
+            String contentType,
+            long size
+    ) {
     }
 }

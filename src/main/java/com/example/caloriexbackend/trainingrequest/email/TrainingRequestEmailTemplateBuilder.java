@@ -14,7 +14,7 @@ public class TrainingRequestEmailTemplateBuilder {
 
         Coach: %s
 
-        Client details:
+        Requester details:
         - Name: %s
         - Email: %s
         - Current weight: %s
@@ -60,7 +60,7 @@ public class TrainingRequestEmailTemplateBuilder {
         Weekly training sessions: %s
         Session duration: %s minutes
         Preferred location: %s
-        Reason: %s
+        Status note: %s
         Request ID: %s
         Created at: %s
 

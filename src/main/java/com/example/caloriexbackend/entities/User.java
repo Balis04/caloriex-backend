@@ -24,7 +24,7 @@ public class User {
     private UUID id;
 
     @Column(name = "auth0_id", nullable = false, unique = true)
-    private String auth0id;
+    private String auth0Id;
 
     @Column(name = "email", unique = true)
     private String email;

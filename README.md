@@ -38,8 +38,14 @@ POSTGRES_PASSWORD=postgres
 USDA_API_KEY=your_usda_api_key
 AUTH0_ISSUER_URI=https://your-tenant.us.auth0.com/
 APP_CORS_ALLOWED_ORIGINS=http://localhost:5173,https://sajat-frontend-domain.hu
-APP_JWT_SECRET=change_me_to_a_long_random_secret
 ```
+
+## File policy
+
+- A coach certificate fajlok publikus dokumentumkent kezelhetok, ezert a rendszer publikus URL-t ad vissza rajuk.
+- A training plan fajlok vedett dokumentumok: a backend storage key-t tarol, es nem ad vissza nyers publikus fajllinket.
+- A training plan letoltes az ownership-ellenorzott `GET /api/training-requests/{trainingRequestId}/training-plan/download` endpointon keresztul tortenik.
+- A training plan fajlt csak az erintett coach es az a user toltheti le, akinek a terv keszult.
 
 ## Inditas
 

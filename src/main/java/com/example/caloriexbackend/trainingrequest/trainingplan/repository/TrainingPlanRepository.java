@@ -12,6 +12,10 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan, UUID
 
     boolean existsByTrainingRequestId(UUID trainingRequestId);
 
+    @EntityGraph(attributePaths = {
+            "coachUser",
+            "requesterUser"
+    })
     Optional<TrainingPlan> findByTrainingRequestId(UUID trainingRequestId);
 
     @EntityGraph(attributePaths = {
