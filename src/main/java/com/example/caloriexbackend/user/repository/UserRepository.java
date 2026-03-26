@@ -10,5 +10,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByAuth0Id(String auth0Id);
 
+    Optional<User> findByEmailIgnoreCase(String email);
+
     boolean existsByAuth0Id(String auth0Id);
 }

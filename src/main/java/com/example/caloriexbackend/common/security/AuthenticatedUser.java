@@ -2,6 +2,8 @@ package com.example.caloriexbackend.common.security;
 
 public record AuthenticatedUser(
         String auth0Id,
-        String email
+        String email,
+        boolean emailVerified,
+        String fullName
 ) {
 }

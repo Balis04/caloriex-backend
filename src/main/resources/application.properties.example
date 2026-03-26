@@ -19,11 +19,26 @@ spring.servlet.multipart.max-request-size=${APP_MULTIPART_MAX_REQUEST_SIZE:10MB}
 logging.level.org.hibernate=warn
 
 # Authentication:
-# This backend accepts JWTs issued by the configured external identity provider.
-# The backend does not generate its own JWTs and does not use a local shared secret.
-spring.security.oauth2.resourceserver.jwt.issuer-uri=${AUTH0_ISSUER_URI:https://dev-s6p5lk76jv2ydpek.us.auth0.com/}
+# Spring Security handles the Auth0 Authorization Code flow and keeps the
+# authenticated user in a server-side session. No OAuth token is exposed to the frontend.
+spring.security.oauth2.client.provider.auth0.issuer-uri=${AUTH0_ISSUER_URI:https://your-tenant.eu.auth0.com/}
+spring.security.oauth2.client.registration.auth0.provider=auth0
+spring.security.oauth2.client.registration.auth0.client-id=${AUTH0_CLIENT_ID:}
+spring.security.oauth2.client.registration.auth0.client-secret=${AUTH0_CLIENT_SECRET:}
+spring.security.oauth2.client.registration.auth0.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.auth0.redirect-uri=${AUTH0_REDIRECT_URI:{baseUrl}/login/oauth2/code/{registrationId}}
+spring.security.oauth2.client.registration.auth0.scope=openid,profile,email
+server.servlet.session.cookie.name=${APP_SESSION_COOKIE_NAME:CALORIEX_SESSION}
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.secure=${APP_SESSION_COOKIE_SECURE:true}
+server.servlet.session.cookie.same-site=${APP_SESSION_COOKIE_SAME_SITE:none}
+server.servlet.session.timeout=${APP_SESSION_TIMEOUT:8h}
 USDA_API_KEY=${USDA_API_KEY}
 app.cors.allowed-origins=${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
+app.auth.frontend-base-url=${APP_FRONTEND_BASE_URL:http://localhost:5173}
+app.auth.post-login-path=${APP_AUTH_POST_LOGIN_PATH:/auth/callback}
+app.auth.post-logout-path=${APP_AUTH_POST_LOGOUT_PATH:/}
+app.auth.auth0-logout-enabled=${APP_AUTH0_LOGOUT_ENABLED:true}
 
 spring.mail.host=${MAIL_HOST:}
 spring.mail.port=${MAIL_PORT:587}
