@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -63,11 +64,17 @@ public class AuthService {
 
     public void logout(HttpServletRequest request,
                        HttpServletResponse response,
-                       Authentication authentication) {
+                       Authentication authentication) throws IOException {
         new SecurityContextLogoutHandler().logout(request, response, authentication);
 
         response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie(sessionCookieName, true).toString());
         response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie("XSRF-TOKEN", false).toString());
+
+        String logoutUrl = getAuth0LogoutUrl();
+
+        if (logoutUrl != null) {
+            response.sendRedirect(logoutUrl);
+        }
     }
 
     private ResponseCookie expiredCookie(String name, boolean httpOnly) {
