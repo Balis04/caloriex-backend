@@ -15,11 +15,18 @@ public class AppAuthProperties {
     private boolean auth0LogoutEnabled = true;
 
     public String getPostLoginRedirectUrl() {
-        return frontendBaseUrl + normalizePath(postLoginPath);
+        return normalizeBaseUrl(frontendBaseUrl) + normalizePath(postLoginPath);
     }
 
     public String getPostLogoutRedirectUrl() {
-        return frontendBaseUrl + normalizePath(postLogoutPath);
+        return normalizeBaseUrl(frontendBaseUrl) + normalizePath(postLogoutPath);
+    }
+
+    private String normalizeBaseUrl(String baseUrl) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            return "";
+        }
+        return baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
     }
 
     private String normalizePath(String path) {

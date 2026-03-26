@@ -1,5 +1,7 @@
 package com.example.caloriexbackend.config;
 
+import com.example.caloriexbackend.common.enums.UserRole;
+import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.common.security.CsrfCookieFilter;
 import com.example.caloriexbackend.common.security.OAuth2LoginFailureHandler;
 import com.example.caloriexbackend.common.security.OAuth2LoginSuccessHandler;
@@ -16,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -23,6 +27,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.security.web.csrf.MissingCsrfTokenException;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -37,8 +42,6 @@ import java.util.stream.Collectors;
 @EnableConfigurationProperties(AppAuthProperties.class)
 public class SecurityConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
-
     @Value("${app.cors.allowed-origins:http://localhost:5173}")
     private String allowedOrigins;
 
@@ -51,7 +54,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http,
                                     OAuth2LoginSuccessHandler successHandler,
-                                    OAuth2LoginFailureHandler failureHandler) throws Exception {
+                                    OAuth2LoginFailureHandler failureHandler,
+                                    AuthorizationManager<RequestAuthorizationContext> coachRoleAuthorizationManager) throws Exception {
         PathPatternRequestMatcher.Builder pathPatterns = PathPatternRequestMatcher.withDefaults();
 
         http
@@ -61,7 +65,6 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
                         .ignoringRequestMatchers(
                                 pathPatterns.matcher("/api/auth/login"),
-                                pathPatterns.matcher("/api/auth/logout"),
                                 pathPatterns.matcher("/oauth2/**"),
                                 pathPatterns.matcher("/login/oauth2/**")
                         )
@@ -72,6 +75,8 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/auth/login", "/api/auth/me", "/api/auth/csrf").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/coach-profiles/me").access(coachRoleAuthorizationManager)
+                        .requestMatchers(HttpMethod.PUT, "/api/coach-profiles/*").access(coachRoleAuthorizationManager)
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -87,7 +92,6 @@ public class SecurityConfig {
                         )
                         .defaultAccessDeniedHandlerFor(
                                 (request, response, accessDeniedException) -> {
-                                    logAccessDenied(request, accessDeniedException);
                                     response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase());
                                 },
                                 pathPatterns.matcher("/api/**")
@@ -96,6 +100,17 @@ public class SecurityConfig {
                 .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    AuthorizationManager<RequestAuthorizationContext> coachRoleAuthorizationManager(
+            AuthenticatedUserService authenticatedUserService
+    ) {
+        return (authentication, context) -> new AuthorizationDecision(
+                authenticatedUserService.findUser()
+                        .map(user -> user.getRole() == UserRole.COACH)
+                        .orElse(false)
+        );
     }
 
     @Bean
@@ -122,64 +137,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    private void logAccessDenied(jakarta.servlet.http.HttpServletRequest request,
-                                 org.springframework.security.access.AccessDeniedException exception) {
-        if (!"/api/user/profile".equals(request.getRequestURI())) {
-            return;
-        }
-
-        String csrfCookie = extractXsrfCookieValue(request);
-        String csrfHeader = request.getHeader("X-XSRF-TOKEN");
-        String sessionId = request.getRequestedSessionId();
-        Object csrfAttribute = request.getAttribute(CsrfToken.class.getName());
-        String expectedToken = csrfAttribute instanceof CsrfToken csrfToken ? csrfToken.getToken() : null;
-
-        if (exception instanceof InvalidCsrfTokenException) {
-            log.warn("Access denied for {} {} due to invalid CSRF token. sessionId={}, headerToken={}, cookieToken={}, expectedToken={}",
-                    request.getMethod(),
-                    request.getRequestURI(),
-                    sessionId,
-                    csrfHeader,
-                    csrfCookie,
-                    expectedToken);
-            return;
-        }
-
-        if (exception instanceof MissingCsrfTokenException) {
-            log.warn("Access denied for {} {} due to missing CSRF token. sessionId={}, headerToken={}, cookieToken={}, expectedToken={}",
-                    request.getMethod(),
-                    request.getRequestURI(),
-                    sessionId,
-                    csrfHeader,
-                    csrfCookie,
-                    expectedToken);
-            return;
-        }
-
-        log.warn("Access denied for {} {}. sessionId={}, headerToken={}, cookieToken={}, expectedToken={}, message={}",
-                request.getMethod(),
-                request.getRequestURI(),
-                sessionId,
-                csrfHeader,
-                csrfCookie,
-                expectedToken,
-                exception.getMessage());
-    }
-
-    private String extractXsrfCookieValue(jakarta.servlet.http.HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
-        }
-
-        for (Cookie cookie : cookies) {
-            if ("XSRF-TOKEN".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-
-        return null;
     }
 }

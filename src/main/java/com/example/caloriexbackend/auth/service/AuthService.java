@@ -93,7 +93,8 @@ public class AuthService {
                 .fromUriString(issuerBaseUrl + "/v2/logout")
                 .queryParam("client_id", auth0ClientId)
                 .queryParam("returnTo", authProperties.getPostLogoutRedirectUrl())
-                .build(true)
+                .build()
+                .encode()
                 .toUriString();
     }
 }

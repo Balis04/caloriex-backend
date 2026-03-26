@@ -31,7 +31,7 @@ public class OAuth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHan
         String targetUrl = UriComponentsBuilder
                 .fromUriString(authProperties.getPostLoginRedirectUrl())
                 .replaceQueryParam("error", "oauth_login_failed")
-                .build(true)
+                .build()
                 .toUriString();
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
