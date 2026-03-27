@@ -13,11 +13,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/coach/training-requests")
 @RequiredArgsConstructor
+@Validated
 @Tag(name = "Coach Training Requests", description = "Endpoints for coaches to manage training requests")
 public class TrainingRequestCoachController {
 
@@ -122,7 +126,7 @@ public class TrainingRequestCoachController {
 
     @Operation(
             summary = "Upload training plan",
-            description = "Uploads a training plan file for a closed or approved training request of the authenticated coach profile."
+            description = "Uploads a training plan file for an approved training request of the authenticated coach profile."
     )
     @ApiResponses({
             @ApiResponse(
@@ -151,9 +155,9 @@ public class TrainingRequestCoachController {
             @PathVariable UUID trainingRequestId,
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "planName", required = false) String planName,
-            @RequestParam(value = "description", required = false) String description
+            @RequestParam("planDescription") @NotBlank @Size(max = 5000) String planDescription
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(trainingRequestService.uploadTrainingPlan(trainingRequestId, file, planName, description));
+                .body(trainingRequestService.uploadTrainingPlan(trainingRequestId, file, planName, planDescription));
     }
 }

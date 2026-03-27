@@ -27,14 +27,14 @@ public class TrainingPlanService {
             TrainingRequest request,
             MultipartFile file,
             String planName,
-            String description
+            String planDescription
     ) {
         ProtectedDocumentUploadResponse upload = storageService.uploadTrainingPlan(file);
 
         TrainingPlan trainingPlan = trainingPlanMapper.toEntity(
                 request,
                 planName,
-                description,
+                planDescription,
                 upload
         );
 
@@ -47,8 +47,8 @@ public class TrainingPlanService {
                 .orElseThrow(() -> new NotFoundException("Training plan not found"));
 
         java.util.UUID currentUserId = authenticatedUserService.getUser().getId();
-        boolean isCoach = trainingPlan.getCoachUser().getId().equals(currentUserId);
-        boolean isRequester = trainingPlan.getRequesterUser().getId().equals(currentUserId);
+        boolean isCoach = trainingPlan.getTrainingRequest().getCoachProfile().getUser().getId().equals(currentUserId);
+        boolean isRequester = trainingPlan.getTrainingRequest().getRequesterUser().getId().equals(currentUserId);
 
         if (!isCoach && !isRequester) {
             throw new NotFoundException("Training plan not found");

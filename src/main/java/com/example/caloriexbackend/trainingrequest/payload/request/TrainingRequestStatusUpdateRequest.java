@@ -11,6 +11,6 @@ public record TrainingRequestStatusUpdateRequest(
 
         @NotBlank
         @Size(max = 5000)
-        String description
+        String coachResponse
 ) {
 }

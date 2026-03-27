@@ -12,18 +12,17 @@ public interface TrainingPlanMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "trainingRequest", source = "request")
-    @Mapping(target = "coachUser", source = "request.coachProfile.user")
-    @Mapping(target = "requesterUser", source = "request.requesterUser")
     @Mapping(target = "planName", source = "planName")
-    @Mapping(target = "description", source = "description")
+    @Mapping(target = "planDescription", source = "planDescription")
     @Mapping(target = "fileName", source = "upload.originalFileName")
     @Mapping(target = "storageKey", source = "upload.storageKey")
     @Mapping(target = "contentType", source = "upload.contentType")
     @Mapping(target = "fileSizeBytes", source = "upload.size")
+    @Mapping(target = "uploadedAt", ignore = true)
     TrainingPlan toEntity(
             TrainingRequest request,
             String planName,
-            String description,
+            String planDescription,
             ProtectedDocumentUploadResponse upload
     );
 

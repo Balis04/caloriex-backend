@@ -13,8 +13,10 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan, UUID
     boolean existsByTrainingRequestId(UUID trainingRequestId);
 
     @EntityGraph(attributePaths = {
-            "coachUser",
-            "requesterUser"
+            "trainingRequest",
+            "trainingRequest.coachProfile",
+            "trainingRequest.coachProfile.user",
+            "trainingRequest.requesterUser"
     })
     Optional<TrainingPlan> findByTrainingRequestId(UUID trainingRequestId);
 
@@ -24,5 +26,5 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan, UUID
             "trainingRequest.coachProfile.user",
             "trainingRequest.requesterUser"
     })
-    List<TrainingPlan> findAllByCoachUserIdOrderByUploadedAtDesc(UUID coachUserId);
+    List<TrainingPlan> findAllByTrainingRequestCoachProfileUserIdOrderByUploadedAtDesc(UUID coachUserId);
 }

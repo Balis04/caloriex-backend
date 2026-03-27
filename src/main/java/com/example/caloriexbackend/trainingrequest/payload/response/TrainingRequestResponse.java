@@ -16,8 +16,8 @@ public record TrainingRequestResponse(
         Integer sessionDurationMinutes,
         String preferredLocation,
         TrainingRequestStatus status,
-        String description,
-        String coachNote,
+        String requestDescription,
+        String coachResponse,
         Instant createdAt
 ) {
 }

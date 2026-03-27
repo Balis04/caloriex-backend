@@ -21,8 +21,9 @@ public interface TrainingRequestMapper {
     @Mapping(target = "sessionDurationMinutes", source = "request.sessionDurationMinutes")
     @Mapping(target = "preferredLocation", source = "request.preferredLocation")
     @Mapping(target = "status", source = "status")
-    @Mapping(target = "coachNote", source = "request.coachNote")
-    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "requestDescription", source = "request.requestDescription")
+    @Mapping(target = "coachResponse", ignore = true)
+    @Mapping(target = "trainingPlan", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     TrainingRequest toEntity(
             TrainingRequestCreateRequest request,
@@ -46,12 +47,12 @@ public interface TrainingRequestMapper {
     @Mapping(source = "trainingRequest.sessionDurationMinutes", target = "sessionDurationMinutes")
     @Mapping(source = "trainingRequest.preferredLocation", target = "preferredLocation")
     @Mapping(source = "trainingRequest.status", target = "status")
-    @Mapping(source = "trainingRequest.description", target = "description")
-    @Mapping(source = "trainingRequest.coachNote", target = "coachNote")
+    @Mapping(source = "trainingRequest.requestDescription", target = "requestDescription")
+    @Mapping(source = "trainingRequest.coachResponse", target = "coachResponse")
     @Mapping(source = "trainingRequest.createdAt", target = "createdAt")
 
     @Mapping(source = "planName", target = "planName")
-    @Mapping(source = "description", target = "planDescription")
+    @Mapping(source = "planDescription", target = "planDescription")
     @Mapping(source = "fileName", target = "fileName")
     @Mapping(source = "uploadedAt", target = "uploadedAt")
     ClosedTrainingRequestResponse toClosedResponse(TrainingPlan entity);

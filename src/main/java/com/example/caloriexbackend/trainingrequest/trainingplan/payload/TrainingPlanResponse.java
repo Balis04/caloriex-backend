@@ -4,7 +4,7 @@ import java.time.Instant;
 
 public record TrainingPlanResponse(
         String planName,
-        String description,
+        String planDescription,
         String fileName,
         Instant uploadedAt
 ) {

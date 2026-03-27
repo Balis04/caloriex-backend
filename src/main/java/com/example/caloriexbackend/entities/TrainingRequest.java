@@ -36,11 +36,11 @@ public class TrainingRequest {
     @Column(name = "preferred_location", nullable = false, length = 255)
     private String preferredLocation;
 
-    @Column(name = "coach_note", columnDefinition = "text")
-    private String coachNote;
+    @Column(name = "coach_response", columnDefinition = "text")
+    private String coachResponse;
 
-    @Column(name = "description", columnDefinition = "text")
-    private String description;
+    @Column(name = "request_description", columnDefinition = "text")
+    private String requestDescription;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)

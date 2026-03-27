@@ -22,19 +22,11 @@ public class TrainingPlan {
     @JoinColumn(name = "training_request_id", unique = true, nullable = false)
     private TrainingRequest trainingRequest;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "coach_user_id", nullable = false)
-    private User coachUser;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "requester_user_id", nullable = false)
-    private User requesterUser;
-
     @Column(name = "plan_name", length = 255)
     private String planName;
 
-    @Column(name = "description", columnDefinition = "text")
-    private String description;
+    @Column(name = "plan_description", columnDefinition = "text")
+    private String planDescription;
 
     @Column(name = "file_name", nullable = false, length = 255)
     private String fileName;

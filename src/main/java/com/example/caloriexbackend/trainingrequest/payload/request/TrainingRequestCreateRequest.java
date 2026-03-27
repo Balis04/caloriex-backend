@@ -17,7 +17,8 @@ public record TrainingRequestCreateRequest(
         @Size(max = 255)
         String preferredLocation,
 
+        @NotBlank
         @Size(max = 5000)
-        String coachNote
+        String requestDescription
 ) {
 }
