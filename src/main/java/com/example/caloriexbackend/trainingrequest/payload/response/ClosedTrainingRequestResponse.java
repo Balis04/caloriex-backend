@@ -12,8 +12,8 @@ public record ClosedTrainingRequestResponse(
         Integer sessionDurationMinutes,
         String preferredLocation,
         String status,
-        String description,
-        String coachNote,
+        String requestDescription,
+        String coachResponse,
         Instant createdAt,
 
         // training plan

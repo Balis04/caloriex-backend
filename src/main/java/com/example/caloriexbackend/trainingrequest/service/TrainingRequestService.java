@@ -69,7 +69,7 @@ public class TrainingRequestService {
         validator.validateStatusUpdate(trainingRequest.getStatus(), request.status());
 
         trainingRequest.setStatus(request.status());
-        trainingRequest.setDescription(request.description());
+        trainingRequest.setCoachResponse(request.coachResponse());
 
         emailService.sendStatusUpdateEmail(trainingRequest);
 
@@ -81,7 +81,7 @@ public class TrainingRequestService {
             UUID trainingRequestId,
             MultipartFile file,
             String planName,
-            String description
+            String planDescription
     ) {
         TrainingRequest trainingRequest = findTrainingRequest(trainingRequestId);
 
@@ -93,7 +93,7 @@ public class TrainingRequestService {
                 trainingRequest,
                 file,
                 planName,
-                description
+                planDescription
         );
 
         trainingRequest.setStatus(TrainingRequestStatus.CLOSED);
@@ -135,7 +135,7 @@ public class TrainingRequestService {
         User coachUser = authenticatedUserService.getUser();
 
         return trainingPlanRepository
-                .findAllByCoachUserIdOrderByUploadedAtDesc(coachUser.getId())
+                .findAllByTrainingRequestCoachProfileUserIdOrderByUploadedAtDesc(coachUser.getId())
                 .stream()
                 .map(trainingRequestMapper::toClosedResponse)
                 .toList();

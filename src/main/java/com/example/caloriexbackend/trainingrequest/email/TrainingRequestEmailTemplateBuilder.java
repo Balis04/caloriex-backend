@@ -26,7 +26,7 @@ public class TrainingRequestEmailTemplateBuilder {
         - Weekly training sessions: %s
         - Session duration: %s minutes
         - Preferred location: %s
-        - Note: %s
+        - Request description: %s
 
         Request status: %s
         Request ID: %s
@@ -44,7 +44,7 @@ public class TrainingRequestEmailTemplateBuilder {
                 trainingRequest.getWeeklyTrainingCount(),
                 trainingRequest.getSessionDurationMinutes(),
                 EmailFormatUtils.safe(trainingRequest.getPreferredLocation()),
-                EmailFormatUtils.safe(trainingRequest.getCoachNote()),
+                EmailFormatUtils.safe(trainingRequest.getRequestDescription()),
                 EmailFormatUtils.status(trainingRequest.getStatus()),
                 trainingRequest.getId(),
                 trainingRequest.getCreatedAt()
@@ -60,7 +60,8 @@ public class TrainingRequestEmailTemplateBuilder {
         Weekly training sessions: %s
         Session duration: %s minutes
         Preferred location: %s
-        Status note: %s
+        Request description: %s
+        Coach response: %s
         Request ID: %s
         Created at: %s
 
@@ -71,7 +72,8 @@ public class TrainingRequestEmailTemplateBuilder {
                 trainingRequest.getWeeklyTrainingCount(),
                 trainingRequest.getSessionDurationMinutes(),
                 EmailFormatUtils.safe(trainingRequest.getPreferredLocation()),
-                EmailFormatUtils.safe(trainingRequest.getDescription()),
+                EmailFormatUtils.safe(trainingRequest.getRequestDescription()),
+                EmailFormatUtils.safe(trainingRequest.getCoachResponse()),
                 trainingRequest.getId(),
                 trainingRequest.getCreatedAt()
         );
