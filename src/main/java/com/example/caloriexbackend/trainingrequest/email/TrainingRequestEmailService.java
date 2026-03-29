@@ -1,6 +1,7 @@
 package com.example.caloriexbackend.trainingrequest.email;
 
 import com.example.caloriexbackend.entities.CoachProfile;
+import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.TrainingRequest;
 import com.example.caloriexbackend.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,28 @@ public class TrainingRequestEmailService {
 
         } catch (Exception ex) {
             log.warn("Failed to send training request status update email to requester '{}', request id={}",
+                    requesterEmail, request.getId(), ex);
+        }
+    }
+
+    public void sendTrainingPlanUploadedEmail(TrainingRequest request, TrainingPlan trainingPlan) {
+        String requesterEmail = request.getRequesterUser().getEmail();
+
+        if (requesterEmail == null || requesterEmail.isBlank()) {
+            log.warn("Skipping training plan uploaded email: requester email is missing, request id={}", request.getId());
+            return;
+        }
+
+        try {
+            SimpleMailMessage message = createBaseMessage();
+            message.setTo(requesterEmail);
+            message.setSubject("[Caloriex] Your training plan is now available");
+            message.setText(templateBuilder.buildTrainingPlanUploadedMailBody(request, trainingPlan));
+
+            mailSender.send(message);
+
+        } catch (Exception ex) {
+            log.warn("Failed to send training plan uploaded email to requester '{}', request id={}",
                     requesterEmail, request.getId(), ex);
         }
     }

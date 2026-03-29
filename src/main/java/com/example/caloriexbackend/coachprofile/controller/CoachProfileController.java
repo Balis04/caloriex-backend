@@ -141,6 +141,36 @@ public class CoachProfileController {
     }
 
     @Operation(
+            summary = "Delete coach certificate",
+            description = "Deletes a certificate for the specified coach profile."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Certificate deleted successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - missing or invalid token",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Certificate or coach profile not found",
+                    content = @Content
+            )
+    })
+    @DeleteMapping("/{id}/certificates/{certificateId}")
+    public ResponseEntity<Void> deleteCertificate(
+            @PathVariable UUID id,
+            @PathVariable UUID certificateId
+    ) {
+        coachProfileService.deleteCertificate(id, certificateId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
             summary = "Update coach profile",
             description = "Updates the specified coach profile."
     )

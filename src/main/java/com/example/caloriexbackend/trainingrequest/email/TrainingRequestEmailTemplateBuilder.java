@@ -1,5 +1,6 @@
 package com.example.caloriexbackend.trainingrequest.email;
 
+import com.example.caloriexbackend.entities.TrainingPlan;
 import com.example.caloriexbackend.entities.CoachProfile;
 import com.example.caloriexbackend.entities.TrainingRequest;
 import com.example.caloriexbackend.entities.User;
@@ -76,6 +77,28 @@ public class TrainingRequestEmailTemplateBuilder {
                 EmailFormatUtils.safe(trainingRequest.getCoachResponse()),
                 trainingRequest.getId(),
                 trainingRequest.getCreatedAt()
+        );
+    }
+
+    public String buildTrainingPlanUploadedMailBody(TrainingRequest trainingRequest, TrainingPlan trainingPlan) {
+        return """
+        Your training plan has been uploaded to the Caloriex app.
+
+        Coach: %s
+        Training plan name: %s
+        Training plan description: %s
+        File name: %s
+        Uploaded at: %s
+        Request ID: %s
+
+        Please log in to the application to review and download your training plan.
+        """.formatted(
+                EmailFormatUtils.safe(trainingRequest.getCoachProfile().getUser().getFullName()),
+                EmailFormatUtils.safe(trainingPlan.getPlanName()),
+                EmailFormatUtils.safe(trainingPlan.getPlanDescription()),
+                EmailFormatUtils.safe(trainingPlan.getFileName()),
+                trainingPlan.getUploadedAt(),
+                trainingRequest.getId()
         );
     }
 }

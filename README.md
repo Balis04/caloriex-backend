@@ -40,6 +40,10 @@ AUTH0_ISSUER_URI=https://your-tenant.us.auth0.com/
 APP_CORS_ALLOWED_ORIGINS=http://localhost:5173,https://sajat-frontend-domain.hu
 ```
 
+Session authhoz a backend alapertelmezett session timeoutja 7 nap. Ezt az
+`APP_SESSION_TIMEOUT` valtozoval tudod felulirni, ha rovidebbre vagy hosszabbra
+akarod venni.
+
 ## File policy
 
 - A coach certificate fajlok publikus dokumentumkent kezelhetok, ezert a rendszer publikus URL-t ad vissza rajuk.
