@@ -116,6 +116,18 @@ public class CoachProfileService {
     }
 
     @Transactional
+    public void deleteCertificate(UUID coachProfileId, UUID certificateId) {
+        User user = authenticatedUserService.getUser();
+
+        CoachCertificate certificate = coachCertificateRepository
+                .findByIdAndCoachProfileIdAndCoachProfileUserId(certificateId, coachProfileId, user.getId())
+                .orElseThrow(() -> new NotFoundException("Certificate not found for the current coach profile"));
+
+        storageService.deleteCertificate(certificate.getFileUrl());
+        coachCertificateRepository.delete(certificate);
+    }
+
+    @Transactional
     public void delete(UUID id) {
         CoachProfile coachProfile = getMyCoachProfile(id);
 

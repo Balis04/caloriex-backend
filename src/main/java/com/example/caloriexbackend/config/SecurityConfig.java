@@ -66,6 +66,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/auth/me", "/api/auth/csrf").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/coach-profiles/me").access(coachRoleAuthorizationManager)
+                        .requestMatchers(HttpMethod.DELETE, "/api/coach-profiles/*/certificates/*").access(coachRoleAuthorizationManager)
                         .requestMatchers(HttpMethod.PUT, "/api/coach-profiles/*").access(coachRoleAuthorizationManager)
                         .anyRequest().authenticated()
                 )

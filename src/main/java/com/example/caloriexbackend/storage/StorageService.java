@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -68,7 +69,7 @@ public class StorageService {
     public StoredFileDownload downloadTrainingPlan(String storedKey, String fileName, String contentType) {
         validateStorageEnabled("Training plan");
 
-        String objectKey = resolveObjectKey(storedKey);
+        String objectKey = resolveObjectKey(storedKey, "Stored training plan key is missing", "Stored training plan key is not a valid storage object key");
 
         try {
             byte[] content = s3Client.getObjectAsBytes(
@@ -85,6 +86,27 @@ public class StorageService {
             );
         } catch (RuntimeException exception) {
             throw new BadRequestException("Failed to download training plan from storage");
+        }
+    }
+
+    public void deleteCertificate(String storedKeyOrUrl) {
+        validateStorageEnabled("Certificate");
+
+        String objectKey = resolveObjectKey(
+                storedKeyOrUrl,
+                "Stored certificate key is missing",
+                "Stored certificate key is not a valid storage object key"
+        );
+
+        try {
+            s3Client.deleteObject(
+                    DeleteObjectRequest.builder()
+                            .bucket(properties.bucket())
+                            .key(objectKey)
+                            .build()
+            );
+        } catch (RuntimeException exception) {
+            throw new BadRequestException("Failed to delete certificate from storage");
         }
     }
 
@@ -227,9 +249,9 @@ public class StorageService {
         );
     }
 
-    private String resolveObjectKey(String storedKey) {
+    private String resolveObjectKey(String storedKey, String missingKeyMessage, String invalidKeyMessage) {
         if (storedKey == null || storedKey.isBlank()) {
-            throw new BadRequestException("Stored training plan key is missing");
+            throw new BadRequestException(missingKeyMessage);
         }
 
         if (!storedKey.startsWith("http://") && !storedKey.startsWith("https://")) {
@@ -254,7 +276,7 @@ public class StorageService {
             }
         }
 
-        throw new BadRequestException("Stored training plan key is not a valid storage object key");
+        throw new BadRequestException(invalidKeyMessage);
     }
 
     private String detectActualFileType(MultipartFile file, String fileTypeLabel) {

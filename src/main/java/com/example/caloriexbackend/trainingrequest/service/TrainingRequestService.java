@@ -97,6 +97,7 @@ public class TrainingRequestService {
         );
 
         trainingRequest.setStatus(TrainingRequestStatus.CLOSED);
+        emailService.sendTrainingPlanUploadedEmail(trainingRequest, trainingPlan);
 
         return trainingPlanMapper.toResponse(trainingPlan);
     }
