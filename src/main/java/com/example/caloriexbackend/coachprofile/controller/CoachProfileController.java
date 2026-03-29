@@ -156,11 +156,6 @@ public class CoachProfileController {
                     content = @Content
             ),
             @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - cannot delete a certificate for this coach profile",
-                    content = @Content
-            ),
-            @ApiResponse(
                     responseCode = "404",
                     description = "Certificate or coach profile not found",
                     content = @Content
