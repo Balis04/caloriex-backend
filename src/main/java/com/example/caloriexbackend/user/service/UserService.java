@@ -45,6 +45,10 @@ public class UserService {
 
         userMapper.updateForRegistration(request, user);
 
+        if (user.getActualWeightKg() == null) {
+            user.setActualWeightKg(user.getStartWeightKg());
+        }
+
         userRepository.save(user);
     }
 

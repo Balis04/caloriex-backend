@@ -6,8 +6,12 @@ import com.example.caloriexbackend.user.payload.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface UserMapper {
 
     UserResponse toResponse(User entity);
@@ -17,6 +21,7 @@ public interface UserMapper {
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "coachProfile", ignore = true)
+    @Mapping(target = "actualWeightKg", source = "request.startWeightKg")
     void updateForRegistration(UserRequest request, @MappingTarget User entity);
 
     @Mapping(target = "id", ignore = true)
