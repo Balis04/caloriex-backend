@@ -36,7 +36,6 @@ public class UserRequest {
     @DecimalMax(value = "500.0", message = "Start weight must not exceed 500 kg")
     private Double startWeightKg;
 
-    @NotNull(message = "Actual weight is required")
     @Positive(message = "Actual weight must be greater than 0")
     @DecimalMax(value = "500.0", message = "Actual weight must not exceed 500 kg")
     private Double actualWeightKg;
