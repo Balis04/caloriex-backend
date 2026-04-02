@@ -50,6 +50,9 @@ akarod venni.
 - A training plan fajlok vedett dokumentumok: a backend storage key-t tarol, es nem ad vissza nyers publikus fajllinket.
 - A training plan letoltes az ownership-ellenorzott `GET /api/training-requests/{trainingRequestId}/training-plan/download` endpointon keresztul tortenik.
 - A training plan fajlt csak az erintett coach es az a user toltheti le, akinek a terv keszult.
+- A community training plan fajlok kulon, publikus `community-training-plans/` mappabol erkeznek.
+- A community training plan lista a `GET /api/community-training-plans` endpointon erheto el.
+- Egy community training plan letoltese a `GET /api/community-training-plans/{fileName}/download` endpointon tortenik.
 
 ## Inditas
 

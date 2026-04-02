@@ -1,6 +1,7 @@
 package com.example.caloriexbackend.storage;
 
 import com.example.caloriexbackend.common.exception.BadRequestException;
+import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.config.R2StorageAccessMode;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
 import com.example.caloriexbackend.config.R2StorageProperties;
@@ -12,16 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.text.Normalizer;
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +44,7 @@ public class StorageService {
             "application/pdf",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     );
+    private static final String COMMUNITY_TRAINING_PLANS_FOLDER = "community-training-plans";
     private static final String PDF_CONTENT_TYPE = "application/pdf";
     private static final String DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -72,20 +80,76 @@ public class StorageService {
         String objectKey = resolveObjectKey(storedKey, "Stored training plan key is missing", "Stored training plan key is not a valid storage object key");
 
         try {
-            byte[] content = s3Client.getObjectAsBytes(
+            ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(
                     GetObjectRequest.builder()
                             .bucket(properties.bucket())
                             .key(objectKey)
                             .build()
-            ).asByteArray();
+            );
 
             return new StoredFileDownload(
                     fileName,
-                    contentType != null && !contentType.isBlank() ? contentType : PDF_CONTENT_TYPE,
-                    content
+                    resolveDownloadContentType(contentType, response.response().contentType()),
+                    response.asByteArray()
             );
         } catch (RuntimeException exception) {
             throw new BadRequestException("Failed to download training plan from storage");
+        }
+    }
+
+    public List<CommunityTrainingPlanSummary> listCommunityTrainingPlans() {
+        validateStorageEnabled("Community training plan");
+
+        String prefix = COMMUNITY_TRAINING_PLANS_FOLDER + "/";
+
+        try {
+            return s3Client.listObjectsV2Paginator(
+                            ListObjectsV2Request.builder()
+                                    .bucket(properties.bucket())
+                                    .prefix(prefix)
+                                    .build()
+                    ).stream()
+                    .flatMap(response -> response.contents().stream())
+                    .filter(object -> !object.key().equals(prefix))
+                    .filter(object -> isDirectChild(object.key(), prefix))
+                    .sorted(Comparator.comparing(object -> extractFileName(object.key()), String.CASE_INSENSITIVE_ORDER))
+                    .map(object -> new CommunityTrainingPlanSummary(
+                            extractFileName(object.key()),
+                            object.size(),
+                            object.lastModified()
+                    ))
+                    .toList();
+        } catch (RuntimeException exception) {
+            throw new BadRequestException("Failed to list community training plans from storage");
+        }
+    }
+
+    public StoredFileDownload downloadCommunityTrainingPlan(String fileName) {
+        validateStorageEnabled("Community training plan");
+
+        String safeFileName = validateCommunityTrainingPlanFileName(fileName);
+        String objectKey = COMMUNITY_TRAINING_PLANS_FOLDER + "/" + safeFileName;
+
+        try {
+            ResponseBytes<GetObjectResponse> response = s3Client.getObjectAsBytes(
+                    GetObjectRequest.builder()
+                            .bucket(properties.bucket())
+                            .key(objectKey)
+                            .build()
+            );
+
+            return new StoredFileDownload(
+                    safeFileName,
+                    resolveDownloadContentType(null, response.response().contentType()),
+                    response.asByteArray()
+            );
+        } catch (S3Exception exception) {
+            if (exception.statusCode() == 404) {
+                throw new NotFoundException("Community training plan not found");
+            }
+            throw new BadRequestException("Failed to download community training plan from storage");
+        } catch (RuntimeException exception) {
+            throw new BadRequestException("Failed to download community training plan from storage");
         }
     }
 
@@ -172,6 +236,23 @@ public class StorageService {
         if (!properties.enabled()) {
             throw new BadRequestException(documentLabel + " storage is not configured");
         }
+    }
+
+    private String validateCommunityTrainingPlanFileName(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            throw new BadRequestException("Community training plan file name is required");
+        }
+
+        if (fileName.contains("/") || fileName.contains("\\") || ".".equals(fileName) || "..".equals(fileName)) {
+            throw new BadRequestException("Community training plan file name is invalid");
+        }
+
+        String extension = getExtension(fileName, "Community training plan");
+        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            throw new BadRequestException("Only PDF and DOCX community training plan files are allowed");
+        }
+
+        return fileName;
     }
 
     private void validateFile(MultipartFile file, String documentLabel, String fileTypeLabel) {
@@ -362,6 +443,28 @@ public class StorageService {
         };
     }
 
+    private String resolveDownloadContentType(String preferredContentType, String storageContentType) {
+        if (preferredContentType != null && !preferredContentType.isBlank()) {
+            return preferredContentType;
+        }
+
+        if (storageContentType != null && !storageContentType.isBlank()) {
+            return storageContentType;
+        }
+
+        return PDF_CONTENT_TYPE;
+    }
+
+    private static boolean isDirectChild(String key, String prefix) {
+        String remainder = key.substring(prefix.length());
+        return !remainder.isBlank() && !remainder.contains("/");
+    }
+
+    private static String extractFileName(String key) {
+        int lastSlash = key.lastIndexOf('/');
+        return lastSlash >= 0 ? key.substring(lastSlash + 1) : key;
+    }
+
     private String trimTrailingSlash(String value) {
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
     }
@@ -371,6 +474,13 @@ public class StorageService {
             String objectKey,
             String contentType,
             long size
+    ) {
+    }
+
+    public record CommunityTrainingPlanSummary(
+            String fileName,
+            long size,
+            Instant lastModified
     ) {
     }
 }

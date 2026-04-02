@@ -65,6 +65,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/auth/login", "/api/auth/me", "/api/auth/csrf").permitAll()
                         .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/community-training-plans", "/api/community-training-plans/*/download").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/coach-profiles/me").access(coachRoleAuthorizationManager)
                         .requestMatchers(HttpMethod.DELETE, "/api/coach-profiles/*/certificates/*").access(coachRoleAuthorizationManager)
                         .requestMatchers(HttpMethod.POST, "/api/coach-profiles/*/certificates").access(coachRoleAuthorizationManager)
