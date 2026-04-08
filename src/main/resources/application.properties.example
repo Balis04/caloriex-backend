@@ -46,7 +46,11 @@ spring.mail.username=${MAIL_USERNAME:}
 spring.mail.password=${MAIL_PASSWORD:}
 spring.mail.properties.mail.smtp.auth=${MAIL_SMTP_AUTH:true}
 spring.mail.properties.mail.smtp.starttls.enable=${MAIL_SMTP_STARTTLS_ENABLE:true}
+app.mail.resend.api-key=${RESEND_API_KEY:}
+app.mail.resend.base-url=${RESEND_BASE_URL:https://api.resend.com}
 app.mail.training-request.from=${TRAINING_REQUEST_MAIL_FROM:${MAIL_USERNAME:}}
+app.mail.training-request.creation-template-id=${TRAINING_REQUEST_CREATION_TEMPLATE_ID:}
+app.mail.training-request.training-plan-template-id=${TRAINING_REQUEST_TRAINING_PLAN_TEMPLATE_ID:}
 
 app.storage.r2.access-mode=${APP_STORAGE_R2_ACCESS_MODE:PUBLIC}
 # Certificate files use the public bucket/base URL flow.
