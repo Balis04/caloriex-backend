@@ -76,24 +76,6 @@ public class AuthenticatedUserService {
     }
 
     private Optional<User> findUser(AuthenticatedUser authenticatedUser) {
-        return userRepository.findByAuth0Id(authenticatedUser.auth0Id())
-                .or(() -> linkVerifiedEmailMatch(authenticatedUser));
-    }
-
-    private Optional<User> linkVerifiedEmailMatch(AuthenticatedUser authenticatedUser) {
-        if (!authenticatedUser.emailVerified()
-                || authenticatedUser.email() == null
-                || authenticatedUser.email().isBlank()) {
-            return Optional.empty();
-        }
-
-        return userRepository.findByEmailIgnoreCase(authenticatedUser.email())
-                .map(user -> {
-                    if (!authenticatedUser.auth0Id().equals(user.getAuth0Id())) {
-                        user.setAuth0Id(authenticatedUser.auth0Id());
-                        return userRepository.save(user);
-                    }
-                    return user;
-                });
+        return userRepository.findByAuth0Id(authenticatedUser.auth0Id());
     }
 }
