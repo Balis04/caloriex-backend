@@ -1,18 +1,17 @@
 CREATE TABLE food_logs (
                            id UUID PRIMARY KEY default gen_random_uuid(),
-                           auth0_id VARCHAR(255) NOT NULL,
+                           user_id UUID NOT NULL,
                            meal_time VARCHAR(50) NOT NULL,
                            food_name VARCHAR(255) NOT NULL,
-                           amount DOUBLE PRECISION,
+                           amount DOUBLE PRECISION not null ,
                            unit VARCHAR(50) NOT NULL,
-                           calories DOUBLE PRECISION,
-                           protein DOUBLE PRECISION,
-                           carbohydrates DOUBLE PRECISION,
-                           fat DOUBLE PRECISION,
+                           calories DOUBLE PRECISION not null ,
+                           protein DOUBLE PRECISION not null ,
+                           carbohydrates DOUBLE PRECISION not null ,
+                           fat DOUBLE PRECISION not null ,
                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                            consumed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                           updated_at TIMESTAMP,
-                           updated_by VARCHAR(255)
+                           updated_at TIMESTAMP
 );
 
-CREATE INDEX idx_auth0_date ON food_logs (auth0_id, consumed_at);
+CREATE INDEX idx_food_logs_user_id_consumed_at ON food_logs (user_id, consumed_at);

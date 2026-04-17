@@ -36,7 +36,7 @@ public class TrainingRequestEmailService {
     @Value("${app.mail.training-request.creation-template-id:}")
     private String creationTemplateId;
 
-    @Value("${app.mail.training-request.status-update-template-id:${app.mail.training-request.creation-template-id:}}")
+    @Value("${app.mail.training-request.status-update-template-id:${app.mail.training-request.status-update-template-id:}}")
     private String statusUpdateTemplateId;
 
     @Value("${app.mail.training-request.training-plan-template-id:}")

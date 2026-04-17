@@ -92,7 +92,6 @@ class FoodLogServiceTest {
         assertEquals(60.0, foodLog.getProtein());
         assertEquals(100.0, foodLog.getCarbohydrates());
         assertEquals(20.0, foodLog.getFat());
-        assertEquals(user.getId(), foodLog.getUpdatedBy());
         verify(repository).save(foodLog);
     }
 
@@ -250,8 +249,7 @@ class FoodLogServiceTest {
                 foodLog.getFat(),
                 foodLog.getConsumedAt(),
                 LocalDateTime.of(2026, 4, 8, 11, 0),
-                LocalDateTime.of(2026, 4, 8, 13, 0),
-                foodLog.getUpdatedBy()
+                LocalDateTime.of(2026, 4, 8, 13, 0)
         );
     }
 }

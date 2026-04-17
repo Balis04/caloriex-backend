@@ -57,9 +57,6 @@ public class FoodLog {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by")
-    private UUID updatedBy;
-
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

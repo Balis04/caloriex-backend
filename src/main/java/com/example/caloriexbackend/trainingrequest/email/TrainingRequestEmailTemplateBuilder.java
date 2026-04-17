@@ -70,9 +70,17 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("preferred_location", EmailFormatUtils.safe(trainingRequest.getPreferredLocation()));
         vars.put("request_description", EmailFormatUtils.safe(trainingRequest.getRequestDescription()));
         vars.put("coach_response", EmailFormatUtils.safe(trainingRequest.getCoachResponse()));
-        vars.put("coach_note", EmailFormatUtils.safe(trainingRequest.getCoachResponse()));
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
-        vars.put("created_at", String.valueOf(trainingRequest.getCreatedAt()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy. MM. dd. HH:mm",
+                Locale.forLanguageTag("hu-HU")
+        );
+        vars.put(
+                "created_at",
+                trainingRequest.getCreatedAt()
+                        .atZone(ZoneId.of("Europe/Budapest"))
+                        .format(formatter)
+        );
         vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
         return vars;
     }
@@ -87,7 +95,16 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("plan_name", EmailFormatUtils.safe(trainingPlan.getPlanName()));
         vars.put("plan_description", EmailFormatUtils.safe(trainingPlan.getPlanDescription()));
         vars.put("file_name", EmailFormatUtils.safe(trainingPlan.getFileName()));
-        vars.put("uploaded_at", String.valueOf(trainingPlan.getUploadedAt()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy. MM. dd. HH:mm",
+                Locale.forLanguageTag("hu-HU")
+        );
+        vars.put(
+                "uploaded_at",
+                trainingRequest.getCreatedAt()
+                        .atZone(ZoneId.of("Europe/Budapest"))
+                        .format(formatter)
+        );
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
         vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
         return vars;

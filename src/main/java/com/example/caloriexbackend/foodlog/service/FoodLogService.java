@@ -51,7 +51,6 @@ public class FoodLogService {
         foodLog.setProtein(scale(foodLog.getProtein(), ratio));
         foodLog.setCarbohydrates(scale(foodLog.getCarbohydrates(), ratio));
         foodLog.setFat(scale(foodLog.getFat(), ratio));
-        foodLog.setUpdatedBy(user.getId());
 
         FoodLog saved = repository.save(foodLog);
         return foodLogMapper.toResponse(saved);

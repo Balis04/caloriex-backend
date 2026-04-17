@@ -18,7 +18,6 @@ public record FoodLogResponse(
         Double fat,
         LocalDateTime consumedAt,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt,
-        UUID updatedBy
+        LocalDateTime updatedAt
 ) {
 }
