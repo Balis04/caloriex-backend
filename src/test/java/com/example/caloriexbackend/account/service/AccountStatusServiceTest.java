@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,24 +26,24 @@ class AccountStatusServiceTest {
     private AccountStatusService accountStatusService;
 
     @Test
-    void getProfileStatusShouldReturnTrueWhenProfileExists() {
+    void getProfileExists() {
         when(authenticatedUserService.getAuth0Id()).thenReturn("auth0|123");
         when(userRepository.existsByAuth0Id("auth0|123")).thenReturn(true);
 
         AccountStatusResponse actual = accountStatusService.getProfileStatus();
 
-        assertEquals(true, actual.hasProfile());
+        assertTrue(actual.hasProfile());
         verify(userRepository).existsByAuth0Id("auth0|123");
     }
 
     @Test
-    void getProfileStatusShouldReturnFalseWhenProfileDoesNotExist() {
+    void getProfileDoesNotExist() {
         when(authenticatedUserService.getAuth0Id()).thenReturn("auth0|123");
         when(userRepository.existsByAuth0Id("auth0|123")).thenReturn(false);
 
         AccountStatusResponse actual = accountStatusService.getProfileStatus();
 
-        assertEquals(false, actual.hasProfile());
+        assertFalse(actual.hasProfile());
         verify(userRepository).existsByAuth0Id("auth0|123");
     }
 }

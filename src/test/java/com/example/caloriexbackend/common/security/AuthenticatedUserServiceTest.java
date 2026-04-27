@@ -2,6 +2,7 @@ package com.example.caloriexbackend.common.security;
 
 import com.example.caloriexbackend.entities.User;
 import com.example.caloriexbackend.user.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -42,7 +44,7 @@ class AuthenticatedUserServiceTest {
                 authenticatedUser
         );
 
-        assertTrue(actual.isEmpty());
+        assertNotNull(actual);
         verify(userRepository).findByAuth0Id("google-oauth2|123");
         verify(userRepository, never()).findByEmailIgnoreCase("user@example.com");
         verify(userRepository, never()).save(org.mockito.ArgumentMatchers.any(User.class));

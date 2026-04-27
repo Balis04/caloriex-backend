@@ -27,7 +27,7 @@ class CommunityTrainingPlanServiceTest {
     private CommunityTrainingPlanService communityTrainingPlanService;
 
     @Test
-    void getAllShouldMapStorageSummariesToResponses() {
+    void getAllSuccessfully() {
         StorageService.CommunityTrainingPlanSummary firstPlan = new StorageService.CommunityTrainingPlanSummary(
                 "beginner-full-body.pdf",
                 245760L,
@@ -56,7 +56,7 @@ class CommunityTrainingPlanServiceTest {
     }
 
     @Test
-    void downloadShouldDelegateToStorageService() {
+    void downloadSuccessfully() {
         String fileName = "beginner-full-body.pdf";
         StoredFileDownload download = new StoredFileDownload(
                 fileName,

@@ -46,7 +46,7 @@ class FoodLogServiceTest {
     private FoodLogService foodLogService;
 
     @Test
-    void createFoodLogShouldMapSaveAndReturnResponse() {
+    void createFoodLogSuccessfully() {
         User user = user();
         FoodLogRequest request = foodLogRequest();
         FoodLog entity = foodLog(user);
@@ -66,7 +66,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldScaleMacrosAndReturnResponse() {
+    void updateFoodLogAmountSuccessfully() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(300.0);
@@ -96,7 +96,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldKeepNullMacroValuesAsNull() {
+    void updateFoodLogAmountKeepNullValuesAsNull() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -123,7 +123,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldThrowWhenOriginalAmountIsMissing() {
+    void updateFoodLogAmountAmountIsMissing() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -144,7 +144,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldThrowWhenFoodLogIsNotFound() {
+    void updateFoodLogIsNotFound() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -162,7 +162,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void deleteFoodLogShouldDeleteOwnedEntry() {
+    void deleteFoodLogSuccessfully() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLog foodLog = foodLog(user);
@@ -177,7 +177,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void deleteFoodLogShouldThrowWhenEntryIsMissing() {
+    void deleteFoodLogIsMissing() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
 

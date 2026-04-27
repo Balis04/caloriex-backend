@@ -48,7 +48,7 @@ class TrainingPlanServiceTest {
     private TrainingPlanService trainingPlanService;
 
     @Test
-    void createShouldUploadMapAndSaveTrainingPlan() {
+    void createSuccessfully() {
         TrainingRequest request = trainingRequest();
         MockMultipartFile file = new MockMultipartFile("file", "plan.pdf", "application/pdf", "%PDF".getBytes());
         ProtectedDocumentUploadResponse upload = new ProtectedDocumentUploadResponse(
@@ -72,7 +72,7 @@ class TrainingPlanServiceTest {
     }
 
     @Test
-    void downloadByTrainingRequestIdShouldAllowCoach() {
+    void downloadByTrainingRequestIdSuccessfully() {
         User coachUser = user();
         TrainingPlan trainingPlan = trainingPlan(trainingRequestWithUsers(coachUser, user()));
         StoredFileDownload download = new StoredFileDownload("plan.pdf", "application/pdf", new byte[]{1});
@@ -87,7 +87,7 @@ class TrainingPlanServiceTest {
     }
 
     @Test
-    void downloadByTrainingRequestIdShouldAllowRequester() {
+    void downloadByTrainingRequestIdSuccessfullyRequester() {
         User requester = user();
         TrainingPlan trainingPlan = trainingPlan(trainingRequestWithUsers(user(), requester));
         StoredFileDownload download = new StoredFileDownload("plan.pdf", "application/pdf", new byte[]{1});
@@ -102,7 +102,7 @@ class TrainingPlanServiceTest {
     }
 
     @Test
-    void downloadByTrainingRequestIdShouldThrowWhenCurrentUserIsUnauthorized() {
+    void downloadByTrainingRequestIdUnauthorized() {
         TrainingPlan trainingPlan = trainingPlan(trainingRequestWithUsers(user(), user()));
         UUID requestId = trainingPlan.getTrainingRequest().getId();
 
@@ -119,7 +119,7 @@ class TrainingPlanServiceTest {
     }
 
     @Test
-    void downloadByTrainingRequestIdShouldThrowWhenPlanDoesNotExist() {
+    void downloadByTrainingRequestIdPlanDoesNotExist() {
         UUID requestId = UUID.randomUUID();
         when(repository.findByTrainingRequestId(requestId)).thenReturn(Optional.empty());
 

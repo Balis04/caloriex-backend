@@ -43,7 +43,7 @@ class CustomFoodServiceTest {
     private CustomFoodService customFoodService;
 
     @Test
-    void createShouldMapSaveAndReturnResponse() {
+    void createSuccessfully() {
         User user = user();
         CustomFoodRequest request = request();
         CustomFood entity = customFood();
@@ -63,7 +63,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void updateShouldUpdateOwnedFoodAndReturnResponse() {
+    void updateSuccessfully() {
         User user = user();
         UUID foodId = UUID.randomUUID();
         CustomFoodRequest request = request();
@@ -84,7 +84,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void updateShouldThrowWhenFoodIsNotOwnedByUser() {
+    void updateNotOwnedByUser() {
         User user = user();
         UUID foodId = UUID.randomUUID();
         CustomFoodRequest request = request();
@@ -103,7 +103,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void deleteShouldRemoveOwnedFood() {
+    void deleteSuccessfully() {
         User user = user();
         UUID foodId = UUID.randomUUID();
         CustomFood entity = customFood();
@@ -118,7 +118,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void deleteShouldThrowWhenFoodIsMissing() {
+    void deleteFoodIsMissing() {
         User user = user();
         UUID foodId = UUID.randomUUID();
 
@@ -135,7 +135,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void getAllShouldReturnMappedRepositoryResults() {
+    void getAllSuccessfully() {
         List<CustomFood> entities = List.of(customFood(), customFood());
         List<CustomFoodResponse> responses = List.of(response(UUID.randomUUID()), response(UUID.randomUUID()));
 
@@ -148,7 +148,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void getMineShouldReturnMappedOwnedFoods() {
+    void getMineSuccessfully() {
         User user = user();
         List<CustomFood> entities = List.of(customFood());
         List<CustomFoodResponse> responses = List.of(response(UUID.randomUUID()));
@@ -164,7 +164,7 @@ class CustomFoodServiceTest {
     }
 
     @Test
-    void getNotMineShouldReturnMappedFoodsOwnedByOthers() {
+    void getNotMineSuccessfully() {
         User user = user();
         List<CustomFood> entities = List.of(customFood());
         List<CustomFoodResponse> responses = List.of(response(UUID.randomUUID()));

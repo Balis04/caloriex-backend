@@ -84,7 +84,7 @@ class CoachProfileServiceTest {
     private CoachProfileService coachProfileService;
 
     @Test
-    void createShouldSaveProfileForAuthenticatedUser() {
+    void createSaveProfileForAuthenticatedUser() {
         User user = user(UUID.randomUUID());
         CoachProfileRequest request = coachProfileRequest(List.of(availabilityRequest(DayOfWeek.MONDAY)));
         CoachAvailability availability = new CoachAvailability();
@@ -111,7 +111,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void createShouldThrowWhenCurrentUserAlreadyHasProfile() {
+    void createUserAlreadyHasProfile() {
         User user = user(UUID.randomUUID());
         CoachProfileRequest request = coachProfileRequest(List.of(availabilityRequest(DayOfWeek.MONDAY)));
 
@@ -125,7 +125,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void createShouldThrowWhenAvailabilitiesContainDuplicateDay() {
+    void createAvailabilitiesContainDuplicateDay() {
         User user = user(UUID.randomUUID());
         CoachProfileRequest request = coachProfileRequest(List.of(
                 availabilityRequest(DayOfWeek.MONDAY),
@@ -143,7 +143,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void updateShouldReplaceAvailabilitiesAndReturnResponse() {
+    void updateReplaceAvailabilities() {
         User user = user(UUID.randomUUID());
         UUID profileId = UUID.randomUUID();
         CoachProfile existingProfile = new CoachProfile();
@@ -170,7 +170,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void getMineShouldReturnMappedProfile() {
+    void getMineSuccessfully() {
         User user = user(UUID.randomUUID());
         CoachProfile profile = new CoachProfile();
         CoachProfileResponse response = response(UUID.randomUUID());
@@ -185,7 +185,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void getAllShouldMapProfilesExceptAuthenticatedUsersOwn() {
+    void getAllSuccessfully() {
         User user = user(UUID.randomUUID());
         CoachProfile first = new CoachProfile();
         CoachProfile second = new CoachProfile();
@@ -237,7 +237,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void uploadCertificateShouldUploadSaveAndReturnMappedResponse() {
+    void uploadCertificateSuccessfully() {
         User user = user(UUID.randomUUID());
         UUID profileId = UUID.randomUUID();
         CoachProfile profile = new CoachProfile();
@@ -278,7 +278,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void deleteCertificateShouldDeleteStoredFileAndEntity() {
+    void deleteCertificateSuccessfully() {
         User user = user(UUID.randomUUID());
         UUID profileId = UUID.randomUUID();
         UUID certificateId = UUID.randomUUID();
@@ -300,7 +300,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void deleteCertificateShouldThrowWhenCertificateIsMissing() {
+    void deleteCertificateMissing() {
         User user = user(UUID.randomUUID());
         UUID profileId = UUID.randomUUID();
         UUID certificateId = UUID.randomUUID();
@@ -323,7 +323,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void deleteShouldRemoveAuthenticatedUsersProfile() {
+    void deleteUsersProfile() {
         User user = user(UUID.randomUUID());
         UUID profileId = UUID.randomUUID();
         CoachProfile profile = new CoachProfile();
@@ -338,7 +338,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void findCoachProfileShouldReturnProfileWhenItExists() {
+    void findCoachSuccessfully() {
         UUID profileId = UUID.randomUUID();
         CoachProfile profile = new CoachProfile();
         profile.setId(profileId);
@@ -351,7 +351,7 @@ class CoachProfileServiceTest {
     }
 
     @Test
-    void findCoachProfileShouldThrowWhenItDoesNotExist() {
+    void findCoachNotExist() {
         UUID profileId = UUID.randomUUID();
         when(coachProfileRepository.findById(profileId)).thenReturn(Optional.empty());
 

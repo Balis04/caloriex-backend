@@ -74,7 +74,7 @@ class TrainingRequestServiceTest {
     private TrainingRequestService trainingRequestService;
 
     @Test
-    void createShouldSaveRequestSendEmailAndReturnResponse() {
+    void createSuccessfully() {
         User requester = user("Requester", "requester@example.com");
         UUID coachProfileId = UUID.randomUUID();
         CoachProfile coachProfile = coachProfile(user("Coach", "coach@example.com"));
@@ -95,7 +95,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void createShouldThrowWhenRequesterTargetsOwnCoachProfile() {
+    void createOwnCoachProfile() {
         User requester = user("Requester", "requester@example.com");
         UUID coachProfileId = UUID.randomUUID();
         CoachProfile coachProfile = coachProfile(requester);
@@ -114,7 +114,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void updateStatusShouldValidateUpdateSendEmailAndReturnResponse() {
+    void updateStatusSuccessfully() {
         User coachUser = user("Coach", "coach@example.com");
         UUID requestId = UUID.randomUUID();
         TrainingRequest trainingRequest = trainingRequest(user("Requester", "requester@example.com"), coachProfile(coachUser), TrainingRequestStatus.PENDING);
@@ -139,7 +139,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void uploadTrainingPlanShouldValidateCloseRequestSendEmailAndReturnMappedPlan() {
+    void uploadTrainingPlanSuccessfully() {
         User coachUser = user("Coach", "coach@example.com");
         UUID requestId = UUID.randomUUID();
         TrainingRequest trainingRequest = trainingRequest(user("Requester", "requester@example.com"), coachProfile(coachUser), TrainingRequestStatus.APPROVED);
@@ -163,7 +163,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void getMyRequestsShouldReturnMappedRequests() {
+    void getMyRequestsSuccessfully() {
         User requester = user("Requester", "requester@example.com");
         TrainingRequest first = trainingRequest(requester, coachProfile(user("Coach 1", "coach1@example.com")), TrainingRequestStatus.PENDING);
         TrainingRequest second = trainingRequest(requester, coachProfile(user("Coach 2", "coach2@example.com")), TrainingRequestStatus.APPROVED);
@@ -181,7 +181,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void getRequestsForMyCoachProfileShouldUseUnfilteredQueryWhenStatusIsNull() {
+    void getRequestsForMyCoachProfileStatusIsNull() {
         User coachUser = user("Coach", "coach@example.com");
         TrainingRequest trainingRequest = trainingRequest(user("Requester", "requester@example.com"), coachProfile(coachUser), TrainingRequestStatus.PENDING);
         TrainingRequestResponse response = trainingRequestResponse(trainingRequest);
@@ -197,7 +197,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void getRequestsForMyCoachProfileShouldUseFilteredQueryWhenStatusIsProvided() {
+    void getRequestsForMyCoachProfileStatusIsProvided() {
         User coachUser = user("Coach", "coach@example.com");
         TrainingRequest trainingRequest = trainingRequest(user("Requester", "requester@example.com"), coachProfile(coachUser), TrainingRequestStatus.APPROVED);
         TrainingRequestResponse response = trainingRequestResponse(trainingRequest);
@@ -215,7 +215,7 @@ class TrainingRequestServiceTest {
     }
 
     @Test
-    void getClosedRequestsForMyCoachProfileShouldMapTrainingPlans() {
+    void getClosedRequestsForMyCoachProfileSuccessfully() {
         User coachUser = user("Coach", "coach@example.com");
         TrainingRequest trainingRequest = trainingRequest(user("Requester", "requester@example.com"), coachProfile(coachUser), TrainingRequestStatus.CLOSED);
         TrainingPlan trainingPlan = trainingPlan(trainingRequest);

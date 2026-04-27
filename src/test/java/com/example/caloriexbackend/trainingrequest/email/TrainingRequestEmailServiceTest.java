@@ -59,7 +59,7 @@ class TrainingRequestEmailServiceTest {
     }
 
     @Test
-    void sendCreationEmailShouldSkipWhenCoachEmailIsMissing() {
+    void sendCreationEmailCoachEmailIsMissing() {
         User requester = user("Requester", "requester@example.com");
         User coachUser = user("Coach", null);
         CoachProfile coachProfile = coachProfile(coachUser);
@@ -72,7 +72,7 @@ class TrainingRequestEmailServiceTest {
     }
 
     @Test
-    void sendStatusUpdateEmailShouldSkipWhenRequesterEmailIsMissing() {
+    void sendStatusUpdateEmailRequesterEmailIsMissing() {
         User requester = user("Requester", " ");
         CoachProfile coachProfile = coachProfile(user("Coach", "coach@example.com"));
         TrainingRequest request = trainingRequest(requester, coachProfile);
@@ -84,7 +84,7 @@ class TrainingRequestEmailServiceTest {
     }
 
     @Test
-    void sendCreationEmailShouldSendTemplateEmailWhenConfigurationIsPresent() {
+    void sendCreationEmailSuccessfully() {
         User requester = user("Requester", "requester@example.com");
         User coachUser = user("Coach", "coach@example.com");
         CoachProfile coachProfile = coachProfile(coachUser);
@@ -115,7 +115,7 @@ class TrainingRequestEmailServiceTest {
     }
 
     @Test
-    void sendTrainingPlanUploadedEmailShouldSendTemplateEmailWhenConfigurationIsPresent() {
+    void sendTrainingPlanUploadedEmailSuccessfully() {
         User requester = user("Requester", "requester@example.com");
         CoachProfile coachProfile = coachProfile(user("Coach", "coach@example.com"));
         TrainingRequest request = trainingRequest(requester, coachProfile);
