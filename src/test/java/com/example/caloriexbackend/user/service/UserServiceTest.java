@@ -46,7 +46,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void getCurrentUserProfileShouldReturnMappedAuthenticatedUser() {
+    void getCurrentUserSuccessfully() {
         User user = user();
         UserResponse response = response();
 
@@ -60,7 +60,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUserProfileShouldCreateNewUserWithAuthenticatedIdentity() {
+    void createUserProfileSuccessfully() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 "auth0|123",
                 "user@example.com",
@@ -82,7 +82,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUserProfileShouldLeaveEmailNullWhenAuthenticatedEmailIsBlank() {
+    void createUserProfileEmailIsBlank() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 "auth0|123",
                 " ",
@@ -102,7 +102,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUserProfileShouldThrowWhenUserAlreadyExists() {
+    void createUserProfileUserAlreadyExists() {
         AuthenticatedUser authenticatedUser = new AuthenticatedUser(
                 "auth0|123",
                 "user@example.com",
@@ -124,7 +124,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUserShouldMutatePersistAndReturnMappedResponse() {
+    void updateUserSuccessfully() {
         User user = user();
         UserRequest request = request();
         UserResponse response = response();

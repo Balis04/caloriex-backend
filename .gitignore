@@ -16,7 +16,6 @@ Thumbs.db
 # Environment / Security
 .env
 *.env
-application.properties
 application.yml
 
 # JetBrains

@@ -7,7 +7,10 @@ import com.example.caloriexbackend.entities.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -23,7 +26,6 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("headline", "New Training Request");
         vars.put("intro_text", "A new training request has been submitted in the Caloriex system.");
         vars.put("status", EmailFormatUtils.status(trainingRequest.getStatus()));
-        vars.put("coach_name", EmailFormatUtils.safe(coachProfile.getUser().getFullName()));
         vars.put("requester_name", EmailFormatUtils.safe(requester.getFullName()));
         vars.put("requester_email", EmailFormatUtils.safe(requester.getEmail()));
         vars.put("current_weight", EmailFormatUtils.weight(requester.getActualWeightKg()));
@@ -35,8 +37,17 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("preferred_location", EmailFormatUtils.safe(trainingRequest.getPreferredLocation()));
         vars.put("request_description", EmailFormatUtils.safe(trainingRequest.getRequestDescription()));
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
-        vars.put("created_at", String.valueOf(trainingRequest.getCreatedAt()));
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy. MM. dd. HH:mm",
+                Locale.forLanguageTag("hu-HU")
+        );
+        vars.put(
+                "created_at",
+                trainingRequest.getCreatedAt()
+                        .atZone(ZoneId.of("Europe/Budapest"))
+                        .format(formatter)
+        );
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 
@@ -59,10 +70,18 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("preferred_location", EmailFormatUtils.safe(trainingRequest.getPreferredLocation()));
         vars.put("request_description", EmailFormatUtils.safe(trainingRequest.getRequestDescription()));
         vars.put("coach_response", EmailFormatUtils.safe(trainingRequest.getCoachResponse()));
-        vars.put("coach_note", EmailFormatUtils.safe(trainingRequest.getCoachResponse()));
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
-        vars.put("created_at", String.valueOf(trainingRequest.getCreatedAt()));
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy. MM. dd. HH:mm",
+                Locale.forLanguageTag("hu-HU")
+        );
+        vars.put(
+                "created_at",
+                trainingRequest.getCreatedAt()
+                        .atZone(ZoneId.of("Europe/Budapest"))
+                        .format(formatter)
+        );
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 
@@ -76,9 +95,18 @@ public class TrainingRequestEmailTemplateBuilder {
         vars.put("plan_name", EmailFormatUtils.safe(trainingPlan.getPlanName()));
         vars.put("plan_description", EmailFormatUtils.safe(trainingPlan.getPlanDescription()));
         vars.put("file_name", EmailFormatUtils.safe(trainingPlan.getFileName()));
-        vars.put("uploaded_at", String.valueOf(trainingPlan.getUploadedAt()));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "yyyy. MM. dd. HH:mm",
+                Locale.forLanguageTag("hu-HU")
+        );
+        vars.put(
+                "uploaded_at",
+                trainingRequest.getCreatedAt()
+                        .atZone(ZoneId.of("Europe/Budapest"))
+                        .format(formatter)
+        );
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 }

@@ -64,7 +64,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void getCurrentUserShouldReturnAnonymousResponseWhenNoAuthenticatedUserExists() {
+    void getCurrentUserNoAuthenticatedUserExists() {
         when(authenticatedUserService.findAuthenticatedUser()).thenReturn(Optional.empty());
 
         AuthMeResponse actual = authService.getCurrentUser();
@@ -80,7 +80,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void getCurrentUserShouldPreferLocalProfileWhenItExists() {
+    void getCurrentUserProfileExists() {
         UUID userId = UUID.randomUUID();
         AuthenticatedUser principal = new AuthenticatedUser("auth0|abc", "principal@example.com", true, "Principal Name");
         User localUser = new User();
@@ -105,7 +105,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void getCurrentUserShouldFallbackToPrincipalDataWhenLocalProfileIsMissing() {
+    void getCurrentUserLocalProfileIsMissing() {
         AuthenticatedUser principal = new AuthenticatedUser("auth0|abc", "principal@example.com", false, "Principal Name");
 
         when(authenticatedUserService.findAuthenticatedUser()).thenReturn(Optional.of(principal));
@@ -124,7 +124,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void getAuth0LogoutUrlShouldReturnNullWhenLogoutIsDisabled() {
+    void getAuth0LogoutUrlDisabled() {
         AppAuthProperties authProperties = new AppAuthProperties();
         authProperties.setAuth0LogoutEnabled(false);
         AuthService disabledAuthService = new AuthService(authenticatedUserService, authProperties);

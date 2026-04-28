@@ -46,7 +46,7 @@ class FoodLogServiceTest {
     private FoodLogService foodLogService;
 
     @Test
-    void createFoodLogShouldMapSaveAndReturnResponse() {
+    void createFoodLogSuccessfully() {
         User user = user();
         FoodLogRequest request = foodLogRequest();
         FoodLog entity = foodLog(user);
@@ -66,7 +66,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldScaleMacrosAndReturnResponse() {
+    void updateFoodLogAmountSuccessfully() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(300.0);
@@ -92,12 +92,11 @@ class FoodLogServiceTest {
         assertEquals(60.0, foodLog.getProtein());
         assertEquals(100.0, foodLog.getCarbohydrates());
         assertEquals(20.0, foodLog.getFat());
-        assertEquals(user.getId(), foodLog.getUpdatedBy());
         verify(repository).save(foodLog);
     }
 
     @Test
-    void updateFoodLogAmountShouldKeepNullMacroValuesAsNull() {
+    void updateFoodLogAmountKeepNullValuesAsNull() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -124,7 +123,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldThrowWhenOriginalAmountIsMissing() {
+    void updateFoodLogAmountAmountIsMissing() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -145,7 +144,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void updateFoodLogAmountShouldThrowWhenFoodLogIsNotFound() {
+    void updateFoodLogIsNotFound() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLogAmountUpdateRequest request = amountRequest(200.0);
@@ -163,7 +162,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void deleteFoodLogShouldDeleteOwnedEntry() {
+    void deleteFoodLogSuccessfully() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
         FoodLog foodLog = foodLog(user);
@@ -178,7 +177,7 @@ class FoodLogServiceTest {
     }
 
     @Test
-    void deleteFoodLogShouldThrowWhenEntryIsMissing() {
+    void deleteFoodLogIsMissing() {
         User user = user();
         UUID foodLogId = UUID.randomUUID();
 
@@ -250,8 +249,7 @@ class FoodLogServiceTest {
                 foodLog.getFat(),
                 foodLog.getConsumedAt(),
                 LocalDateTime.of(2026, 4, 8, 11, 0),
-                LocalDateTime.of(2026, 4, 8, 13, 0),
-                foodLog.getUpdatedBy()
+                LocalDateTime.of(2026, 4, 8, 13, 0)
         );
     }
 }

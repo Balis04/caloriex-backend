@@ -52,7 +52,7 @@ class UsdaFoodServiceTest {
     }
 
     @Test
-    void searchShouldMapFoodsFromUsdaResponse() {
+    void searchSuccessfully() {
         UsdaFood food = new UsdaFood();
         food.setFdcId(123);
         food.setDescription("Protein Bar");
@@ -75,20 +75,20 @@ class UsdaFoodServiceTest {
         List<UsdaFoodItemResponse> actual = usdaFoodService.search("protein", "BrandX");
 
         assertEquals(1, actual.size());
-        assertEquals(123, actual.get(0).fdcId());
-        assertEquals("Protein Bar", actual.get(0).name());
-        assertEquals("BrandX", actual.get(0).brand());
-        assertEquals(250.0, actual.get(0).calories());
-        assertEquals(20.0, actual.get(0).protein());
-        assertEquals(25.0, actual.get(0).carbohydrates());
-        assertEquals(8.0, actual.get(0).fat());
-        assertEquals(60.0, actual.get(0).servingSize());
-        assertEquals("g", actual.get(0).servingUnit());
+        assertEquals(123, actual.getFirst().fdcId());
+        assertEquals("Protein Bar", actual.getFirst().name());
+        assertEquals("BrandX", actual.getFirst().brand());
+        assertEquals(250.0, actual.getFirst().calories());
+        assertEquals(20.0, actual.getFirst().protein());
+        assertEquals(25.0, actual.getFirst().carbohydrates());
+        assertEquals(8.0, actual.getFirst().fat());
+        assertEquals(60.0, actual.getFirst().servingSize());
+        assertEquals("g", actual.getFirst().servingUnit());
         verify(responseSpec).body(UsdaFoodSearchResponse.class);
     }
 
     @Test
-    void searchShouldReturnZeroForMissingNutrients() {
+    void searchZeroNutrients() {
         UsdaFood food = new UsdaFood();
         food.setFdcId(456);
         food.setDescription("Plain Water");
@@ -105,14 +105,14 @@ class UsdaFoodServiceTest {
 
         List<UsdaFoodItemResponse> actual = usdaFoodService.search("water", null);
 
-        assertEquals(0.0, actual.get(0).calories());
-        assertEquals(0.0, actual.get(0).protein());
-        assertEquals(0.0, actual.get(0).carbohydrates());
-        assertEquals(0.0, actual.get(0).fat());
+        assertEquals(0.0, actual.getFirst().calories());
+        assertEquals(0.0, actual.getFirst().protein());
+        assertEquals(0.0, actual.getFirst().carbohydrates());
+        assertEquals(0.0, actual.getFirst().fat());
     }
 
     @Test
-    void searchShouldThrowBadGatewayWhenResponseIsNull() {
+    void searchShouldResponseIsNull() {
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
@@ -128,7 +128,7 @@ class UsdaFoodServiceTest {
     }
 
     @Test
-    void searchShouldTranslate4xxErrorsToBadRequest() {
+    void searchBadRequest() {
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
@@ -153,7 +153,7 @@ class UsdaFoodServiceTest {
     }
 
     @Test
-    void searchShouldTranslate5xxErrorsToBadGateway() {
+    void searchBadGateway() {
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
@@ -178,7 +178,7 @@ class UsdaFoodServiceTest {
     }
 
     @Test
-    void searchShouldTranslateTimeoutToBadGateway() {
+    void searchTimeout() {
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(any(java.util.function.Function.class))).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);

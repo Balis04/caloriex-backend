@@ -17,6 +17,7 @@ import com.example.caloriexbackend.entities.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -50,7 +51,7 @@ class CaloriesSummaryServiceTest {
     private CaloriesSummaryService caloriesSummaryService;
 
     @Test
-    void getSummaryByDateShouldUseProvidedDateAndReturnMappedSummary() {
+    void getSummaryByDateSuccessfully() {
         User user = user();
         LocalDate date = LocalDate.of(2026, 4, 8);
         LocalDateTime start = date.atStartOfDay();
@@ -83,7 +84,7 @@ class CaloriesSummaryServiceTest {
     }
 
     @Test
-    void getMealTimeSummaryByDateAndMealShouldCalculateMealTargetsAndMapResponse() {
+    void getMealTimeSummarySuccessfully() {
         User user = user();
         LocalDate date = LocalDate.of(2026, 4, 8);
         LocalDateTime start = date.atStartOfDay();
@@ -144,7 +145,7 @@ class CaloriesSummaryServiceTest {
     }
 
     @Test
-    void getTodayFoodsShouldReturnMappedFoodsForCurrentDate() {
+    void getTodayFoodsSuccessfully() {
         User user = user();
         LocalDate today = LocalDate.now();
         LocalDateTime start = today.atStartOfDay();
@@ -174,7 +175,7 @@ class CaloriesSummaryServiceTest {
     }
 
     @Test
-    void getSummaryByDateShouldUseCurrentDateWhenInputIsNull() {
+    void getSummaryByDateNullInput() {
         User user = user();
         DailyMacroTargets macros = new DailyMacroTargets(150.0, 200.0, 70.0);
         MealCaloriesBreakdown mealBreakdown = new MealCaloriesBreakdown(500.0, 700.0, 600.0, 200.0, 0.0, 0.0, 0.0, 0.0);
@@ -189,22 +190,22 @@ class CaloriesSummaryServiceTest {
         when(caloriesCalculator.calculateTargetCalories(user)).thenReturn(2200.0);
         when(caloriesCalculator.calculateMacros(user, 2200.0)).thenReturn(macros);
         when(caloriesSummaryRepository.findTodayIntake(
-                org.mockito.ArgumentMatchers.eq(user.getId()),
-                org.mockito.ArgumentMatchers.any(LocalDateTime.class),
-                org.mockito.ArgumentMatchers.any(LocalDateTime.class)
+                ArgumentMatchers.eq(user.getId()),
+                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class)
         )).thenReturn(intake);
         when(caloriesSummaryRepository.findByUserIdAndConsumedAtGreaterThanEqualAndConsumedAtLessThanOrderByConsumedAtDesc(
-                org.mockito.ArgumentMatchers.eq(user.getId()),
-                org.mockito.ArgumentMatchers.any(LocalDateTime.class),
-                org.mockito.ArgumentMatchers.any(LocalDateTime.class)
+                ArgumentMatchers.eq(user.getId()),
+                ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class)
         )).thenReturn(List.of());
         when(caloriesCalculator.calculateMealCalories(2200.0, List.of())).thenReturn(mealBreakdown);
         when(caloriesSummaryMapper.toCaloriesSummaryResponse(
-                org.mockito.ArgumentMatchers.any(LocalDate.class),
-                org.mockito.ArgumentMatchers.eq(2200.0),
-                org.mockito.ArgumentMatchers.eq(macros),
-                org.mockito.ArgumentMatchers.eq(intake),
-                org.mockito.ArgumentMatchers.eq(mealBreakdown)
+                ArgumentMatchers.any(LocalDate.class),
+                ArgumentMatchers.eq(2200.0),
+                ArgumentMatchers.eq(macros),
+                ArgumentMatchers.eq(intake),
+                ArgumentMatchers.eq(mealBreakdown)
         )).thenReturn(response);
 
         CaloriesSummaryResponse actual = caloriesSummaryService.getSummaryByDate(null);
@@ -214,7 +215,7 @@ class CaloriesSummaryServiceTest {
         ArgumentCaptor<LocalDateTime> startCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
         ArgumentCaptor<LocalDateTime> endCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
         verify(caloriesSummaryRepository).findTodayIntake(
-                org.mockito.ArgumentMatchers.eq(user.getId()),
+                ArgumentMatchers.eq(user.getId()),
                 startCaptor.capture(),
                 endCaptor.capture()
         );

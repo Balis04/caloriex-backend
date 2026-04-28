@@ -12,7 +12,6 @@ public interface FoodLogMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "user")
-    @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     FoodLog toEntity(FoodLogRequest request, User user);
