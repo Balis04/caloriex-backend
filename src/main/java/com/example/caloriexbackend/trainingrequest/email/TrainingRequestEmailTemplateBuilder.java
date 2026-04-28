@@ -47,7 +47,7 @@ public class TrainingRequestEmailTemplateBuilder {
                         .atZone(ZoneId.of("Europe/Budapest"))
                         .format(formatter)
         );
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 
@@ -81,7 +81,7 @@ public class TrainingRequestEmailTemplateBuilder {
                         .atZone(ZoneId.of("Europe/Budapest"))
                         .format(formatter)
         );
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 
@@ -106,7 +106,7 @@ public class TrainingRequestEmailTemplateBuilder {
                         .format(formatter)
         );
         vars.put("request_id", String.valueOf(trainingRequest.getId()));
-        vars.put("app_url", frontendBaseUrl + "/training-requests/" + trainingRequest.getId());
+        vars.put("app_url", frontendBaseUrl + "/training-requests/");
         return vars;
     }
 }
