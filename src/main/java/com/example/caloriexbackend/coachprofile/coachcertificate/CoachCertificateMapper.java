@@ -18,6 +18,8 @@ public interface CoachCertificateMapper {
     @Mapping(target = "contentType", ignore = true)
     @Mapping(target = "fileSizeBytes", ignore = true)
     @Mapping(target = "uploadedAt", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     CoachCertificate toEntity(CoachCertificateUploadRequest request);
 
     CoachCertificateResponse toResponse(CoachCertificate entity);
