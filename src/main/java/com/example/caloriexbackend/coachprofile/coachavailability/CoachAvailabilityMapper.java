@@ -16,8 +16,12 @@ public interface CoachAvailabilityMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "coachProfile", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     CoachAvailability toEntity(CoachAvailabilityRequest request);
 
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     default List<CoachAvailabilityResponse> toResponseList(List<CoachAvailability> entities) {
         return entities.stream()
                 .sorted(Comparator.comparing(CoachAvailability::getDayOfWeek))

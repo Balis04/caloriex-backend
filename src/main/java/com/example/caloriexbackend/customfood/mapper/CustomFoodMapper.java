@@ -13,12 +13,14 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CustomFoodMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "user", source = "user")
     CustomFood toEntity(CustomFoodRequest request, User user);
 
     CustomFoodResponse toResponse(CustomFood entity);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "user", source = "user")
     void updateEntity(@MappingTarget CustomFood entity, CustomFoodRequest request, User user);
 
