@@ -15,6 +15,7 @@ import com.example.caloriexbackend.coachprofile.payload.CoachProfileResponse;
 import com.example.caloriexbackend.coachprofile.repository.CoachProfileRepository;
 import com.example.caloriexbackend.common.enums.Currency;
 import com.example.caloriexbackend.common.enums.TrainingFormat;
+import com.example.caloriexbackend.common.enums.UserRole;
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
@@ -227,7 +228,8 @@ class CoachProfileServiceTest {
         );
 
         when(authenticatedUserService.getUser()).thenReturn(user);
-        when(coachProfileRepository.findAllByUserIdNot(user.getId())).thenReturn(List.of(first, second));
+        when(coachProfileRepository.findAllByUser_IdNotAndUser_Role(user.getId(), UserRole.COACH))
+                .thenReturn(List.of(first, second));
         when(coachProfileMapper.toListResponse(first)).thenReturn(firstResponse);
         when(coachProfileMapper.toListResponse(second)).thenReturn(secondResponse);
 

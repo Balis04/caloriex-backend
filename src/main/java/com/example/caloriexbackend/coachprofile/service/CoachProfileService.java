@@ -12,6 +12,7 @@ import com.example.caloriexbackend.coachprofile.payload.CoachListResponse;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileRequest;
 import com.example.caloriexbackend.coachprofile.payload.CoachProfileResponse;
 import com.example.caloriexbackend.coachprofile.repository.CoachProfileRepository;
+import com.example.caloriexbackend.common.enums.UserRole;
 import com.example.caloriexbackend.common.exception.BadRequestException;
 import com.example.caloriexbackend.common.exception.NotFoundException;
 import com.example.caloriexbackend.common.security.AuthenticatedUserService;
@@ -89,7 +90,9 @@ public class CoachProfileService {
     @Transactional(readOnly = true)
     public List<CoachListResponse> getAll() {
         User user = authenticatedUserService.getUser();
-        return coachProfileRepository.findAllByUserIdNot(user.getId()).stream()
+        return coachProfileRepository
+                .findAllByUser_IdNotAndUser_Role(user.getId(), UserRole.COACH)
+                .stream()
                 .map(coachProfileMapper::toListResponse)
                 .toList();
     }

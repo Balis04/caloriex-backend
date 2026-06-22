@@ -1,5 +1,6 @@
 package com.example.caloriexbackend.coachprofile.repository;
 
+import com.example.caloriexbackend.common.enums.UserRole;
 import com.example.caloriexbackend.entities.CoachProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,5 +16,5 @@ public interface CoachProfileRepository extends JpaRepository<CoachProfile, UUID
 
     Optional<CoachProfile> findByUserId(UUID userId);
 
-    List<CoachProfile> findAllByUserIdNot(UUID userId);
+    List<CoachProfile> findAllByUser_IdNotAndUser_Role(UUID userId, UserRole role);
 }
