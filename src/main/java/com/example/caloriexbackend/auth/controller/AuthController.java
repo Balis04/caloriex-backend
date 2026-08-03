@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -50,7 +49,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<LogoutResponse> logout(HttpServletRequest request,
                                                  HttpServletResponse response,
-                                                 Authentication authentication) throws IOException {
+                                                 Authentication authentication) {
         authService.logout(request, response, authentication);
         return ResponseEntity.ok(new LogoutResponse(true, authService.getAuth0LogoutUrl()));
     }
