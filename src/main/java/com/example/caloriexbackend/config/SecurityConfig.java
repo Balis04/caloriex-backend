@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,6 +41,9 @@ public class SecurityConfig {
 
     @Value("${server.servlet.session.cookie.same-site:lax}")
     private String sameSite;
+
+    @Value("${app.csrf.cookie-domain:}")
+    private String csrfCookieDomain;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http,
@@ -109,10 +113,15 @@ public class SecurityConfig {
     @Bean
     public CookieCsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookieCustomizer(cookie -> cookie
-                .path("/")
-                .secure(secureSessionCookie)
-                .sameSite(sameSite));
+        repository.setCookieCustomizer(cookie -> {
+            cookie.path("/")
+                    .secure(secureSessionCookie)
+                    .sameSite(sameSite);
+
+            if (StringUtils.hasText(csrfCookieDomain)) {
+                cookie.domain(csrfCookieDomain);
+            }
+        });
         return repository;
     }
 

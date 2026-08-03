@@ -41,6 +41,9 @@ public class AuthService {
     @Value("${server.servlet.session.cookie.same-site:lax}")
     private String sameSite;
 
+    @Value("${app.csrf.cookie-domain:}")
+    private String csrfCookieDomain;
+
     public AuthMeResponse getCurrentUser() {
         Optional<AuthenticatedUser> authenticatedUser = authenticatedUserService.findAuthenticatedUser();
         if (authenticatedUser.isEmpty()) {
@@ -67,8 +70,8 @@ public class AuthService {
                        Authentication authentication) throws IOException {
         new SecurityContextLogoutHandler().logout(request, response, authentication);
 
-        response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie(sessionCookieName, true).toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie("XSRF-TOKEN", false).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie(sessionCookieName, true, null).toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, expiredCookie("XSRF-TOKEN", false, csrfCookieDomain).toString());
 
         String logoutUrl = getAuth0LogoutUrl();
 
@@ -77,14 +80,19 @@ public class AuthService {
         }
     }
 
-    private ResponseCookie expiredCookie(String name, boolean httpOnly) {
-        return ResponseCookie.from(name, "")
+    private ResponseCookie expiredCookie(String name, boolean httpOnly, String domain) {
+        ResponseCookie.ResponseCookieBuilder cookie = ResponseCookie.from(name, "")
                 .path("/")
                 .maxAge(0)
                 .httpOnly(httpOnly)
                 .secure(secureSessionCookie)
-                .sameSite(sameSite)
-                .build();
+                .sameSite(sameSite);
+
+        if (domain != null && !domain.isBlank()) {
+            cookie.domain(domain);
+        }
+
+        return cookie.build();
     }
 
     public String getAuth0LogoutUrl() {
