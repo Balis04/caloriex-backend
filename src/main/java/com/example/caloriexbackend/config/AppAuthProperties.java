@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AppAuthProperties {
 
     private String frontendBaseUrl = "http://localhost:5173";
-    private String postLoginPath = "/auth/callback";
+    private String postLoginPath = "/auth-redirect";
     private String postLogoutPath = "/";
     private boolean auth0LogoutEnabled = true;
 

@@ -38,7 +38,7 @@ public class AuthService {
     @Value("${server.servlet.session.cookie.secure:true}")
     private boolean secureSessionCookie;
 
-    @Value("${server.servlet.session.cookie.same-site:none}")
+    @Value("${server.servlet.session.cookie.same-site:lax}")
     private String sameSite;
 
     public AuthMeResponse getCurrentUser() {
